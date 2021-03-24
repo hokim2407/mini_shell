@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 pid_t pid;
