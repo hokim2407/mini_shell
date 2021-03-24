@@ -6,7 +6,7 @@ char *check_sigle(char *s, char c)
 
     i = 0;
 	j = 0;
-    new = malloc(ft_strlen(s));
+    new = malloc(ft_strlen(s) + 1);
     while (s[i])
     {
         if (s[i] != c)
