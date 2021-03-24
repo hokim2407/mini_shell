@@ -1,12 +1,24 @@
 char *check_sigle(char *s, char c)
 {
     int i;
-    char *my;
+	  int j;
+    char *new;
+
 
     i = 0;
-    new
+	  j = 0;
+    new = malloc(ft_strlen(s));
     while (s[i])
     {
-        if (s[i] )
+        if (s[i] != c)
+		{
+			new[j] = s[i];
+			j++;
+		}
+		i++;
     }
+  
+	new[j] = '\0';
+	return (new);
+
 }
