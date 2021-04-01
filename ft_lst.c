@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:45:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/03/20 16:11:35 by hokim            ###   ########.fr       */
+/*   Updated: 2021/03/25 10:54:39 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ t_list		*ft_lstfind(t_deck * deck, char *key)
 	return (NULL);
 }
 
-char		*find_lst_value(t_deck * deck, char *key)
+char		*find_value_in_list(t_deck * deck, char *key)
 {
 	t_list	*temp;
 	char	**list_data;
@@ -108,9 +108,6 @@ char		*find_lst_value(t_deck * deck, char *key)
 			break ;
 		}
 		temp = temp->next;
-		free_str_array(list_data);
 	}
-	if(list_data!= NULL)
-		free_str_array(list_data);
 	return (result);
 }

@@ -1,5 +1,7 @@
-#include "minishell.h"
 
+#include "minishell.h"
+#include <string.h>
+#include <errno.h>
 pid_t pid;
 char *head;
 	int read_fd;
@@ -22,14 +24,13 @@ int mini_process(char *buf, char **envv, t_deck *env_lst)
 
     i=-1;
 	new_argv = ft_split(buf, ' ');
-    
+
     while (new_argv[++i])
         check_env_in_cmd(new_argv + i, env_lst);
 	if (new_argv[0] == NULL)
 		return 1;
-	if (!ft_strcmp(new_argv[0], "ls") || !ft_strcmp(new_argv[0], "pwd") || !ft_strcmp(new_argv[0], "echo"))
-		exe_process(new_argv, envv, env_lst);
-	else if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
+  
+	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 		chdir(new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "env"))
 		ft_print_all_deck(*env_lst);
@@ -37,11 +38,18 @@ int mini_process(char *buf, char **envv, t_deck *env_lst)
 		ft_add_env(env_lst, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "unset"))
 		ft_rm_env(env_lst, new_argv[1]);
-	else if (new_argv[0][0]== '/' || !ft_strlcmp(new_argv[0], "./", 2)|| !ft_strlcmp(new_argv[0], "../", 3))
-            sh_process(new_argv, envv, env_lst);
 	else if (!ft_strcmp(new_argv[0], "exit"))
 		exit(0);
-	return 1;
+	else if (new_argv[0][0]== '/' || !ft_strlcmp(new_argv[0], "./", 2)|| !ft_strlcmp(new_argv[0], "../", 3))
+            sh_process(new_argv, envv, env_lst);
+	else
+		exe_process(new_argv, envv, env_lst);
+
+		
+	
+	
+    return 1;
+    
 }
 
 int main(int argc, char **argv, char **envv)
@@ -51,13 +59,14 @@ int main(int argc, char **argv, char **envv)
 	t_deck *env_lst = array_to_list(envv);
 	head = "mini_shell> ";
 	char ** splited;
+	t_fd fd;
 	//getcwd(path, 256);
 	//signal(SIGINT, sig_ft);
 
 	while (1)
 	{
-		read_fd = 0;
-		write_fd = 1;
+		fd.read = 0;
+		fd.write = 1;
 		write(1, head, ft_strlen(head));
 		int i = 0;
 		while (read(0, buf + i, 1) > 0 && buf[i] != '\n')
@@ -67,7 +76,12 @@ int main(int argc, char **argv, char **envv)
 		buf[i] = '\0';
 		if (buf[0] == '\0' || buf[0] == '\n')
 			continue;
-	
-		mini_process(splited[1],envv, env_lst);
+		check_redirect(buf, &fd);
+
+
+		mini_process(buf, envv,env_lst);
+
 	}
+  
+   
 }

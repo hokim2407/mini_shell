@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char		*get_only_env(char *str, int *start, int *len)
+char		*get_env_in_cmd(char *str, int *start, int *len)
 {
 	char	*result;
 	int		chr;
@@ -25,63 +25,43 @@ char		*get_only_env(char *str, int *start, int *len)
     return result;
 }
 
-void		trim_side(char **str)
+void		change_env_to_value(char **str, t_deck *env)
 {
-	char	*s1 = *str;
-	int		len;
-
-	len = ft_strlen(s1);
-	s1[len - 1] = '\0';
-	*str = ft_strdup(s1 + 1);
-	free(s1);
-}
-void		change_env_to_value(char **str,char * s1, t_deck *env)
-{
-	char	*env_value;
 	int		start;
-	int		env_len;
-	int		env_val_len;
-	char	*env_key;
+	t_env	env_data;
     char	*result;
-
-	env_key = get_only_env(*str, &start, &env_len);
-	env_value = find_lst_value(env, env_key);
-	env_val_len = ft_strlen(env_value);
-	result = malloc(ft_strlen(s1) + env_val_len + 1);
-	int i = -1;
-	while (s1[++i] && i < start)
-		result[i] = s1[i];
-    result[i] = 0;
-	ft_strlcpy(result + i , env_value, env_val_len + 1);
-    env_len++;
-	while (s1[i + env_len])
+	int 	index;
+	
+	index = -1;
+	while (str[++index])
 	{
-		result[i+ env_val_len] = s1[i + env_len];
-		i++;
+		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
+		if(env_data.key == NULL || (start > 0 && str[index][start-1] == '\''))
+			continue ;
+		env_data.value = find_value_in_list(env, env_data.key);
+		if(env_data.value == NULL)
+		{
+			ft_strlcpy(result , str[index], start + 1);
+			ft_strlcpy(result + start, str[index]+ start + env_data.key_len + 1, ft_strlen(str[index]));
+			str[index] =result;
+			continue;
+		}
+		env_data.val_len = ft_strlen(env_data.value);
+		result = malloc(ft_strlen(str[index]) + env_data.val_len + 1);
+		ft_strlcpy(result , str[index], start + 1);
+		ft_strlcpy(result + start , env_data.value, env_data.val_len + 1);
+		ft_strlcpy(result + start + env_data.val_len , str[index]+ start + env_data.key_len + 1, ft_strlen(str[index]));
+		str[index] =result;
 	}
-    result[i+ env_val_len]  = '\0';
-    *str =result;
 }
 
-void		check_env_in_cmd(char **str,t_deck *env)
+void		check_env_in_cmd(char **cmds,t_deck *env)
 {
-	char	*s1= *str;
 	int		len;
 	int		chr;
 
-	len = ft_strlen(s1);
-	if (s1 == NULL)
+	if (cmds == NULL)
 		return ;
-	if (s1[0] == '\'' && s1[len - 1] == '\'')
-	{
-		trim_side(str);
-		return ;
-	}
-	if ((chr = ft_strchr(s1, '$') != -1))
-		change_env_to_value(str, s1, env);
-	if (s1[0] == '\"' && s1[len - 1] == '\"')
-	{
-		trim_side(str);
-		s1 = *str;
-	}
+	change_env_to_value(cmds,  env);
+	int i = -1;
 }
