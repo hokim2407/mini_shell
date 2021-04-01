@@ -1,6 +1,4 @@
 #include "minishell.h"
-extern	int read_fd;
-extern	int write_fd;
 
 int in_dir(char * path, char * cmd)
 {
@@ -41,23 +39,24 @@ char * get_executable(char * path, char *cmd)
     return temp;
 }
 
-int exe_process(char **new_argv, char **envv, t_deck *env_list)
+int exe_process(char **new_argv, t_datas datas)
 {
     int pid;
     char *temp;
 
     pid = fork();
     if (pid == 0)
-    { 
-        temp = get_executable(find_value_in_list(env_list,"PATH") ,new_argv[0]);
-     //   dup2(read_fd,0);
-    //    dup2(write_fd,1);
-        if (execve(temp, new_argv, envv) == -1)
+    {   
+        temp = get_executable(find_value_in_list(datas.env_list,"PATH") ,new_argv[0]);
+        dup2(datas.fd.read,0);
+        dup2(datas.fd.write,1);
+     
+        if (execve(temp, new_argv, datas.envv) == -1)
             return write(1,"execve error\n",13);
-        if(read_fd != 0)
-            close(read_fd);
-        if(write_fd != 0)
-            close(write_fd);
+        if(datas.fd.read != 0)
+            close(datas.fd.read);
+        if(datas.fd.write != 1)
+            close(datas.fd.write);
         free(temp);
     }
     else

@@ -1,17 +1,16 @@
 #include <stdio.h>
 #include <unistd.h>
-#include<stdlib.h>
+#include <stdlib.h>
 #include <sys/wait.h>
 #include <fcntl.h>
-#include  <signal.h>
+#include <signal.h>
 
+#include "minishell.h"
 
 #define READ 0
 #define WRITE 1
 
-int ori_write_fd;
-
-void recur_pipe(char **argv, int count, int read_fd)
+void recur_pipe(char **argv, t_datas datas, int count, int read_fd)
 {
 
 	int fd_pread[2];
@@ -24,58 +23,88 @@ void recur_pipe(char **argv, int count, int read_fd)
 	pipe(fd_cread);
 	pid = fork();
 
-	if(pid == 0)
+	if (pid == 0)
 	{
+		int ori_write_fd = dup(1);
+		int ori_read_fd = dup(0);
 		close(fd_cread[1]);
-		dup2(fd_cread[0],0);
-		dup2(fd_pread[1],1);
-		if(argv[count + 1] == NULL)
-			dup2(ori_write_fd,1);
-		while (read(0, &c,1) > 0)
+		check_redirect(argv[count], &datas.fd);
+
+
+		if (datas.fd.read == 0)
+			dup2(fd_cread[0], 0);
+		else
+			dup2(datas.fd.read, 0);
+
+
+
+
+		if (datas.fd.write != 1)
+			dup2(datas.fd.write, 1);
+		else if (argv[count + 1] == NULL)
+			dup2(ori_write_fd, 1);
+		else
+			dup2(fd_pread[1], 1);
+		
+
+		mini_pipe_process(argv[count], datas);
+		/*	while (read(fd_cread[0], &c,1) > 0)
 		{
 			c += 1;
 			write(1, &c,1);
 		}
-
+*/
 		close(fd_cread[0]);
 		close(fd_pread[1]);
 
-		//printf("\n*send = %d*\n", fd_pread[0]);
-
-		if(argv[count + 1] != NULL)
-			recur_pipe(argv,count+1 ,fd_pread[0]);
+		dup2(ori_read_fd, 0);
+		dup2(ori_write_fd, 1);
+		if (argv[count + 1] != NULL)
+			recur_pipe(argv, datas, count + 1, fd_pread[0]);
 
 		exit(0);
 	}
 	else
-	{ 
+	{
 		close(fd_cread[0]);
-		dup2(read_fd,0);
-		dup2(fd_cread[1],1);
 		//printf("\n*recieve fd = %d*\n", read_fd);
-		while (read(0, &c,1) > 0  )
-		{
-			write(1, &c, 1);
-		}
-		close(0);
-		close(1);
+		if (read_fd != 0)
+			while (read(read_fd, &c, 1) > 0)
+			{
+				write(fd_cread[1], &c, 1);
+			}
+
 		close(fd_cread[1]);
 		close(read_fd);
 		close(fd_pread[1]);
 		close(fd_pread[0]);
-		waitpid(pid, NULL,0);
+		waitpid(pid, NULL, 0);
 	}
-
 }
 
-int pipe_process (int argc, char **argv)
+int pipe_process(char *block, t_datas datas)
 {
 
-	pid_t pid = fork();
-	ori_write_fd = dup(1);
-	if(pid == 0)
-		recur_pipe(argv,0,0);
+	pid_t pid;
+
+	char **pipes;
+	int i = -1;
+	pipes = ft_split(block, '|');
+
+	if (pipes[1] == NULL)
+	{
+		mini_single_process(pipes[0], datas);
+	}
 	else
-		waitpid(pid, NULL,0);
-return 1;
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			recur_pipe(pipes, datas, 0, 0);
+			exit(0);
+		}
+		else
+			waitpid(pid, NULL, 0);
+	}
+	return 1;
 }

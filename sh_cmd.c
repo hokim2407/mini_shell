@@ -2,7 +2,7 @@
 
 
 
-int sh_process(char **new_argv, char **envv, t_deck *deck)
+int sh_process(char **new_argv, t_datas datas)
 {
     int pid;
     char *temp;
@@ -14,12 +14,15 @@ int sh_process(char **new_argv, char **envv, t_deck *deck)
     pid = fork();
     if (pid == 0)
     {
-        if (execve(new_argv[0], new_argv, envv) == -1)
+        if (execve(new_argv[0], new_argv, datas.envv) == -1)
             return ft_write("execve error\n");
         free(temp);
     }
     else
+     {
         wait(NULL);
+        exit(0);
+       }
 
     return 1;
 }

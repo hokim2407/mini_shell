@@ -1,5 +1,6 @@
 #include "minishell.h"
-
+#include <errno.h>
+#include <string.h>
 char		*get_filename_from(char *str)
 {
 	char	*result;
@@ -30,19 +31,17 @@ void check_redirect(char * pipe, t_fd *fd)
 	{
 		if(pipe[i] == '>' && pipe[i + 1] && pipe[i + 1] == '>' )
 		{
+			 pipe[i] = ' '; 
 			i++;
-			fd->write = open(get_filename_from(pipe + i + 1), O_WRONLY | O_APPEND | O_CREAT, 777);
+ 			pipe[i] = ' '; 
+			fd->write = open(get_filename_from(pipe + i + 1), O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG |S_IRWXO);
 			if(fd->write  == -1)
 				fd->write  = 1;
 		}
 		else if(pipe[i] == '>')
 		{
             pipe[i] = ' '; 
-			fd->write = open(get_filename_from(pipe + i + 1), O_WRONLY | O_TRUNC | O_CREAT, 777);
-	   char a[2];
-	   a[0] = '0'+ fd->write;
-	   a[1]='\0';
-	   write(1,a,2);
+			fd->write = open(get_filename_from(pipe + i + 1), O_WRONLY| O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG |S_IRWXO);
 
 			if(fd->write  == -1)
 				fd->write  = 1;
