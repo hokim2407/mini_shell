@@ -72,3 +72,32 @@ int			ft_write(char *str)
 	write(1, str, i);
 	return 1;
 }
+
+int			ft_write_ch(int c)
+{
+	write(1, &c, 1);
+	return 0;
+}
+
+void remove_char_in_str(char *buf,int nth)
+{
+	int i = nth ;
+	while(buf[i])
+	{
+		buf[i] = buf[i + 1];
+		i ++;
+	}
+	
+}
+
+void put_char_in_str(char *buf, char c, int nth)
+{
+	int len = ft_strlen(buf) + 1;
+	buf[len] = '\0';
+	while(len > nth)
+	{
+		buf[len] = buf[len - 1];
+		len --;
+	}
+	buf[len] = c;
+}

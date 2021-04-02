@@ -7,6 +7,17 @@
 #include <fcntl.h>
 #include  <signal.h>
 #include <dirent.h> 
+#include <termios.h>
+#include <termcap.h>
+
+#define BACKSPACE 127
+#define LEFT 4479771
+#define RIGHT 4414235
+
+#define UP 4283163
+#define DOWN 4348699
+
+#define HEADER_OFFSET 13
 
 typedef struct		s_deck
 {
@@ -67,6 +78,7 @@ char	*ft_strdup(const char *str);
 int		ft_strcmp(char *str1, char *str2);
 int		ft_strlcmp(char *str1, char *str2, int len);
 int		ft_strchr(const char *str, int value);
+int			ft_atoi(const char *str);
 void	free_str_array(char **str);
 
 void	check_env_in_cmd(char **str,t_deck *env);
@@ -80,4 +92,13 @@ int		exe_process(char **new_argv, t_datas datas);
 int		sh_process(char **new_argv, t_datas datas);
 
 int ft_write(char *str);
+int			ft_write_ch(int c);
+
+void get_cursor_position(int *col, int *row);
+void	move_cursor_left(int *col, int *row, char *cm, int * i);
+void	move_cursor_right(int *h, int *v, char *cm, int * i, int max);
+void	delete_end(int *h, int *v, char *cm, char *ec, int * i, int * max);
+void remove_char_in_str(char *buf,int nth);
+void put_char_in_str(char *buf, char c, int nth);
+void push_new(int *h, int *v, char *cm, char *ce, char * buf);
 #endif
