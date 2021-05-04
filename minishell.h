@@ -19,6 +19,9 @@
 
 #define HEADER_OFFSET 13
 
+
+#define HEADER "mini_shell> "
+
 typedef struct		s_deck
 {
 	struct s_list	*head;
@@ -50,13 +53,30 @@ typedef struct		s_fd
 typedef struct		s_datas
 {
 	t_deck			*env_list;
+	t_deck			*export_list;
 	t_fd			fd;
+	t_fd			ori_fd;
+	int				status;
 	char			**envv;
 }					t_datas;
 
+typedef struct		s_cursor
+{
+	char			*cm;
+	char			*ec;
+	char			*ce;
+	t_list			*cur_history;
+	t_deck			*history;
+	int				c;
+	int				h;
+	int				v;
+	// int				i;
+	int				max;
+}					t_cursor;
+
 void 	ft_env(t_list *values);
 void 	ft_rm_env(t_deck * deck, char *target);
-void 	ft_add_env(t_deck * deck, char *target);
+void ft_export_env(t_deck * env,t_deck * export, char *target);
 
 t_deck	*ft_new_deck();
 t_list	*ft_new_list(t_list * pre, void* value, t_list * next);
@@ -85,11 +105,11 @@ void	check_env_in_cmd(char **str,t_deck *env);
 void	check_redirect(char * pipe, t_fd *fd);
 char	*get_abs_path(char *original);
 
-int mini_single_process(char *buf, t_datas datas);
-int		mini_pipe_process(char *buf, t_datas datas);
-int		pipe_process (char *block, t_datas datas);
-int		exe_process(char **new_argv, t_datas datas);
-int		sh_process(char **new_argv, t_datas datas);
+int 	mini_single_process(char *buf, t_datas *datas);
+int		mini_pipe_process(char *buf, t_datas *datas);
+int		pipe_process (char *block, t_datas *datas);
+int		exe_process(char **new_argv, t_datas *datas);
+int		sh_process(char **new_argv, t_datas *datas);
 
 int ft_write(char *str);
 int			ft_write_ch(int c);
@@ -101,4 +121,9 @@ void	delete_end(int *h, int *v, char *cm, char *ec, int * i, int * max);
 void remove_char_in_str(char *buf,int nth);
 void put_char_in_str(char *buf, char c, int nth);
 void push_new(int *h, int *v, char *cm, char *ce, char * buf);
+
+void check_cursor(t_cursor *cursor, char * buf, int *i);
+int		count_deck(t_deck * deck);
+void		ft_lst_import(t_list *front_lst, t_list *new_lst, t_list *next_lst);
+t_deck *  ft_make_export_list(char **target);
 #endif

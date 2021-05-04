@@ -60,7 +60,7 @@ void		check_env_in_cmd(char **cmds,t_deck *env)
 	int		len;
 	int		chr;
 
-	if (cmds == NULL)
+	if (cmds == NULL || !ft_strcmp(cmds[0], "$?"))
 		return ;
 	change_env_to_value(cmds,  env);
 	int i = -1;

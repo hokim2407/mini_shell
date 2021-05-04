@@ -72,6 +72,15 @@ void		ft_lstadd(t_deck * deck, t_list *new_lst)
 	tail->pre = new_lst;
 }
 
+
+void		ft_lst_import(t_list *front_lst, t_list *new_lst, t_list *next_lst)
+{
+	front_lst->next = new_lst;
+	new_lst->pre = front_lst;
+	next_lst->pre = new_lst;
+	new_lst->next = next_lst;
+}
+
 t_list		*ft_lstfind(t_deck * deck, char *key)
 {
 	t_list	*temp;
@@ -110,4 +119,17 @@ char		*find_value_in_list(t_deck * deck, char *key)
 		temp = temp->next;
 	}
 	return (result);
+}
+
+int		count_deck(t_deck * deck)
+{
+	t_list	*temp;
+	int count = 0;
+	temp = deck->head->next;
+	while (temp != deck->tail)
+	{
+		count++;
+		temp = temp->next;
+	}
+	return (count);
 }

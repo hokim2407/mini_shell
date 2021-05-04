@@ -39,28 +39,31 @@ char * get_executable(char * path, char *cmd)
     return temp;
 }
 
-int exe_process(char **new_argv, t_datas datas)
+int exe_process(char **new_argv, t_datas *datas)
 {
     int pid;
     char *temp;
-
+    int status;
+    int limit= 20000000;
     pid = fork();
+
     if (pid == 0)
     {   
-        temp = get_executable(find_value_in_list(datas.env_list,"PATH") ,new_argv[0]);
-        dup2(datas.fd.read,0);
-        dup2(datas.fd.write,1);
+        temp = get_executable(find_value_in_list(datas->env_list,"PATH") ,new_argv[0]);
+        dup2(datas->fd.read,0);
+        dup2(datas->fd.write,1);
      
-        if (execve(temp, new_argv, datas.envv) == -1)
-            return write(1,"execve error\n",13);
-        if(datas.fd.read != 0)
-            close(datas.fd.read);
-        if(datas.fd.write != 1)
-            close(datas.fd.write);
-        free(temp);
+        if (execve(temp, new_argv, datas->envv) == -1)
+            {
+                if (!ft_strcmp(new_argv[0], "cd") || !ft_strcmp(new_argv[0], "env") || !ft_strcmp(new_argv[0], "export") || !ft_strcmp(new_argv[0], "unset")|| !ft_strcmp(new_argv[0], "exit"))
+	                exit(0);
+                exit(1);
+            }
+
     }
     else
-        wait(NULL);
-
+        {
+            waitpid(pid,&datas->status,0);
+        }
     return 1;
 }
