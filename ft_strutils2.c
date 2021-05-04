@@ -101,3 +101,36 @@ void put_char_in_str(char *buf, char c, int nth)
 	}
 	buf[len] = c;
 }
+
+
+void rm_quato(char **buf)
+{
+	int i = -1;
+	int j;
+	int str_i;
+	int quato = 0;
+	char *temp;
+
+	while (buf[++i])
+	{
+		temp = malloc(ft_strlen(buf[i]) + 1);
+		j = -1;
+		str_i = 0;
+		while (buf[i][++j])
+		{
+			if ((quato == 1 && buf[i][j] == '\'') || (quato == 2 && buf[i][j] == '\"'))
+				quato = 0;
+			else if (quato == 0 && buf[i][j] == '\'')
+				quato = 1;
+			else if (quato == 0 && buf[i][j] == '\"')
+				quato = 2;
+			else
+			{
+				temp[str_i++] = buf[i][j] ;
+			}
+			temp[str_i] = '\0';
+		}
+		free(buf[i]);
+		buf[i] = temp;
+	}
+}

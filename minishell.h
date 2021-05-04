@@ -126,4 +126,6 @@ void check_cursor(t_cursor *cursor, char * buf, int *i);
 int		count_deck(t_deck * deck);
 void		ft_lst_import(t_list *front_lst, t_list *new_lst, t_list *next_lst);
 t_deck *  ft_make_export_list(char **target);
+
+void rm_quato(char **buf);
 #endif

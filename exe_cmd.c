@@ -21,6 +21,7 @@ int in_dir(char * path, char * cmd)
 char * get_executable(char * path, char *cmd)
 {
     char **paths = ft_split(path, ':');
+
     int i = -1;
     char * temp = NULL;
     while(paths[++i])
@@ -45,14 +46,15 @@ int exe_process(char **new_argv, t_datas *datas)
     char *temp;
     int status;
     int limit= 20000000;
+  
     pid = fork();
 
     if (pid == 0)
-    {   
+    {
         temp = get_executable(find_value_in_list(datas->env_list,"PATH") ,new_argv[0]);
         dup2(datas->fd.read,0);
         dup2(datas->fd.write,1);
-     
+
         if (execve(temp, new_argv, datas->envv) == -1)
             {
                 if (!ft_strcmp(new_argv[0], "cd") || !ft_strcmp(new_argv[0], "env") || !ft_strcmp(new_argv[0], "export") || !ft_strcmp(new_argv[0], "unset")|| !ft_strcmp(new_argv[0], "exit"))

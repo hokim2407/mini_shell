@@ -22,6 +22,7 @@ int mini_pipe_process(char *buf, t_datas *datas)
 
 	i = -1;
 	new_argv = ft_split(buf, ' ');
+	rm_quato(new_argv);
 	while (new_argv[++i])
 		check_env_in_cmd(new_argv + i, datas->env_list);
 	if (new_argv[0] == NULL)
@@ -41,11 +42,11 @@ int mini_single_process(char *buf, t_datas *datas)
 
 	i = -1;
 	new_argv = ft_split(buf, ' ');
+	rm_quato(new_argv);
 	while (new_argv[++i])
 		check_env_in_cmd(new_argv + i, datas->env_list);
 	if (new_argv[0] == NULL)
 		return 1;
-	
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 		chdir(new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "env"))
@@ -137,12 +138,14 @@ int main(int argc, char **argv, char **envv)
 			cursor.c = 0;
 			buf[cursor.max + 1] = '\0';
 		}
+		buf[cursor.max + 1] = '\0';
 		ft_lstadd(cursor.history, ft_new_list(NULL, ft_strdup(buf), NULL));
 		cursor.cur_history = cursor.history->tail;
 		if (buf[i] != '\n')
 			write(1, "\n", 1);
 		if (buf[0] == '\0' || buf[0] == '\n')
 			continue;
+	
 		blocks = ft_split(buf, ';');
 		i = -1;
 		while (blocks[++i])
