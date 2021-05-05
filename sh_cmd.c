@@ -1,7 +1,5 @@
 #include "minishell.h"
 
-
-
 int sh_process(char **new_argv, t_datas *datas)
 {
     int pid;

@@ -3,17 +3,18 @@
 #include <string.h>
 #include <errno.h>
 
-
-// void sig_ft()
-// {
-// 	if (SIGINT != 2)
-// 		signal(SIGINT, SIG_DFL);
-// 	else
-// 	{
-// 		write(1, "\n", 1);
-// 		write(1, head, ft_strlen(head));
-// 	}
-// }
+int sig_end;
+void sig_ft(int signum)
+{
+	if (SIGINT == signum)
+	{
+		write(1,"\n",1);
+		write(1,HEADER,HEADER_OFFSET);
+		sig_end = 'c';
+	}	
+	else if (SIGQUIT == signum)
+		;
+}
 
 int mini_pipe_process(char *buf, t_datas *datas)
 {
@@ -22,9 +23,9 @@ int mini_pipe_process(char *buf, t_datas *datas)
 
 	i = -1;
 	new_argv = ft_split(buf, ' ');
-	rm_quato(new_argv);
 	while (new_argv[++i])
 		check_env_in_cmd(new_argv + i, datas->env_list);
+		rm_quato(new_argv);
 	if (new_argv[0] == NULL)
 		return 1;
 
@@ -42,9 +43,9 @@ int mini_single_process(char *buf, t_datas *datas)
 
 	i = -1;
 	new_argv = ft_split(buf, ' ');
-	rm_quato(new_argv);
 	while (new_argv[++i])
 		check_env_in_cmd(new_argv + i, datas->env_list);
+		rm_quato(new_argv);
 	if (new_argv[0] == NULL)
 		return 1;
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
@@ -82,9 +83,7 @@ void set_terminal(char **cm, char **dc, char **ce)
 
 	tgetent(NULL, env);		   // xterm 설정 사용
 	*cm = tgetstr("cm", NULL); //cursor motion
-
 	*dc = tgetstr("dc", NULL); //clear line from cursor
-
 	*ce = tgetstr("ce", NULL); //clear line from cursor
 }
 
@@ -97,17 +96,19 @@ int main(int argc, char **argv, char **envv)
 	int i;
 	char **blocks;
 
+	sig_end = 0;
+
+	set_terminal(&cursor.cm, &cursor.dc, &cursor.ce);
 
 	cursor.history = ft_new_deck();
-	set_terminal(&cursor.cm, &cursor.ec, &cursor.ce);
-	datas.env_list = array_to_list(envv);
-	datas.export_list = ft_make_export_list(envv);
-
+	datas.env_list = array_to_list(envv,0);
+	datas.export_list = array_to_list(envv,1);
 	datas.envv = envv;
-		datas.fd.read = 0;
-		datas.fd.write = 1;
-		datas.status = 0;
-
+	datas.fd.read = 0;
+	datas.fd.write = 1;
+	datas.status = 0;
+	signal(SIGINT,sig_ft);
+	signal(SIGQUIT,sig_ft);
 	while (1)
 	{
 		write(1, HEADER, ft_strlen(HEADER));
@@ -116,9 +117,22 @@ int main(int argc, char **argv, char **envv)
 		cursor.c = 0;
 		while (read(0, &cursor.c, sizeof(int)) > 0 && cursor.c != '\n')
 		{
-			if(cursor.c == '\t')
-				continue;
-			get_cursor_position(&cursor.h, &cursor.v);
+			if(sig_end == 'c' )
+			{
+				sig_end = 0;
+				cursor.max = 0;
+				i = 0;
+				buf[0] = '\0';
+			}
+			if((cursor.c == 4 && cursor.max != 0)|| cursor.c == '\t')
+				{
+					continue;
+				}
+			if(cursor.c == 4)
+			{
+				write(1,"exit\n",5);
+				exit(0);
+			}
 			check_cursor(&cursor, buf, &i);
 			if (cursor.c < 127)
 			{
@@ -131,7 +145,6 @@ int main(int argc, char **argv, char **envv)
 				{
 					put_char_in_str(buf, cursor.c, i - 1);
 					push_new(&cursor.h, &cursor.v, cursor.cm, cursor.ce, buf);
-				
 				}
 				cursor.max++;
 			}
@@ -139,7 +152,7 @@ int main(int argc, char **argv, char **envv)
 			buf[cursor.max + 1] = '\0';
 		}
 		buf[cursor.max + 1] = '\0';
-		ft_lstadd(cursor.history, ft_new_list(NULL, ft_strdup(buf), NULL));
+		ft_lstadd(cursor.history, ft_new_list(ft_strdup(buf)));
 		cursor.cur_history = cursor.history->tail;
 		if (buf[i] != '\n')
 			write(1, "\n", 1);

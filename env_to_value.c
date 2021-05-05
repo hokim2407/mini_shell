@@ -25,22 +25,7 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
     return result;
 }
 
-int get_quato(char *str, int util)
-{
-	int quato;
-	int i = -1;
-	quato = 0;
-	while(str[++i]  && i <= util)
-	{
-		if((quato == 1 && str[i] == '\'') || (quato == 2 && str[i] == '\"') )
-			quato = 0;
-		else if(quato == 0 && str[i] == '\'')
-			quato = 1;
-		else if(quato == 0 && str[i] == '\"')
-			quato = 2;
-	}
-	return quato;
-}
+
 
 void		change_env_to_value(char **str, t_deck *env)
 {
@@ -50,12 +35,13 @@ void		change_env_to_value(char **str, t_deck *env)
 	int 	index;
 	
 	index = -1;
+
 	while (str[++index])
 	{
 		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
-		if(env_data.key == NULL || (start > 0 && str[index][start-1] == '\''))
+		if(env_data.key == NULL || start < 0)
 			continue ;
-		env_data.value = find_value_in_list(env, env_data.key);
+		env_data.value = find_value_by_key(env, env_data.key);
 		if(get_quato(str[index], start)!= 1)
 		{
 			if(env_data.value == NULL )
@@ -84,5 +70,5 @@ void		check_env_in_cmd(char **cmds,t_deck *env)
 	if (cmds == NULL || !ft_strcmp(cmds[0], "$?"))
 		return ;
 	change_env_to_value(cmds,  env);
-	int i = -1;
+	
 }

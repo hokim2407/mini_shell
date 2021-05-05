@@ -51,7 +51,7 @@ int exe_process(char **new_argv, t_datas *datas)
 
     if (pid == 0)
     {
-        temp = get_executable(find_value_in_list(datas->env_list,"PATH") ,new_argv[0]);
+        temp = get_executable(find_value_by_key(datas->env_list,"PATH") ,new_argv[0]);
         dup2(datas->fd.read,0);
         dup2(datas->fd.write,1);
 

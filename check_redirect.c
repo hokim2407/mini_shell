@@ -1,12 +1,13 @@
 #include "minishell.h"
-#include <errno.h>
-#include <string.h>
+
+
 char		*get_filename_from(char *str)
 {
 	char	*result;
 	int		chr;
 	int		i;
-	int j;
+	int		j;
+
 	result = malloc(ft_strlen(str) + 1);
 	i = -1;
 	j = -1;
@@ -42,7 +43,6 @@ void check_redirect(char * pipe, t_fd *fd)
 		{
             pipe[i] = ' '; 
 			fd->write = open(get_filename_from(pipe + i + 1), O_WRONLY| O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG |S_IRWXO);
-
 			if(fd->write  == -1)
 				fd->write  = 1;
 		}
