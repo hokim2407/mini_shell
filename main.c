@@ -15,32 +15,13 @@ void sig_ft(int signum)
 	if (SIGINT == signum)
 	{
 		write(1,"\n",1);
-		write(1,HEADER,HEADER_OFFSET);
+		write(1,HEADER,ft_strlen(HEADER));
 		sig_end = 'c';
 	}	
 	else if (SIGQUIT == signum)
 		;
 }
 
-int mini_pipe_process(char *buf, t_datas *datas)
-{
-	char **new_argv;
-	int i;
-
-	i = -1;
-	new_argv = ft_split(buf, ' ');
-	while (new_argv[++i])
-		check_env_in_cmd(new_argv + i, datas->env_list);
-		rm_quato(new_argv);
-	if (new_argv[0] == NULL)
-		return 1;
-
-	else if (new_argv[0][0] == '/' || !ft_strlcmp(new_argv[0], "./", 2) || !ft_strlcmp(new_argv[0], "../", 3))
-		sh_process(new_argv, datas);
-	else
-		exe_process(new_argv, datas);
-	return 1;
-}
 
 int mini_single_process(char *buf, t_datas *datas)
 {
@@ -65,7 +46,7 @@ int mini_single_process(char *buf, t_datas *datas)
 	else if (!ft_strcmp(new_argv[0], "export"))
 		ft_export_env(datas->env_list,datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "unset"))
-		ft_rm_env(datas->env_list, new_argv[1]);
+		ft_rm_env(datas->env_list,datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "exit"))
 		exit(0);
 	else if (!ft_strcmp(new_argv[0], "$?"))
@@ -131,6 +112,7 @@ int main(int argc, char **argv, char **envv)
 	set_terminal(&cursor.cm, &cursor.dc, &cursor.ce);
 
 	cursor.history = ft_new_deck();
+	cursor.cur_history =cursor.history->tail;
 	datas.env_list = array_to_list(envv,0);
 	datas.export_list = array_to_list(envv,1);
 	datas.envv = envv;
@@ -139,13 +121,12 @@ int main(int argc, char **argv, char **envv)
 	datas.status = 0;
 	signal(SIGINT,sig_ft);
 	signal(SIGQUIT,sig_ft);
-	struct termios terminal;
-	tcgetattr(STDIN_FILENO, &terminal);
 	while (1)
 	{
 
 		set_again_terminal();
 		write(1, HEADER, ft_strlen(HEADER));
+		get_cursor_position(&(cursor.term_offset), &(cursor.v));
 		buf[0] = '\0';
 		cursor.max = 0;
 		i = 0;
@@ -179,7 +160,7 @@ int main(int argc, char **argv, char **envv)
 				else
 				{
 					put_char_in_str(buf, cursor.c, i - 1);
-					push_new(&cursor.h, &cursor.v, cursor.cm, cursor.ce, buf);
+					push_new(&cursor, buf);
 				}
 				cursor.max++;
 			}

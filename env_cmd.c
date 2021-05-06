@@ -24,9 +24,10 @@ void ft_print_all_deck(t_deck deck)
 	}
 }
 
-void ft_rm_env(t_deck * deck, char *target)
+void ft_rm_env(t_deck * env,t_deck * export, char *target)
 {
-	ft_lstdelone(find_lst_by_key(deck, target));
+	ft_lstdelone(find_lst_by_key(env, target));
+	ft_lstdelone(find_lst_by_key(export, target));
 }
 
 void ft_print_all_export(t_deck deck)
@@ -42,11 +43,12 @@ void ft_print_all_export(t_deck deck)
         len = ft_strlen(str);
         while( str[i++] && str[i]!= '=')
         ;
-		write(1,str, i + 1);
+		write(1,str, i);
         if(str[i]== '=')
          {
+             write(1, str + i++, 1);
             write(1, "\"", 1);
-            write(1, str + i + 1, len - i);
+            write(1, str + i, len - i);
             write(1, "\"", 1);
          }
 
@@ -59,7 +61,7 @@ void ft_print_all_export(t_deck deck)
 void ft_add_export(t_deck * deck, char *target)
 {
     char **data = ft_split_two(target, '=');
-
+    
     if (!is_valid_key(target))
         return;
     t_list *inlist = find_lst_by_key(deck, data[0]);

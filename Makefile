@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = #-Wall -Wextra -Werror
+CFLAGS = -g3 -fsanitize=address#-Wall -Wextra -Werror
 NAME = minishell
 RM = rm -f
 SRCS = env_cmd.c ft_lst_add.c ft_pipe.c ft_strutils_basic.c get_abs_path.c check_redirect.c env_to_value.c \

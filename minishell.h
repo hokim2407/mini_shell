@@ -20,7 +20,6 @@
 #define DOWN 4348699
 
 #define HEADER "mini_shell> "
-#define HEADER_OFFSET 13
 
 typedef struct		s_deck
 {
@@ -70,12 +69,13 @@ typedef struct		s_cursor
 	int				c;
 	int				h;
 	int				v;
+
+	int				term_offset;
 	// int				i;
 	int				max;
 }					t_cursor;
 
 int 	mini_single_process(char *buf, t_datas *datas);
-int		mini_pipe_process(char *buf, t_datas *datas);
 int		pipe_process (char *block, t_datas *datas);
 int		exe_process(char **new_argv, t_datas *datas);
 int		sh_process(char **new_argv, t_datas *datas);
@@ -83,8 +83,9 @@ int		sh_process(char **new_argv, t_datas *datas);
 int			ft_write_ch(int c);
 
 void check_cursor(t_cursor *cursor, char * buf, int *i);
+void get_cursor_position(int *h, int *v);
 void put_char_in_str(char *buf, char c, int nth);
-void push_new(int *h, int *v, char *cm, char *ce, char * buf);
+void push_new(t_cursor *cursor, char *buf);
 
 t_deck	*ft_new_deck();
 t_deck	*array_to_list(char **envv, int is_inorder);
@@ -109,7 +110,7 @@ void 	rm_quato(char **buf);
 int get_quato(char *str, int util);
 
 
-void 	ft_rm_env(t_deck * deck, char *target);
+void	ft_rm_env(t_deck * env,t_deck * export, char *target);
 void	ft_export_env(t_deck * env,t_deck * export, char *target);
 void 	ft_print_all_deck(t_deck deck);
 
