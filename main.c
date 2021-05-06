@@ -1,9 +1,15 @@
 
 #include "minishell.h"
-#include <string.h>
-#include <errno.h>
 
 int sig_end;
+
+void print_err(int fd)
+{
+	write(fd, strerror(errno), ft_strlen(strerror(errno)));
+	write(fd, "\n",1);
+}
+
+
 void sig_ft(int signum)
 {
 	if (SIGINT == signum)
@@ -49,7 +55,11 @@ int mini_single_process(char *buf, t_datas *datas)
 	if (new_argv[0] == NULL)
 		return 1;
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
-		chdir(new_argv[1]);
+		{
+			if (chdir(new_argv[1]) < 0)
+			  print_err(1);
+			
+		}
 	else if (!ft_strcmp(new_argv[0], "env"))
 		ft_print_all_deck(*datas->env_list);
 	else if (!ft_strcmp(new_argv[0], "export"))
@@ -88,6 +98,26 @@ void set_terminal(char **cm, char **dc, char **ce)
 }
 
 
+void set_again_terminal()
+{
+	struct termios terminal;
+
+	tcgetattr(STDIN_FILENO, &terminal);
+	terminal.c_lflag &= ~ICANON;
+	terminal.c_lflag &= ~ECHO;
+	tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
+}
+
+void back_terminal()
+{
+	struct termios terminal;
+
+	tcgetattr(STDIN_FILENO, &terminal);
+	terminal.c_lflag |= ICANON;
+	terminal.c_lflag |= ECHO;
+	tcsetattr(STDIN_FILENO, TCSANOW, &terminal);
+}
+
 int main(int argc, char **argv, char **envv)
 {
 	char buf[4096];
@@ -109,9 +139,14 @@ int main(int argc, char **argv, char **envv)
 	datas.status = 0;
 	signal(SIGINT,sig_ft);
 	signal(SIGQUIT,sig_ft);
+	struct termios terminal;
+	tcgetattr(STDIN_FILENO, &terminal);
 	while (1)
 	{
+
+		set_again_terminal();
 		write(1, HEADER, ft_strlen(HEADER));
+		buf[0] = '\0';
 		cursor.max = 0;
 		i = 0;
 		cursor.c = 0;
@@ -151,6 +186,7 @@ int main(int argc, char **argv, char **envv)
 			cursor.c = 0;
 			buf[cursor.max + 1] = '\0';
 		}
+		back_terminal();
 		buf[cursor.max + 1] = '\0';
 		ft_lstadd(cursor.history, ft_new_list(ft_strdup(buf)));
 		cursor.cur_history = cursor.history->tail;

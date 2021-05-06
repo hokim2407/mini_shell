@@ -37,6 +37,8 @@ char * get_executable(char * path, char *cmd)
         temp = ft_strjoin(paths[i], cmd);
     }
     free_str_array(paths);
+    if(temp == NULL)
+        temp = cmd;
     return temp;
 }
 
@@ -46,26 +48,24 @@ int exe_process(char **new_argv, t_datas *datas)
     char *temp;
     int status;
     int limit= 20000000;
-  
+    
     pid = fork();
-
+    
     if (pid == 0)
     {
         temp = get_executable(find_value_by_key(datas->env_list,"PATH") ,new_argv[0]);
         dup2(datas->fd.read,0);
         dup2(datas->fd.write,1);
-
+        
         if (execve(temp, new_argv, datas->envv) == -1)
             {
-                if (!ft_strcmp(new_argv[0], "cd") || !ft_strcmp(new_argv[0], "env") || !ft_strcmp(new_argv[0], "export") || !ft_strcmp(new_argv[0], "unset")|| !ft_strcmp(new_argv[0], "exit"))
-	                exit(0);
+                print_err(datas->ori_fd.write);
                 exit(1);
             }
-
     }
     else
         {
-            waitpid(pid,&datas->status,0);
+            waitpid(pid, &datas->status,0);
         }
     return 1;
 }

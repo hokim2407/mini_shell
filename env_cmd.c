@@ -12,6 +12,7 @@
 
 #include "minishell.h"
 
+
 void ft_print_all_deck(t_deck deck)
 {
 	t_list *temp = deck.head->next;
@@ -80,7 +81,7 @@ void ft_export_env(t_deck * env,t_deck * export, char *target)
  
 	if(!is_valid_key(target))
 	{
-		printf("Wrong key\n");
+		printf("not a valid identifier\n");
 		return;
 	}
     if(ft_strchr(target,'=') < 0)

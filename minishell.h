@@ -114,48 +114,25 @@ void	ft_export_env(t_deck * env,t_deck * export, char *target);
 void 	ft_print_all_deck(t_deck deck);
 
 
-// void 	ft_env(t_list *values);
-
-// 
-// 
-// 
-// 
-
-// 
-// void 	ft_r_print_all_deck(t_deck deck);
-
-
 size_t	ft_strlcpy(char *dest, const char *src, size_t size);
 char	**ft_split_two(char *str, char c);
 int			ft_strlcmp(char *str1, char *str2, int len);
 char	*ft_strjoin(char const *s1, char const *s2);
-// int 	ft_strtrim_quato(char **str);
 char	*ft_strdup(const char *str);
-
 int		ft_strchr(const char *str, int value);
-// int			ft_atoi(const char *str);
 void	free_str_array(char **str);
 
-// 
-// 
+
 char	*get_abs_path(char *original);
 
 
 
 int ft_write(char *str);
-// 
 
-// void get_cursor_position(int *col, int *row);
-// void	move_cursor_left(int *col, int *row, char *cm, int * i);
-// void	move_cursor_right(int *h, int *v, char *cm, int * i, int max);
-// void	delete_end(int *h, int *v, char *cm, char *ec, int * i, int * max);
 void remove_char_in_str(char *buf,int nth);
 
 int		count_deck(t_deck * deck);
-// void		ft_lstadd_between(t_list *front_lst, t_list *new_lst, t_list *next_lst);
-// t_deck *  ft_make_inorder_list(char **target);
 
-// 
-
+void print_err(int fd);
 
 #endif
