@@ -11,10 +11,10 @@ void get_cursor_position(int *h, int *v)
 	write(0, "\033[6n", 4);
 	ret = read(0, buf, 254);
 	buf[ret] = '\0';
-	while ((buf[i] < '0' || buf[i] > '9') && buf[i + 1] != ';')
+	while (buf[i] &&(buf[i] < '0' || buf[i] > '9') && buf[i + 1] != ';')
 		++i;
 	*v = atoi(buf + i) - 1;
-	while (buf[i] != ';')
+	while (buf[i] && buf[i] != ';')
 		++i;
 	*h = atoi(buf + i + 1) - 1;
 }
