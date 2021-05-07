@@ -71,22 +71,28 @@ void start_pipe(char **pipes, t_datas *datas)
 	{
 		waitpid(pid, &datas->status, 0);
 	}
+	free(child_pid);
 }
 
 int pipe_process(char *block, t_datas *datas)
 {
 	char **pipes;
 	int i = -1;
+	
 	pipes = ft_split(block, '|');
-		datas->ori_fd.write = dup(1);
-		 datas->ori_fd.read = dup(0);
+	datas->ori_fd.write = dup(1);
+	datas->ori_fd.read = dup(0);
 	if (pipes[1] == NULL)
 	{
+		datas->fd.read = 0;
+		datas->fd.write = 1;
+		check_redirect(pipes[0], &datas->fd);
 		mini_single_process(pipes[0], datas);
 	}
 	else
 	{
 		start_pipe(pipes, datas);
 	}
+	free_str_array(pipes);
 	return 1;
 }

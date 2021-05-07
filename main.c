@@ -32,14 +32,14 @@ int mini_single_process(char *buf, t_datas *datas)
 	new_argv = ft_split(buf, ' ');
 	while (new_argv[++i])
 		check_env_in_cmd(new_argv + i, datas->env_list);
-		rm_quato(new_argv);
+	rm_quato(new_argv);
+	
 	if (new_argv[0] == NULL)
 		return 1;
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 		{
 			if (chdir(new_argv[1]) < 0)
 			  print_err(1);
-			
 		}
 	else if (!ft_strcmp(new_argv[0], "env"))
 		ft_print_all_deck(*datas->env_list);
@@ -55,6 +55,8 @@ int mini_single_process(char *buf, t_datas *datas)
 		sh_process(new_argv, datas);
 	else
 		exe_process(new_argv, datas);
+	
+	free_str_array(new_argv);
 	return 0;
 }
 
@@ -169,8 +171,8 @@ int main(int argc, char **argv, char **envv)
 		}
 		back_terminal();
 		buf[cursor.max + 1] = '\0';
-		ft_lstadd(cursor.history, ft_new_list(ft_strdup(buf)));
-		cursor.cur_history = cursor.history->tail;
+		ft_lstadd(cursor.history, ft_new_list(buf));
+		 cursor.cur_history = cursor.history->tail;
 		if (buf[i] != '\n')
 			write(1, "\n", 1);
 		if (buf[0] == '\0' || buf[0] == '\n')
@@ -180,5 +182,8 @@ int main(int argc, char **argv, char **envv)
 		i = -1;
 		while (blocks[++i])
 			pipe_process(blocks[i], &datas);
+		free_str_array(blocks);
+		
 	}
+	system("leaks checker");
 }

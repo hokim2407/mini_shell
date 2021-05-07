@@ -32,6 +32,7 @@ void		change_env_to_value(char **str, t_deck *env)
 	int		start;
 	t_env	env_data;
     char	*result;
+
 	int 	index;
 	
 	index = -1;
@@ -39,9 +40,12 @@ void		change_env_to_value(char **str, t_deck *env)
 	while (str[++index])
 	{
 		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
+		
 		if(env_data.key == NULL || start < 0)
 			continue ;
+		
 		env_data.value = find_value_by_key(env, env_data.key);
+		/*
 		if(get_quato(str[index], start)!= 1)
 		{
 			if(env_data.value == NULL )
@@ -50,6 +54,8 @@ void		change_env_to_value(char **str, t_deck *env)
 				ft_strlcpy(result , str[index], start + 1);
 				ft_strlcpy(result + start, str[index]+ start + env_data.key_len + 1, ft_strlen(str[index]));
 				str[index] =result;
+				free(env_data.key);
+				free(env_data.value);
 				continue;
 			}
 			env_data.val_len = ft_strlen(env_data.value);
@@ -57,8 +63,14 @@ void		change_env_to_value(char **str, t_deck *env)
 			ft_strlcpy(result , str[index], start + 1);
 			ft_strlcpy(result + start , env_data.value, env_data.val_len + 1);
 			ft_strlcpy(result + start + env_data.val_len , str[index]+ start + env_data.key_len + 1, ft_strlen(str[index]));
+			free(str[index]);
 			str[index] =result;
 		}
+		*/
+
+		free(env_data.value);
+		
+		free(env_data.key);
 	}
 }
 

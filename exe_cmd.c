@@ -77,6 +77,7 @@ int exe_process(char **new_argv, t_datas *datas)
                 print_err(datas->ori_fd.write);
                 exit(1);
             }
+        
     }
     else
         {

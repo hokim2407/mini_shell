@@ -6,7 +6,9 @@ t_list		*ft_new_list(void* value)
 
 	result = malloc(sizeof(t_list));
 	result->pre = NULL;
-	result->content = value;
+	result->content = NULL;
+	if(value!= NULL)
+		result->content = ft_strdup((char*)value);
 	result->next = NULL;
 
 	return (result);

@@ -28,11 +28,15 @@ t_list		*find_lst_by_key(t_deck * deck, char *key)
 {
 	t_list	*temp;
 	char	**list_data;
-
 	temp = deck->head->next;
+
 	while (temp != deck->tail)
 	{
-		list_data = ft_split(temp->content, '=');
+		if(ft_strchr(key,'=') > 0)
+			list_data = ft_split(temp->content, '=');
+		else
+			list_data = ft_one_str_arr(temp->content);
+			
 		if (!ft_strcmp(list_data[0], key))
 		{
 			free_str_array(list_data);
@@ -58,9 +62,11 @@ char		*find_value_by_key(t_deck * deck, char *key)
 		if (!ft_strcmp(list_data[0], key))
 		{
 			result = ft_strdup(list_data[1]);
-			break ;
+			free_str_array(list_data);
+			break;
 		}
 		temp = temp->next;
+		free_str_array(list_data);
 	}
 	return (result);
 }

@@ -40,14 +40,22 @@ void move_cursor_horizontal(t_cursor *cursor, int *i, int is_left)
 
 void move_cursor_vertital(t_cursor *cursor, char *buf, int *i, int is_up)
 {
-	if(is_up && cursor->cur_history == cursor->history->head || 
-		is_up && cursor->cur_history->pre == cursor->history->head|| 
-		!is_up && cursor->cur_history->next == cursor->history->tail || 
-		!is_up  && cursor->cur_history == cursor->history->tail)
-		return ;
-	if (is_up  )
+	if (is_up && cursor->cur_history == cursor->history->head ||
+		is_up && cursor->cur_history->pre == cursor->history->head)
+		return;
+	if (!is_up && cursor->cur_history->next == cursor->history->tail ||
+		!is_up && cursor->cur_history == cursor->history->tail)
+	{
+		*i = 0;
+		cursor->max = 0;
+		buf[0] = '\0';
+		cursor->h = ft_strlen(HEADER) - 1;
+		push_new(cursor, buf);
+		return;
+	}
+	if (is_up)
 		cursor->cur_history = cursor->cur_history->pre;
-	else if (!is_up )
+	else if (!is_up)
 		cursor->cur_history = cursor->cur_history->next;
 	cursor->h = ft_strlen(cursor->cur_history->content);
 	*i = cursor->h;
@@ -93,7 +101,7 @@ void check_cursor(t_cursor *cursor, char *buf, int *i)
 	{
 		if (*i == cursor->max && *i >0)
 			buf[*i - 1] = '\0';
-		else if (*i >= 0)
+		else if (*i > 0)
 			remove_char_in_str(buf, *i - 1);
 		delete_end(cursor, i);
 	}

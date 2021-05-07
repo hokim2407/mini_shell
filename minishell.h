@@ -136,4 +136,6 @@ int		count_deck(t_deck * deck);
 
 void print_err(int fd);
 
+char		**ft_one_str_arr(const char *str);
+
 #endif

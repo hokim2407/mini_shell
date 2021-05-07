@@ -117,3 +117,13 @@ char		**ft_split_two(char *str, char c)
 	return (result);
 }
 
+char		**ft_one_str_arr(const char *str)
+{
+	char	**result;
+
+	if (!(result = (char**)malloc(sizeof(char*) * 2)))
+		return (NULL);
+	result[0] = ft_strdup(str);
+	result[1]= NULL;
+	return (result);
+}

@@ -3,15 +3,13 @@
 
 void		ft_lstadd(t_deck * deck, t_list *new_lst)
 {
-	t_list	*tail;
-
 	if (new_lst == NULL)
 		return ;
-	tail = deck->tail;
-	new_lst->pre = tail->pre;
-	new_lst->next = tail;
-	tail->pre->next = new_lst;
-	tail->pre = new_lst;
+        
+	new_lst->pre = deck->tail->pre;
+	new_lst->next = deck->tail;
+	deck->tail->pre->next = new_lst;
+	deck->tail->pre = new_lst;
 }
 
 void		ft_lstadd_between(t_list *front_lst, t_list *new_lst, t_list *next_lst)
