@@ -4,7 +4,7 @@ NAME = minishell
 RM = rm -f
 SRCS = env_cmd.c ft_lst_add.c ft_pipe.c ft_strutils_basic.c get_abs_path.c check_redirect.c env_to_value.c \
 		ft_lst_find.c ft_quato.c ft_strutils_etc.c main.c sh_cmd.c cursor.c exe_cmd.c ft_lst_new.c ft_split.c \
-		ft_strutils_make.c ft_strsplit_two.c term.c 
+		ft_strutils_make.c ft_strsplit_two.c term.c mini_process.c
 OBJS = $(SRCS:.c=.o)
 .c.o :
 	$(CC) $(CFLAGS) -c -o $@ $<

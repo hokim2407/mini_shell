@@ -37,11 +37,25 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	return (result);
 }
 
+void		env_to_value(char **str, t_env env_data, int index, int start)
+{
+	char *result;
+
+	env_data.val_len = ft_strlen(env_data.value);
+	result = malloc(ft_strlen(str[index]) + env_data.val_len + 1);
+	ft_strlcpy(result, str[index], start + 1);
+	ft_strlcpy(result + start, env_data.value, env_data.val_len + 1);
+	ft_strlcpy(result + start + env_data.val_len,
+				str[index] + start + env_data.key_len + 1,
+				ft_strlen(str[index]));
+	free(str[index]);
+	str[index] = result;
+}
+
 void		change_env_to_value(char **str, t_deck *env)
 {
 	int		start;
 	t_env	env_data;
-	char	*result;
 	int		index;
 
 	index = -1;
@@ -57,20 +71,9 @@ void		change_env_to_value(char **str, t_deck *env)
 			{
 				str[index][start] = ' ';
 				rm_chars_in_str(str[index], start, env_data.key_len);
-				free(env_data.key);
-				free(env_data.value);
-				index--;
-				continue;
 			}
-			env_data.val_len = ft_strlen(env_data.value);
-			result = malloc(ft_strlen(str[index]) + env_data.val_len + 1);
-			ft_strlcpy(result, str[index], start + 1);
-			ft_strlcpy(result + start, env_data.value, env_data.val_len + 1);
-			ft_strlcpy(result + start + env_data.val_len,
-					str[index] + start + env_data.key_len + 1,
-					ft_strlen(str[index]));
-			free(str[index]);
-			str[index] = result;
+			else
+				env_to_value(str, env_data, index, start);
 			index--;
 		}
 		free(env_data.value);
