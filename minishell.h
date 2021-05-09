@@ -30,7 +30,7 @@ typedef struct		s_deck
 typedef struct		s_list
 {
 	struct s_list	*pre;
-	void			*content;
+	void				*content;
 	struct s_list	*next;
 }					t_list;
 
@@ -69,79 +69,74 @@ typedef struct		s_cursor
 	int				c;
 	int				h;
 	int				v;
-
 	int				term_offset;
-	// int				i;
 	int				max;
 }					t_cursor;
 
-int 	mini_single_process(char *buf, t_datas *datas);
-int		pipe_process (char *block, t_datas *datas);
-int		exe_process(char **new_argv, t_datas *datas);
-int		sh_process(char **new_argv, t_datas *datas);
+int mini_single_process(char *buf, t_datas *datas);
+int pipe_process(char *block, t_datas *datas);
+int exe_process(char **new_argv, t_datas *datas);
+int sh_process(char **new_argv, t_datas *datas);
 
-int			ft_write_ch(int c);
+int ft_write_ch(int c);
 
-void set_terminal(char **cm, char **dc, char **ce);
-void set_again_terminal();
-void back_terminal();
+void	 set_terminal(char **cm, char **dc, char **ce);
+void	 set_again_terminal();
+void	 back_terminal();
 
-void check_cursor(t_cursor *cursor, char * buf, int *i);
-void get_cursor_position(int *h, int *v);
-void put_char_in_str(char *buf, char c, int nth);
-void push_new(t_cursor *cursor, char *buf);
+void	 check_cursor(t_cursor *cursor, char *buf, int *i);
+void	 get_cursor_position(int *h, int *v);
+void	 put_char_in_str(char *buf, char c, int nth);
+void	 push_new(t_cursor *cursor, char *buf);
 
-t_deck	*ft_new_deck();
-t_deck	*array_to_list(char **envv, int is_inorder);
-t_list	*ft_new_list(void* value);
-void	ft_lstadd(t_deck * deck, t_list *new_lst);
-void	ft_lstdelone(t_list *one);
-void	ft_lstadd_inorder(t_deck * deck, t_list *lst);
+t_deck *ft_new_deck();
+t_deck *array_to_list(char **envv, int is_inorder);
+t_list *ft_new_list(void	 *value);
+void	 ft_lstadd(t_deck *deck, t_list *new_lst);
+void	 ft_lstdelone(t_list *one);
+void	 ft_lstadd_inorder(t_deck *deck, t_list *lst);
 
-void	check_redirect(char * pipe, t_fd *fd);
+void	 check_redirect(char *pipe, t_fd *fd);
 
-char	**ft_split(char const *str, char c);
-int		ft_strcmp(char *str1, char *str2);
-int		ft_strlcmp(char *str1, char *str2, int len);
-size_t	ft_strlen(const char *str);
-int		is_valid_key(char *target);
+char **ft_split(char const *str, char c);
+int ft_strcmp(char *str1, char *str2);
+int ft_strlcmp(char *str1, char *str2, int len);
+size_t ft_strlen(const char *str);
+int is_valid_key(char *target);
 
-t_list	*find_lst_by_key(t_deck * deck, char *data);
-char	*find_value_by_key(t_deck * deck, char *key);
+t_list		*find_lst_by_key(t_deck *deck, char *data);
+char		*find_value_by_key(t_deck *deck, char *key);
 
-void	check_env_in_cmd(char **str,t_deck *env);
-void 	rm_quato(char **buf);
-int get_quato(char *str, int util);
+void		check_env_in_cmd(char **str, t_deck *env);
+void		rm_quato(char **buf);
+int			get_quato(char *str, int util);
 
+void	 	ft_rm_env(t_deck *env, t_deck *export, char *target);
+void	 	ft_export_env(t_deck *env, t_deck *export, char *target);
+void	 	ft_print_all_deck(t_deck deck);
 
-void	ft_rm_env(t_deck * env,t_deck * export, char *target);
-void	ft_export_env(t_deck * env,t_deck * export, char *target);
-void 	ft_print_all_deck(t_deck deck);
-
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t size);
-char	**ft_split_two(char *str, char c);
+size_t		ft_strlcpy(char *dest, const char *src, size_t size);
+char		**ft_split_two(char *str, char c);
 int			ft_strlcmp(char *str1, char *str2, int len);
-char	*ft_strjoin(char const *s1, char const *s2);
-char	*ft_strdup(const char *str);
-int		ft_strchr(const char *str, int value);
-void	free_str_array(char **str);
+char		*ft_strjoin(char const *s1, char const *s2);
+char		*ft_strdup(const char *str);
+int			ft_strchr(const char *str, int value);
+void		free_str_array(char **str);
 
+char		*get_abs_path(char *original);
 
-char	*get_abs_path(char *original);
+int	 	 ft_write(char *str);
 
+void	 remove_char_in_str(char *buf, int nth);
 
+int		count_deck(t_deck *deck);
 
-int ft_write(char *str);
+int		print_err(int fd);
 
-void remove_char_in_str(char *buf,int nth);
+char	**ft_one_str_arr(const char *str);
 
-int		count_deck(t_deck * deck);
-
-void print_err(int fd);
-
-char		**ft_one_str_arr(const char *str);
-
-void		rm_chars_in_str(char *buf, int start, int len);
+void	rm_chars_in_str(char *buf, int start, int len);
+int		mini_single_process(char *buf, t_datas *datas);
+void	read_char_process(char *buf, t_cursor *cursor, int *i);
 
 #endif

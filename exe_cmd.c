@@ -91,10 +91,7 @@ int					exe_process(char **new_argv, t_datas *datas)
 		if (!ft_strcmp(new_argv[0], "echo"))
 			offset = check_echo(new_argv);
 		if (execve(temp, new_argv + offset, datas->envv) == -1)
-		{
-			print_err(datas->ori_fd.write);
-			exit(1);
-		}
+			exit(print_err(datas->ori_fd.write));
 	}
 	else
 		waitpid(pid, &datas->status, 0);

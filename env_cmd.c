@@ -81,6 +81,21 @@ void		ft_add_export(t_deck *deck, char *target)
 	free_str_array(data);
 }
 
+void		add_lst_export_env(t_deck *env, t_deck *export,
+							char **data, char *target)
+{
+	t_list *inlist;
+
+	inlist = find_lst_by_key(env, data[0]);
+	if (inlist == NULL)
+	{
+		ft_lstadd(env, ft_new_list(target));
+		ft_add_export(export, target);
+	}
+	else
+		inlist->content = ft_strdup(target);
+}
+
 void		ft_export_env(t_deck *env, t_deck *export, char *target)
 {
 	char	**data;
@@ -100,16 +115,7 @@ void		ft_export_env(t_deck *env, t_deck *export, char *target)
 		while (data[++count])
 			;
 		if (count > 1)
-		{
-			inlist = find_lst_by_key(env, data[0]);
-			if (inlist == NULL)
-			{
-				ft_lstadd(env, ft_new_list(target));
-				ft_add_export(export, target);
-			}
-			else
-				inlist->content = ft_strdup(target);
-		}
+			add_lst_export_env(env, export, data, target);
 	}
 	free_str_array(data);
 }

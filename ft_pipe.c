@@ -12,11 +12,8 @@
 
 #include "minishell.h"
 
-#define READ 0
-#define WRITE 1
-
 int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
-		int fd_read, int is_final)
+		int is_final)
 {
 	int		fd_pipe[2];
 	char	c;
@@ -27,19 +24,29 @@ int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
 	{
 		close(fd_pipe[0]);
 		check_redirect(argv, &datas->fd);
-		dup2(fd_read, 0);
+		dup2(datas->fd.read, 0);
 		if (is_final)
 			dup2(datas->ori_fd.write, 1);
 		else
 			dup2(fd_pipe[1], 1);
 		mini_single_process(argv, datas);
 		close(fd_pipe[1]);
-		close(fd_read);
+		close(datas->fd.read);
 		exit(datas->status / 256);
 	}
 	close(fd_pipe[1]);
-	close(fd_read);
+	close(datas->fd.read);
 	return (fd_pipe[0]);
+}
+
+int			count_arr(char **arr)
+{
+	int count;
+
+	count = -1;
+	while (arr[++count])
+		;
+	return (count);
 }
 
 void		start_pipe(char **pipes, t_datas *datas)
@@ -49,9 +56,7 @@ void		start_pipe(char **pipes, t_datas *datas)
 	int		count;
 	int		i;
 
-	count = -1;
-	while (pipes[++count])
-		;
+	count = count_arr(pipes);
 	child_pid = malloc(sizeof(pid_t) * count);
 	pid = fork();
 	if (pid == 0)
@@ -62,7 +67,7 @@ void		start_pipe(char **pipes, t_datas *datas)
 		datas->fd.read = 0;
 		while (pipes[++i])
 			datas->fd.read = refeat_pipe(pipes[i], datas, child_pid + i,
-					datas->fd.read, pipes[i + 1] == NULL);
+					pipes[i + 1] == NULL);
 		i = -1;
 		while (pipes[++i])
 			waitpid(child_pid[i], &datas->status, 0);
