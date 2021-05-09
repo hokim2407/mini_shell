@@ -3,27 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   env_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:48:03 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 16:38:17 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/09 19:51:58 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void		ft_print_all_deck(t_deck deck)
-{
-	t_list	*temp;
-
-	temp = deck.head->next;
-	while (temp != deck.tail)
-	{
-		write(1, temp->content, ft_strlen(temp->content));
-		write(1, "\n", 1);
-		temp = temp->next;
-	}
-}
 
 void		ft_rm_env(t_deck *env, t_deck *export, char *target)
 {
