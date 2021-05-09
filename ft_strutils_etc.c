@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strutils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/29 15:48:17 by hokim             #+#    #+#             */
+/*   Updated: 2021/04/01 17:18:16 by hokim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -10,7 +21,6 @@ int			ft_strcmp(char *str1, char *str2)
 	i = 0;
 	len1 = ft_strlen(str1);
 	len2 = ft_strlen(str2);
-
 	while (i < len1 && i < len2)
 	{
 		if (str1[i] == '\0' && str2[i] == '\0')
@@ -31,7 +41,6 @@ int			ft_strlcmp(char *str1, char *str2, int len)
 	i = 0;
 	len1 = ft_strlen(str1);
 	len2 = ft_strlen(str2);
-
 	while (i < len1 && i < len2 && i < len)
 	{
 		if (str1[i] == '\0' && str2[i] == '\0')
@@ -43,27 +52,40 @@ int			ft_strlcmp(char *str1, char *str2, int len)
 	return (0);
 }
 
-
-
-void remove_char_in_str(char *buf,int nth)
+void		remove_char_in_str(char *buf, int nth)
 {
-	int i = nth ;
-	while(buf[i])
+	int		i;
+
+	i = nth;
+	while (buf[i])
 	{
 		buf[i] = buf[i + 1];
 		i++;
 	}
-	
 }
 
-void put_char_in_str(char *buf, char c, int nth)
+void		put_char_in_str(char *buf, char c, int nth)
 {
-	int len = ft_strlen(buf) + 1;
+	int		len;
+
+	len = ft_strlen(buf) + 1;
 	buf[len] = '\0';
-	while(len > nth)
+	while (len > nth)
 	{
 		buf[len] = buf[len - 1];
-		len --;
+		len--;
 	}
 	buf[len] = c;
+}
+
+void		free_str_array(char **str)
+{
+	int		i;
+
+	if (str == NULL)
+		return ;
+	i = -1;
+	while (str[++i])
+		free(str[i]);
+	free(str);
 }

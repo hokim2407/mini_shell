@@ -85,6 +85,7 @@ void		ft_export_env(t_deck *env, t_deck *export, char *target)
 {
 	char	**data;
 	int		count;
+	t_list	*inlist;
 
 	data = ft_split_two(target, '=');
 	count = -1;
@@ -100,7 +101,6 @@ void		ft_export_env(t_deck *env, t_deck *export, char *target)
 			;
 		if (count > 1)
 		{
-			t_list *inlist;
 			inlist = find_lst_by_key(env, data[0]);
 			if (inlist == NULL)
 			{

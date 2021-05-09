@@ -82,6 +82,10 @@ int		sh_process(char **new_argv, t_datas *datas);
 
 int			ft_write_ch(int c);
 
+void set_terminal(char **cm, char **dc, char **ce);
+void set_again_terminal();
+void back_terminal();
+
 void check_cursor(t_cursor *cursor, char * buf, int *i);
 void get_cursor_position(int *h, int *v);
 void put_char_in_str(char *buf, char c, int nth);
@@ -137,5 +141,7 @@ int		count_deck(t_deck * deck);
 void print_err(int fd);
 
 char		**ft_one_str_arr(const char *str);
+
+void		rm_chars_in_str(char *buf, int start, int len);
 
 #endif

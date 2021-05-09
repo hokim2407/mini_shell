@@ -12,54 +12,62 @@
 
 #include "minishell.h"
 
-char				*ft_strjoin(char const *s1, char const *s2)
+char		*ft_strldup(const char *str, int len)
 {
-	char			*result;
-	int				i;
+	char	*result;
 
-	i = 0;
-	if (s1 == NULL)
+	if (!(result = malloc(len + 1)))
 		return (NULL);
-	if (!(result = malloc(ft_strlen(s1) + ft_strlen(s2) + 1)))
-		return (NULL);
-	while (*s1 != '\0')
-	{
-		*(result + i) = *(s1++);
-		i++;
-	}
-	while (*s2 != '\0')
-	{
-		*(result + i) = *(s2++);
-		i++;
-	}
-	*(result + i) = '\0';
+	ft_strlcpy(result, str, len + 1);
+	result[len - 1] = '\0';
 	return (result);
 }
 
-size_t				ft_strlcpy(char *dest, const char *src, size_t size)
+char		**ft_split_two(char *str, char c)
 {
-	unsigned int	i;
+	int		count;
+	char	**result;
+	int		i;
+	int		point;
 
 	i = 0;
-	if (!src)
-		return (0);
-	if (!dest || size == 0)
-		return (ft_strlen(src));
-	while (*(src + i) != '\0' && i + 1 < size)
+	if (str == NULL)
+		return (NULL);
+	count = 2;
+	if ((point = ft_strchr(str, c)) == -1)
+		count = 1;
+	if (!(result = malloc(sizeof(char *) * (count + 1))))
+		return (NULL);
+	if (count == 1)
 	{
-		*(dest + i) = *(src + i);
-		i++;
+		result[0] = ft_strdup(str);
+		result[1] = NULL;
+		return (result);
 	}
-	*(dest + i) = '\0';
-	return (ft_strlen(src));
+	point++;
+	result[0] = ft_strldup(str, point);
+	result[1] = ft_strdup(str + point);
+	result[2] = NULL;
+	return (result);
 }
 
-char				*ft_strdup(const char *str)
+char		**ft_one_str_arr(const char *str)
 {
-	char			*result;
+	char	**result;
 
-	if (!(result = malloc(ft_strlen(str) + 1)))
+	if (!(result = (char **)malloc(sizeof(char *) * 2)))
 		return (NULL);
-	ft_strlcpy(result, str, ft_strlen(str) + 1);
+	result[0] = ft_strdup(str);
+	result[1] = NULL;
 	return (result);
+}
+
+void		rm_chars_in_str(char *buf, int start, int len)
+{
+	int		i;
+
+	i = start - 1;
+	while (buf[++i + len + 1])
+		buf[i] = buf[i + len + 1];
+	buf[i] = '\0';
 }

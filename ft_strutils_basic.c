@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-size_t ft_strlen(const char *str)
+size_t		ft_strlen(const char *str)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	while (*(str + i) != '\0')
@@ -30,16 +30,16 @@ int			ft_write(char *str)
 	while (str[++i])
 		;
 	write(1, str, i);
-	return 1;
+	return (1);
 }
 
 int			ft_write_ch(int c)
 {
 	write(1, &c, 1);
-	return 1;
+	return (1);
 }
 
-int		ft_strchr(const char *str, int value)
+int			ft_strchr(const char *str, int value)
 {
 	int		i;
 
