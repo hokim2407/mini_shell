@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/04 20:19:51 by hokim             #+#    #+#             */
-/*   Updated: 2021/03/10 17:20:16 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/09 16:54:36 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,19 +29,20 @@ int			count_str(char *str, char c)
 	int		is_quato;
 
 	count = 0;
-	is_quato= 0;
+	is_quato = 0;
 	while (*str == c && *str)
 		str++;
 	if (*str != c && *str)
 	{
-		while (*str && (is_quato ||  *str != c))
+		while (*str && (is_quato || *str != c))
 		{
-			if((is_quato == 2 && *str == '\"') || (is_quato == 1 && *str == '\''))
+			if ((is_quato == 2 && *str == '\"') ||
+					(is_quato == 1 && *str == '\''))
 				is_quato = 0;
-			else if(is_quato == 0 && *str == '\"')
-				is_quato =2;
-			else if(is_quato == 0 &&  *str == '\'')
-				is_quato =1;
+			else if (is_quato == 0 && *str == '\"')
+				is_quato = 2;
+			else if (is_quato == 0 && *str == '\'')
+				is_quato = 1;
 			count++;
 			str++;
 		}
@@ -57,7 +58,6 @@ int			fill_data(char *str, char c, char **result, int count)
 	index = 0;
 	while (*str && index < count)
 	{
-
 		while (*str == c && *str)
 			str++;
 		if (!*str)
@@ -66,10 +66,9 @@ int			fill_data(char *str, char c, char **result, int count)
 			return (1);
 		}
 		str_count = count_str(str, c);
-		if (!(result[index] = malloc( str_count+ 1)))
+		if (!(result[index] = malloc(str_count + 1)))
 			return (free_array(result, index));
 		ft_strlcpy(result[index], str, str_count + 1);
-
 		str += str_count;
 		index++;
 	}
@@ -105,15 +104,15 @@ char		**ft_split(char const *str, char c)
 	i = 0;
 	if (str == NULL)
 		return (NULL);
-	count = count_split((char*)str, c);
-	if (!(result = malloc(sizeof(char*) * (count + 1))))
+	count = count_split((char *)str, c);
+	if (!(result = malloc(sizeof(char *) * (count + 1))))
 		return (NULL);
 	if (count == 0)
 	{
 		*result = NULL;
 		return (result);
 	}
-	if (!fill_data((char*)str, c, result, count))
+	if (!fill_data((char *)str, c, result, count))
 		return (NULL);
 	return (result);
 }

@@ -1,17 +1,28 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_pipe.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
+/*   Updated: 2021/05/09 17:12:36 by hyerkim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "minishell.h"
 
 #define READ 0
 #define WRITE 1
 
-int refeat_pipe(char *argv, t_datas *datas, pid_t * pid, int fd_read, int is_final)
+int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
+		int fd_read, int is_final)
 {
-	int fd_pipe[2];
-	char c;
+	int		fd_pipe[2];
+	char	c;
 
 	pipe(fd_pipe);
 	*pid = fork();
-
 	if (*pid == 0)
 	{
 		close(fd_pipe[0]);
@@ -20,32 +31,28 @@ int refeat_pipe(char *argv, t_datas *datas, pid_t * pid, int fd_read, int is_fin
 		if (is_final)
 			dup2(datas->ori_fd.write, 1);
 		else
-			dup2(fd_pipe[1] ,1);
+			dup2(fd_pipe[1], 1);
 		mini_single_process(argv, datas);
-
 		close(fd_pipe[1]);
 		close(fd_read);
-		exit(datas->status/256);
+		exit(datas->status / 256);
 	}
 	close(fd_pipe[1]);
 	close(fd_read);
-	return fd_pipe[0];
+	return (fd_pipe[0]);
 }
 
-
-
-void start_pipe(char **pipes, t_datas *datas)
+void		start_pipe(char **pipes, t_datas *datas)
 {
-	pid_t pid;
-	pid_t *child_pid;
-	int count;
-	int i;
+	pid_t	pid;
+	pid_t	*child_pid;
+	int		count;
+	int		i;
 
 	count = -1;
-
-	while(pipes[++count])
-	;
-	child_pid = malloc(sizeof(pid_t)* count);
+	while (pipes[++count])
+		;
+	child_pid = malloc(sizeof(pid_t) * count);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -53,32 +60,25 @@ void start_pipe(char **pipes, t_datas *datas)
 		signal(SIGQUIT, SIG_DFL);
 		i = -1;
 		datas->fd.read = 0;
-		while(pipes[++i])
-		{
-			datas->fd.read = refeat_pipe(pipes[i], datas, child_pid + i, 	datas->fd.read , pipes[i + 1] == NULL);
-			
-			
-		}
+		while (pipes[++i])
+			datas->fd.read = refeat_pipe(pipes[i], datas, child_pid + i,
+					datas->fd.read, pipes[i + 1] == NULL);
 		i = -1;
-		while(pipes[++i])
-		{
+		while (pipes[++i])
 			waitpid(child_pid[i], &datas->status, 0);
-
-		}
 		exit(WEXITSTATUS(datas->status));
 	}
 	else
-	{
 		waitpid(pid, &datas->status, 0);
-	}
 	free(child_pid);
 }
 
-int pipe_process(char *block, t_datas *datas)
+int			pipe_process(char *block, t_datas *datas)
 {
-	char **pipes;
-	int i = -1;
-	
+	char	**pipes;
+	int		i;
+
+	i = -1;
 	pipes = ft_split(block, '|');
 	datas->ori_fd.write = dup(1);
 	datas->ori_fd.read = dup(0);
@@ -94,5 +94,5 @@ int pipe_process(char *block, t_datas *datas)
 		start_pipe(pipes, datas);
 	}
 	free_str_array(pipes);
-	return 1;
+	return (1);
 }
