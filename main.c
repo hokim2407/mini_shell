@@ -1,73 +1,156 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_strutils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/09/29 15:48:17 by hokim             #+#    #+#             */
+/*   Updated: 2021/04/01 17:18:16 by hokim            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-pid_t pid;
-char *head;
-	int read_fd;
-	int write_fd;
-void sig_ft()
+int				g_sig_end;
+
+void			print_err(int fd)
 {
-	if (SIGINT != 2)
-		signal(SIGINT, SIG_DFL);
-	else
+	write(fd, strerror(errno), ft_strlen(strerror(errno)));
+	write(fd, "\n", 1);
+}
+
+void			sig_ft(int signum)
+{
+	if (SIGINT == signum)
 	{
 		write(1, "\n", 1);
-		write(1, head, ft_strlen(head));
+		write(1, HEADER, ft_strlen(HEADER));
+		g_sig_end = 'c';
 	}
+	else if (SIGQUIT == signum)
+		;
 }
 
-int mini_process(char *buf, char **envv, t_deck *env_lst)
+int				mini_single_process(char *buf, t_datas *datas)
 {
-	char **new_argv;
-	int i;
+	char		**new_argv;
+	int			i;
 
-    i=-1;
+	i = -1;
 	new_argv = ft_split(buf, ' ');
-    
-    while (new_argv[++i])
-        check_env_in_cmd(new_argv + i, env_lst);
+	check_env_in_cmd(new_argv, datas->env_list);
+	rm_quato(new_argv);
 	if (new_argv[0] == NULL)
-		return 1;
-	if (!ft_strcmp(new_argv[0], "ls") || !ft_strcmp(new_argv[0], "pwd") || !ft_strcmp(new_argv[0], "echo"))
-		exe_process(new_argv, envv, env_lst);
-	else if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
-		chdir(new_argv[1]);
+		return (1);
+	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
+	{
+		if (chdir(new_argv[1]) < 0)
+			print_err(1);
+	}
 	else if (!ft_strcmp(new_argv[0], "env"))
-		ft_print_all_deck(*env_lst);
+		ft_print_all_deck(*datas->env_list);
 	else if (!ft_strcmp(new_argv[0], "export"))
-		ft_add_env(env_lst, new_argv[1]);
+		ft_export_env(datas->env_list, datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "unset"))
-		ft_rm_env(env_lst, new_argv[1]);
-	else if (new_argv[0][0]== '/' || !ft_strlcmp(new_argv[0], "./", 2)|| !ft_strlcmp(new_argv[0], "../", 3))
-            sh_process(new_argv, envv, env_lst);
+		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "exit"))
 		exit(0);
-	return 1;
+	else if (!ft_strcmp(new_argv[0], "$?"))
+		printf("%d\n", datas->status / 256);
+	else if (new_argv[0][0] == '/' || !ft_strlcmp(new_argv[0], "./", 2)
+				|| !ft_strlcmp(new_argv[0], "../", 3))
+		sh_process(new_argv, datas);
+	else
+		exe_process(new_argv, datas);
+	free_str_array(new_argv);
+	return (0);
 }
 
-int main(int argc, char **argv, char **envv)
+void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 {
-	char buf[4096];
-	char **new_argv;
-	t_deck *env_lst = array_to_list(envv);
-	head = "mini_shell> ";
-	char ** splited;
-	//getcwd(path, 256);
-	//signal(SIGINT, sig_ft);
+	g_sig_end = 0;
+	set_terminal(&cursor->cm, &cursor->dc, &cursor->ce);
+	cursor->history = ft_new_deck();
+	cursor->cur_history = cursor->history->tail;
+	datas->env_list = array_to_list(envv, 0);
+	datas->export_list = array_to_list(envv, 1);
+	datas->envv = envv;
+	datas->fd.read = 0;
+	datas->fd.write = 1;
+	datas->status = 0;
+	signal(SIGINT, sig_ft);
+	signal(SIGQUIT, sig_ft);
+}
 
+void			read_char_process(char *buf, t_cursor *cursor, int *i)
+{
+	if (g_sig_end == 'c')
+	{
+		g_sig_end = 0;
+		cursor->max = 0;
+		*i = 0;
+		buf[0] = '\0';
+	}
+	if ((cursor->c == 4 && cursor->max != 0) || cursor->c == '\t')
+		return ;
+	if (cursor->c == 4)
+	{
+		write(1, "exit\n", 5);
+		exit(0);
+	}
+	check_cursor(cursor, buf, i);
+	if (cursor->c < 127)
+	{
+		if (cursor->max < ++(*i))
+		{
+			buf[*i - 1] = cursor->c;
+			write(1, buf + *i - 1, 1);
+		}
+		else
+		{
+			put_char_in_str(buf, cursor->c, *i - 1);
+			push_new(cursor, buf);
+		}
+		cursor->max++;
+	}
+	cursor->c = 0;
+	buf[cursor->max + 1] = '\0';
+}
+
+int				main(int argc, char **argv, char **envv)
+{
+	char		buf[4096];
+	t_datas		datas;
+	t_cursor	cursor;
+	int			i;
+	char		**blocks;
+
+	shell_init(&datas, &cursor, envv);
 	while (1)
 	{
-		read_fd = 0;
-		write_fd = 1;
-		write(1, head, ft_strlen(head));
-		int i = 0;
-		while (read(0, buf + i, 1) > 0 && buf[i] != '\n')
-			i++;
+		set_again_terminal();
+		write(1, HEADER, ft_strlen(HEADER));
+		get_cursor_position(&(cursor.term_offset), &(cursor.v));
+		buf[0] = '\0';
+		cursor.max = 0;
+		i = 0;
+		cursor.c = 0;
+		while (read(0, &cursor.c, sizeof(int)) > 0 && cursor.c != '\n')
+			read_char_process(buf, &cursor, &i);
+		back_terminal();
+		buf[cursor.max + 1] = '\0';
+		ft_lstadd(cursor.history, ft_new_list(buf));
+		cursor.cur_history = cursor.history->tail;
 		if (buf[i] != '\n')
 			write(1, "\n", 1);
-		buf[i] = '\0';
 		if (buf[0] == '\0' || buf[0] == '\n')
-			continue;
-	
-		mini_process(splited[1],envv, env_lst);
+			continue ;
+		blocks = ft_split(buf, ';');
+		i = -1;
+		while (blocks[++i])
+			pipe_process(blocks[i], &datas);
+		free_str_array(blocks);
 	}
+	system("leaks checker");
 }
