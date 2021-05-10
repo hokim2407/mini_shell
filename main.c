@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/10 13:04:49 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/10 14:46:00 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,6 @@ void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 	datas->fd.read = 0;
 	datas->fd.write = 1;
 	datas->status = 0;
-	signal(SIGINT, sig_ft);
-	signal(SIGQUIT, sig_ft);
 }
 
 void			new_input_init(t_cursor *cursor, char *buf, int *i)
@@ -46,6 +44,8 @@ void			new_input_init(t_cursor *cursor, char *buf, int *i)
 	cursor->max = 0;
 	*i = 0;
 	cursor->c = 0;
+	signal(SIGINT, sig_ft);
+	signal(SIGQUIT, sig_ft);
 }
 
 int				main(int argc, char **argv, char **envv)
