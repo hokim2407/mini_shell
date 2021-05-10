@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:49:21 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/10 13:04:49 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,6 @@ int				print_err(int fd)
 	write(fd, strerror(errno), ft_strlen(strerror(errno)));
 	write(fd, "\n", 1);
 	return (1);
-}
-
-void			sig_ft(int signum)
-{
-	if (SIGINT == signum)
-	{
-		write(1, "\n", 1);
-		write(1, HEADER, ft_strlen(HEADER));
-		g_sig_end = 'c';
-	}
-	else if (SIGQUIT == signum)
-		;
 }
 
 void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)

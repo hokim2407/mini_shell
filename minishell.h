@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:49:37 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/10 13:01:05 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,5 +151,9 @@ char				**ft_one_str_arr(const char *str);
 void				rm_chars_in_str(char *buf, int start, int len);
 int					mini_single_process(char *buf, t_datas *datas);
 void				read_char_process(char *buf, t_cursor *cursor, int *i);
+
+void				sig_ft(int signum);
+void				sig_ign();
+void				sig_dfl();
 
 #endif

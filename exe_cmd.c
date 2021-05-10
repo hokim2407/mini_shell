@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:43:51 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/09 16:44:10 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/10 13:02:56 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,14 +76,13 @@ int					exe_process(char **new_argv, t_datas *datas)
 	int				pid;
 	char			*temp;
 	int				status;
-	int				limit;
 	int				offset;
 
-	limit = 20000000;
 	offset = 0;
 	pid = fork();
 	if (pid == 0)
 	{
+		sig_dfl();
 		temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
 				new_argv[0]);
 		dup2(datas->fd.read, 0);
@@ -94,6 +93,9 @@ int					exe_process(char **new_argv, t_datas *datas)
 			exit(print_err(datas->ori_fd.write));
 	}
 	else
+	{
+		signal(SIGINT, sig_ign);
 		waitpid(pid, &datas->status, 0);
+	}
 	return (1);
 }
