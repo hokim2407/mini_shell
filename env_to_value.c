@@ -3,14 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/09 17:00:07 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/10 13:01:32 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int			find_out_sign(char *str)
+{
+	int temp;
+	int chr;
+
+	temp = ft_strchr(str, '$');
+	chr = temp;
+	if (temp != -1 && get_quato(str, chr) == 1)
+	{
+		temp = ft_strchr(str + chr + 1, '$');
+		chr += temp + 1;
+	}
+	if (temp == -1)
+		chr = -1;
+	return (chr);
+}
 
 char		*get_env_in_cmd(char *str, int *start, int *len)
 {
@@ -18,7 +35,7 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	int		chr;
 	int		i;
 
-	chr = ft_strchr(str, '$');
+	chr = find_out_sign(str);
 	if (chr == -1)
 		return (NULL);
 	result = malloc(ft_strlen(str) - chr + 1);

@@ -1,37 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sh_cmd.c                                           :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/05/09 19:51:24 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:51:27 by hokim            ###   ########.fr       */
+/*   Created: 2021/05/10 12:55:36 by hokim             #+#    #+#             */
+/*   Updated: 2021/05/10 12:55:37 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			sh_process(char **new_argv, t_datas *datas)
-{
-	int		pid;
-	char	*temp;
+extern int		g_sig_end;
 
-	if (new_argv[0][ft_strlen(new_argv[0]) - 1] == '/')
-		return (1);
-	if (new_argv[0][0] != '/')
-		new_argv[0] = get_abs_path(new_argv[0]);
-	pid = fork();
-	if (pid == 0)
+void			sig_ft(int signum)
+{
+	if (SIGINT == signum)
 	{
-		if (execve(new_argv[0], new_argv, datas->envv) == -1)
-			exit(1);
-		free(temp);
+		write(1, "\n", 2);
+		write(1, HEADER, ft_strlen(HEADER));
+		g_sig_end = 'c';
 	}
-	else
-	{
-		wait(&datas->status);
-		exit(datas->status);
-	}
-	return (1);
+	else if (SIGQUIT == signum)
+		;
+}
+
+void			sig_ign(void)
+{
+	write(1, "\n", 2);
+}
+
+void			sig_dfl(void)
+{
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 }

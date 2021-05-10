@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_find.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:45:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 17:08:14 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/09 19:52:08 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,17 @@ int			count_deck(t_deck *deck)
 		temp = temp->next;
 	}
 	return (count);
+}
+
+void		ft_print_all_deck(t_deck deck)
+{
+	t_list	*temp;
+
+	temp = deck.head->next;
+	while (temp != deck.tail)
+	{
+		write(1, temp->content, ft_strlen(temp->content));
+		write(1, "\n", 1);
+		temp = temp->next;
+	}
 }
