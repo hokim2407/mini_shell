@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/10 13:02:03 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/11 14:56:10 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
 	if (*pid == 0)
 	{
 		close(fd_pipe[0]);
-		if(!check_redirect(argv, datas->ori_fd, &datas->fd))
+		if(!check_redirect(argv, datas, &datas->fd))
 			exit(1);
 		dup2(datas->fd.read, 0);
 		if (is_final)
@@ -90,9 +90,10 @@ int			pipe_process(char *block, t_datas *datas)
 	{
 		datas->fd.read = 0;
 		datas->fd.write = 1;
-		if(!check_redirect(pipes[0], datas->ori_fd, &datas->fd))
-		{
-			free_str_array(pipes);
+		if(!check_redirect(pipes[0], datas, &datas->fd))
+    {
+      free_str_array(pipes);
+
 			return (1);
 		}
 		mini_single_process(pipes[0], datas);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:51:20 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/11 14:55:34 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 	{
 		if (chdir(new_argv[1]) < 0)
-			print_err(1);
+			print_err(1, new_argv, 1);
 	}
 	else if (!ft_strcmp(new_argv[0], "env"))
 		ft_print_all_deck(*datas->env_list);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:43:51 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/10 13:02:56 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/11 14:55:18 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int					exe_process(char **new_argv, t_datas *datas)
 		if (!ft_strcmp(new_argv[0], "echo"))
 			offset = check_echo(new_argv);
 		if (execve(temp, new_argv + offset, datas->envv) == -1)
-			exit(print_err(datas->ori_fd.write));
+			exit(print_err(datas->ori_fd.write, new_argv, 127));
 	}
 	else
 	{
