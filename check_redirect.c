@@ -47,15 +47,11 @@ int		write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 	{
 		i++;
 		pipe[i] = ' ';
-		str = ft_split(pipe, ' ');
-		fd->write = open(get_filename_from(pipe + i + 1),
-					O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		create = O_WRONLY | O_APPEND | O_CREAT;
   }
 	else
-  {
-    str = ft_split(pipe, ' ');
 		create = O_WRONLY | O_TRUNC | O_CREAT;
-  }
+    str = ft_split(pipe, ' ');
 	filename = get_filename_from(pipe + i + 1);
 	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
 	free(filename);

@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern t_sig	g_sig;
+
 int					in_dir(char *path, char *cmd)
 {
 	DIR				*dir_ptr;
@@ -94,7 +96,9 @@ int					exe_process(char **new_argv, t_datas *datas)
 	}
 	else
 	{
-		signal(SIGINT, sig_ign);
+		g_sig.is_cat = !ft_strcmp(new_argv[0], "cat");
+		signal(SIGINT, sig_special);
+		signal(SIGQUIT, sig_special);
 		waitpid(pid, &datas->status, 0);
 	}
 	return (1);

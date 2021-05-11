@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int				g_sig_end;
+t_sig			g_sig;
 
 int				print_err(int fd, char **argv, int status)
 {
@@ -38,7 +38,6 @@ int				print_err(int fd, char **argv, int status)
 
 void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 {
-	g_sig_end = 0;
 	set_terminal(&cursor->cm, &cursor->dc, &cursor->ce);
 	cursor->history = ft_new_deck();
 	cursor->cur_history = cursor->history->tail;

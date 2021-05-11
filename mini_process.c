@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-extern int		g_sig_end;
+extern t_sig	g_sig;
 
 void			mini_single_process2(char **new_argv, t_datas *datas)
 {
@@ -72,9 +72,9 @@ void			ascii_char_process(char *buf, t_cursor *cursor, int *i)
 
 void			read_char_process(char *buf, t_cursor *cursor, int *i)
 {
-	if (g_sig_end == 'c')
+	if (g_sig.sig == 'c')
 	{
-		g_sig_end = 0;
+		g_sig.sig = 0;
 		cursor->max = 0;
 		*i = 0;
 		buf[0] = '\0';
