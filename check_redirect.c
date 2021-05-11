@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:56:56 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/09 16:56:58 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 14:53:58 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,48 +33,68 @@ char		*get_filename_from(char *str)
 	return (result);
 }
 
-int		write_redirect(char *pipe, t_fd ori_fd, t_fd *fd, int i)
+int		write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 {
+	char	**str;
+
+	str = NULL;
 	if (pipe[i] == '>' && pipe[i + 1] && pipe[i + 1] == '>')
 	{
 		pipe[i] = ' ';
 		i++;
 		pipe[i] = ' ';
+		/*
+		*/
+		str = ft_split(pipe, ' ');
 		fd->write = open(get_filename_from(pipe + i + 1),
 					O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
 	}
 	else if (pipe[i] == '>')
 	{
 		pipe[i] = ' ';
+		/*
+		*/
+		str = ft_split(pipe, ' ');
 		fd->write = open(get_filename_from(pipe + i + 1),
 					O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
 	}
 	if (fd->write == -1)
 	{
-		print_err(ori_fd.write);
+		datas->status = print_err(datas->ori_fd.write, str, 22);
+		if(str != NULL)
+			free_str_array(str);
 		return 0;
 	}
+	if(str != NULL)
+		free_str_array(str);
 	return 1;
 }
 
-int		check_redirect(char *pipe, t_fd ori_fd, t_fd *fd)
+int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 {
 	int		i;
+	char	**str;
 
+	str = NULL;
 	i = -1;
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			return write_redirect(pipe, ori_fd, fd, i);
+			return write_redirect(pipe, datas, fd, i);
 		else if (pipe[i] == '<')
 		{
 			pipe[i] = ' ';
+			 str = ft_split(pipe, ' ');
 			fd->read = open(get_filename_from(pipe + i + 1), O_RDONLY);
 			if (fd->read == -1)
 			{
-				print_err(ori_fd.write);
+				
+				 datas->status = print_err(datas->ori_fd.write, str, 22);
+				 free_str_array(str);
 				return 0;
 			}
+			if(str != NULL)
+				free_str_array(str);
 		}
 	}
 	return 1;

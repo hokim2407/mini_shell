@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/10 13:01:05 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/11 14:54:59 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void				ft_lstadd(t_deck *deck, t_list *new_lst);
 void				ft_lstdelone(t_list *one);
 void				ft_lstadd_inorder(t_deck *deck, t_list *lst);
 
-int					check_redirect(char *pipe, t_fd ori_fd, t_fd *fd);
+int					check_redirect(char *pipe, t_datas *datas, t_fd *fd);
 
 char				**ft_split(char const *str, char c);
 int					ft_strcmp(char *str1, char *str2);
@@ -144,7 +144,7 @@ void				remove_char_in_str(char *buf, int nth);
 
 int					count_deck(t_deck *deck);
 
-int					print_err(int fd);
+int					print_err(int fd, char **argv, int status);
 
 char				**ft_one_str_arr(const char *str);
 

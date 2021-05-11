@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/10 14:46:00 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/11 14:55:01 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,28 @@
 
 int				g_sig_end;
 
-int				print_err(int fd)
+int				print_err(int fd, char **argv, int status)
 {
-	write(fd, strerror(errno), ft_strlen(strerror(errno)));
-	write(fd, "\n", 1);
-	return (1);
+	int len;
+
+	len = -1;
+	while (argv[++len])
+		;
+	if (status == 127)
+	{
+		write(fd, "bash: ", 6);
+		write(fd, argv[0], ft_strlen(argv[0]));
+		write(fd, ": command not found\n", 20);
+	}
+	else
+	{
+		write(fd, "bash: ", 6);
+		write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
+		write(fd, ": ", 2);
+		write(fd, strerror(errno), ft_strlen(strerror(errno)));
+		write(fd, "\n", 1);
+	}
+	return (status);
 }
 
 void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
