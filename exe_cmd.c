@@ -67,14 +67,24 @@ char *get_executable(char *path, char *cmd)
 int check_echo(char **new_argv)
 {
 	int i;
+	int j;
 
 	i = 0;
-	while (new_argv[++i] && !ft_strcmp(new_argv[i], "-n") && !ft_strcmp(new_argv[i + 1], "-n"))
-		;
+	while (new_argv[++i] )
+	{
+		j = 0;
+		if(new_argv[i][j]== '-')
+		{
+			while(new_argv[i][++j] == 'n')
+			;
+		}
+		if(new_argv[i][j] != '\0')
+			break;
+	}
 	if (i == 1)
 		return (0);
 	else
-		return (i);
+		return (i - 1);
 }
 
 int exe_process(char **new_argv, t_datas *datas)

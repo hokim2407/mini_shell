@@ -28,7 +28,7 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 	else if (!ft_strcmp(new_argv[0], "unset"))
 		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "$?"))
-		printf("%d\n", datas->status / 256);
+		print_status(datas->ori_fd.write, datas->status);
 	else if (new_argv[0][0] == '/' ||
 			!ft_strlcmp(new_argv[0], "./", 2) ||
 			!ft_strlcmp(new_argv[0], "../", 3))
@@ -37,33 +37,33 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 		exe_process(new_argv, datas);
 }
 
-int				mini_single_process(char *buf, t_datas *datas)
+int mini_single_process(char *buf, t_datas *datas)
 {
-	char		**new_argv;
-	int			i;
-
-	i = -1;
-	new_argv = ft_split(buf, ' ');
-	check_env_in_cmd(new_argv, datas->env_list);
-	rm_quato(new_argv);
-	if (new_argv[0] == NULL)
-		return (1);
-	if (!ft_strcmp(new_argv[0], "exit"))
-	{
-		i = 0;
-		int num = 0;
-		while (new_argv[1][i] && ('1' <= new_argv[1][i]) && (new_argv[1][i] <= '9'))
-		{
-			num = num*10 + new_argv[1][i] - '0';
-			i++;
-		}
-		if (num != 0)
-			exit(num);
-		exit(0);
-	}
-	mini_single_process2(new_argv, datas);
-	free_str_array(new_argv);
-	return (0);
+    char **new_argv;
+    int i;
+    i = -1;
+    new_argv = ft_split(buf, ' ');
+    check_env_in_cmd(new_argv, datas->env_list);
+    rm_quato(new_argv);
+    if (new_argv[0] == NULL)
+        return (1);
+    if (!ft_strcmp(new_argv[0], "exit"))
+    {
+        i = 0;
+        int num = 0;
+         write(datas->ori_fd.write, "exit\n", 5);
+        if (new_argv[1] != NULL)
+        {
+            num = ft_atoi(new_argv[1]);
+            if (num != 0)
+                exit(num);
+            exit(print_err(datas->ori_fd.write, new_argv, 255));
+        }
+        exit(0);
+    }
+    mini_single_process2(new_argv, datas);
+    free_str_array(new_argv);
+    return (0);
 }
 
 void			ascii_char_process(char *buf, t_cursor *cursor, int *i)

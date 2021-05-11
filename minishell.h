@@ -141,6 +141,8 @@ char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strdup(const char *str);
 int					ft_strchr(const char *str, int value);
 void				free_str_array(char **str);
+char				*ft_itoa(int num);
+int					ft_atoi(const char *str);
 
 char				*get_abs_path(char *original);
 
@@ -151,6 +153,7 @@ void				remove_char_in_str(char *buf, int nth);
 int					count_deck(t_deck *deck);
 
 int					print_err(int fd, char **argv, int status);
+int					print_status(int fd, int status);
 
 char				**ft_one_str_arr(const char *str);
 

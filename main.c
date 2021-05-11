@@ -16,23 +16,39 @@ t_sig			g_sig;
 
 int				print_err(int fd, char **argv, int status)
 {
-	int len;
+    int len;
+	
+    len = -1;
+    while (argv[++len])
+        ;
+    write(fd, "minishell: ", 11);
+    write(fd, argv[0], ft_strlen(argv[0]));
+    write(fd, ": ", 2);
+    if (status == 127)
+        write(fd, "command not found\n", 18);
+    else if (status == 255)
+    {
+        write(fd, argv[1], ft_strlen(argv[1]));
+        write(fd, ": numeric argument required\n", 28);
+    }
+    else
+    {
+        write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
+        write(fd, ": ", 2);
+        write(fd, strerror(errno), ft_strlen(strerror(errno)));
+        write(fd, "\n", 1);
+    }
+    return (status);
+}
 
-	len = -1;
-	while (argv[++len])
-		;
+int				print_status(int fd, int status)
+{
+	char *str ;
+
+	str = ft_itoa(status/256);
 	write(fd, "minishell: ", 11);
-	write(fd, argv[0], ft_strlen(argv[0]));
-	write(fd, ": ", 2);
-	if (status == 127)
-		write(fd, ": command not found\n", 20);
-	else
-	{
-		write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
-		write(fd, ": ", 2);
-		write(fd, strerror(errno), ft_strlen(strerror(errno)));
-		write(fd, "\n", 1);
-	}
+	write(fd, str, ft_strlen(str));
+	write(fd, ": command not found\n", 20);
 	return (status);
 }
 

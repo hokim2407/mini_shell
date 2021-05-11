@@ -82,3 +82,32 @@ int			ft_atoi(const char *str)
 	}
 	return (int)value * flag;
 }
+
+char            *ft_itoa(int num)
+{
+        int             divider;
+        char    *result;
+        int             flag;
+        int             count;
+
+        divider = 1;
+        flag = (num < 0) ? -1 : 1;
+        count = (num < 0) ? 2 : 1;
+        while (((long)num * flag) / divider > 9)
+        {
+                divider *= 10;
+                count++;
+        }
+        if (!(result = malloc(count + 1)))
+                return (NULL);
+        *result = '-';
+        count = (num < 0) ? 1 : 0;
+        while (divider > 0)
+        {
+                *(result + count) = '0' + (((long)num * flag) / divider) % 10;
+                divider /= 10;
+                count++;
+        }
+        *(result + count) = '\0';
+        return (result);
+}

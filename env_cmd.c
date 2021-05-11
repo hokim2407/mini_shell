@@ -31,6 +31,7 @@ void		ft_print_all_export(t_deck deck)
 		i = -1;
 		str = temp->content;
 		len = ft_strlen(str);
+		write(1, "declare -x ", 11);
 		while (str[++i] && str[i] != '=')
 			;
 		write(1, str, i);
