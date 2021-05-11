@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:56:56 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 14:53:58 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 17:56:22 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ char		*get_filename_from(char *str)
 	return (result);
 }
 
-int		write_redirect(char *pipe, t_datas *datas, int i)
+int		write_redirect(char *pipe, t_datas *datas, int i, t_fd *fd)
 {
 	char	**str;
 	int create;
@@ -53,8 +53,10 @@ int		write_redirect(char *pipe, t_datas *datas, int i)
 		create = O_WRONLY | O_TRUNC | O_CREAT;
     str = ft_split(pipe, ' ');
 	filename = get_filename_from(pipe + i + 1);
-	datas->fd.write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
-	printf("#%d#",datas->fd.write);
+
+	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
+
+
 	free(filename);
 	if (datas->fd.write == -1)
 	{
@@ -68,7 +70,7 @@ int		write_redirect(char *pipe, t_datas *datas, int i)
 	return 1;
 }
 
-int		check_redirect(char *pipe, t_datas *datas)
+int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 {
 	int		i;
 	char	**str;
@@ -85,7 +87,7 @@ int		check_redirect(char *pipe, t_datas *datas)
 			pipe[i] = ' ';
 			str = ft_split(pipe, ' ');
 			filename = get_filename_from(pipe + i + 1);
-			datas->fd.read = open(filename, O_RDONLY);
+			fd->read = open(filename, O_RDONLY);
 			free(filename);
 			if (datas->fd.read == -1)
 			{
