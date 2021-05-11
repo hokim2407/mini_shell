@@ -85,6 +85,12 @@ typedef struct		s_cursor
 	int				max;
 }					t_cursor;
 
+typedef struct		s_sig
+{
+	int				sig;
+	int				is_cat;
+}					t_sig;
+
 int					mini_single_process(char *buf, t_datas *datas);
 int					pipe_process(char *block, t_datas *datas);
 int					exe_process(char **new_argv, t_datas *datas);
@@ -155,7 +161,7 @@ void				read_char_process(char *buf, t_cursor *cursor, int *i);
 void				sig_ft(int signum);
 void				sig_ign();
 void				sig_dfl();
+void				sig_special(int signum);
 
 int					check_file_state(t_fd fd, int is_check_write);
-
 #endif

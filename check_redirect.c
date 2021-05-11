@@ -33,7 +33,7 @@ char		*get_filename_from(char *str)
 	return (result);
 }
 
-int		write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
+int		write_redirect(char *pipe, t_datas *datas, int i, t_fd *fd)
 {
 	char	**str;
 	int create;
@@ -53,10 +53,12 @@ int		write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 		create = O_WRONLY | O_TRUNC | O_CREAT;
     str = ft_split(pipe, ' ');
 	filename = get_filename_from(pipe + i + 1);
+
 	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
-	printf("!!!!!%d!!!!!\n", fd->write);
+
+
 	free(filename);
-	if (fd->write == -1)
+	if (datas->fd.write == -1)
 	{
 		datas->status = print_err(datas->ori_fd.write, str, 22);
 		if(str != NULL)
@@ -79,7 +81,7 @@ int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			return write_redirect(pipe, datas, fd, i);
+			return write_redirect(pipe, datas, i);
 		else if (pipe[i] == '<')
 		{
 			pipe[i] = ' ';
@@ -87,14 +89,14 @@ int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 			filename = get_filename_from(pipe + i + 1);
 			fd->read = open(filename, O_RDONLY);
 			free(filename);
-			if (fd->read == -1)
+			if (datas->fd.read == -1)
 			{
 
 				datas->status = print_err(datas->ori_fd.write, str, 22);
 				free_str_array(str);
 				return 0;
 			}
-			if(str != NULL)
+			if (str != NULL)
 				free_str_array(str);
 		}
 	}
