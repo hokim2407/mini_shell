@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/11 14:55:34 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 19:45:34 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,6 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 		ft_export_env(datas->env_list, datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "unset"))
 		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
-	else if (!ft_strcmp(new_argv[0], "exit"))
-		exit(0);
 	else if (!ft_strcmp(new_argv[0], "$?"))
 		printf("%d\n", datas->status / 256);
 	else if (new_argv[0][0] == '/' ||
@@ -50,6 +48,19 @@ int				mini_single_process(char *buf, t_datas *datas)
 	rm_quato(new_argv);
 	if (new_argv[0] == NULL)
 		return (1);
+	if (!ft_strcmp(new_argv[0], "exit"))
+	{
+		i = 0;
+		int num = 0;
+		while (new_argv[1][i] && ('1' <= new_argv[1][i]) && (new_argv[1][i] <= '9'))
+		{
+			num = num*10 + new_argv[1][i] - '0';
+			i++;
+		}
+		if (num != 0)
+			exit(num);
+		exit(0);
+	}
 	mini_single_process2(new_argv, datas);
 	free_str_array(new_argv);
 	return (0);

@@ -6,18 +6,18 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:43:51 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 14:55:18 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 19:40:31 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern t_sig	g_sig;
+extern t_sig g_sig;
 
-int					in_dir(char *path, char *cmd)
+int in_dir(char *path, char *cmd)
 {
-	DIR				*dir_ptr;
-	struct dirent	*file;
+	DIR *dir_ptr;
+	struct dirent *file;
 
 	dir_ptr = NULL;
 	file = NULL;
@@ -26,28 +26,30 @@ int					in_dir(char *path, char *cmd)
 	while ((file = readdir(dir_ptr)))
 	{
 		if (!ft_strcmp(file->d_name, cmd))
-			{
+		{
 
-				return (1);
-			}
+			return (1);
+		}
 	}
 	closedir(dir_ptr);
 	return (0);
 }
 
-char				*get_executable(char *path, char *cmd)
+char *get_executable(char *path, char *cmd)
 {
-	char			**paths;
-	int				i;
-	char			*temp;
+	char **paths;
+	int i;
+	char *temp;
 
+	if (path == NULL)
+		return (NULL);
 	paths = ft_split(path, ':');
 	temp = NULL;
 	i = -1;
 	while (paths[++i])
 	{
 		if (in_dir(paths[i], cmd))
-			break ;
+			break;
 	}
 	if (paths[i])
 	{
@@ -62,13 +64,12 @@ char				*get_executable(char *path, char *cmd)
 	return (temp);
 }
 
-int					check_echo(char **new_argv)
+int check_echo(char **new_argv)
 {
-	int				i;
+	int i;
 
 	i = 0;
-	while (new_argv[++i] && !ft_strcmp(new_argv[i], "-n")
-			&& !ft_strcmp(new_argv[i + 1], "-n"))
+	while (new_argv[++i] && !ft_strcmp(new_argv[i], "-n") && !ft_strcmp(new_argv[i + 1], "-n"))
 		;
 	if (i == 1)
 		return (0);
@@ -76,22 +77,29 @@ int					check_echo(char **new_argv)
 		return (i);
 }
 
-int					exe_process(char **new_argv, t_datas *datas)
+int exe_process(char **new_argv, t_datas *datas)
 {
-	int				pid;
-	char			*temp;
-	int				status;
-	int				offset;
+	int pid;
+	char *temp;
+	int status;
+	int offset;
 
 	offset = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		sig_dfl();
-		temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
-				new_argv[0]);
-		if(temp[0]!='/')
-			exit(print_err(datas->ori_fd.write, new_argv, 127));
+	
+		if (!(temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
+		 	new_argv[0]))|| temp[0] != '/')
+		 {
+			if (!(ft_strcmp(new_argv[0], "echo")))
+			{
+				write(datas->ori_fd.write, "\n", 1);
+				exit(0);
+			}	
+		 	exit(print_err(datas->ori_fd.write, new_argv, 127));
+		 }
 		dup2(datas->fd.read, 0);
 		dup2(datas->fd.write, 1);
 		if (!ft_strcmp(new_argv[0], "echo"))

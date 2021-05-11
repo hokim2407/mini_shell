@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 18:16:00 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 19:45:48 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int			pipe_process(char *block, t_datas *datas)
 
 		{
 			free_str_array(pipes);
+			datas->status = 256;
 			return (1);
 		}
 		mini_single_process(pipes[0], datas);

@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:56:56 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 17:56:22 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 19:44:49 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,7 @@ int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 			free(filename);
 			if (datas->fd.read == -1)
 			{
-
-				datas->status = print_err(datas->ori_fd.write, str, 22);
+				print_err(datas->ori_fd.write, str, 22);
 				free_str_array(str);
 				return 0;
 			}
