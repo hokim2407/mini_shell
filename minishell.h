@@ -108,7 +108,7 @@ void				ft_lstadd(t_deck *deck, t_list *new_lst);
 void				ft_lstdelone(t_list *one);
 void				ft_lstadd_inorder(t_deck *deck, t_list *lst);
 
-void				check_redirect(char *pipe, t_fd *fd);
+int					check_redirect(char *pipe, t_fd ori_fd, t_fd *fd);
 
 char				**ft_split(char const *str, char c);
 int					ft_strcmp(char *str1, char *str2);
@@ -155,5 +155,7 @@ void				read_char_process(char *buf, t_cursor *cursor, int *i);
 void				sig_ft(int signum);
 void				sig_ign();
 void				sig_dfl();
+
+int					check_file_state(t_fd fd, int is_check_write);
 
 #endif

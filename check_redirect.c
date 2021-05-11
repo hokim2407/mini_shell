@@ -33,7 +33,7 @@ char		*get_filename_from(char *str)
 	return (result);
 }
 
-void		write_redirect(char *pipe, t_fd *fd, int i)
+int		write_redirect(char *pipe, t_fd ori_fd, t_fd *fd, int i)
 {
 	if (pipe[i] == '>' && pipe[i + 1] && pipe[i + 1] == '>')
 	{
@@ -42,20 +42,22 @@ void		write_redirect(char *pipe, t_fd *fd, int i)
 		pipe[i] = ' ';
 		fd->write = open(get_filename_from(pipe + i + 1),
 					O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		if (fd->write == -1)
-			fd->write = 1;
 	}
 	else if (pipe[i] == '>')
 	{
 		pipe[i] = ' ';
 		fd->write = open(get_filename_from(pipe + i + 1),
 					O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-		if (fd->write == -1)
-			fd->write = 1;
 	}
+	if (fd->write == -1)
+	{
+		print_err(ori_fd.write);
+		return 0;
+	}
+	return 1;
 }
 
-void		check_redirect(char *pipe, t_fd *fd)
+int		check_redirect(char *pipe, t_fd ori_fd, t_fd *fd)
 {
 	int		i;
 
@@ -63,13 +65,18 @@ void		check_redirect(char *pipe, t_fd *fd)
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			write_redirect(pipe, fd, i);
+			return write_redirect(pipe, ori_fd, fd, i);
 		else if (pipe[i] == '<')
 		{
 			pipe[i] = ' ';
 			fd->read = open(get_filename_from(pipe + i + 1), O_RDONLY);
 			if (fd->read == -1)
-				fd->read = 0;
+			{
+				print_err(ori_fd.write);
+				return 0;
+			}
 		}
 	}
+	return 1;
 }
+
