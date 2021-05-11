@@ -39,6 +39,8 @@ void		move_cursor_vertital(t_cursor *cursor, char *buf, int *i, int is_up)
 	if (!is_up && cursor->cur_history->next == cursor->history->tail ||
 		!is_up && cursor->cur_history == cursor->history->tail)
 	{
+		if (cursor->cur_history->next == cursor->history->tail)
+			cursor->cur_history = cursor->history->tail;
 		*i = 0;
 		cursor->max = 0;
 		buf[0] = '\0';
