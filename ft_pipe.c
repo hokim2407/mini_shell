@@ -23,7 +23,7 @@ int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
 	if (*pid == 0)
 	{
 		close(fd_pipe[0]);
-		if(!check_redirect(argv, datas))
+		if(!check_redirect(argv, datas, &datas->fd))
 			exit(1);
 		dup2(datas->fd.read, 0);
 		if (is_final)

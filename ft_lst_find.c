@@ -35,8 +35,10 @@ t_list		*find_lst_by_key(t_deck *deck, char *key)
 	temp = deck->head->next;
 	while (temp != deck->tail)
 	{
-		if (ft_strchr(key, '=') > 0)
+
+		if (ft_strchr(temp->content, '=') > 0)
 			list_data = ft_split(temp->content, '=');
+	
 		else
 			list_data = ft_one_str_arr(temp->content);
 		if (!ft_strcmp(list_data[0], key))

@@ -33,7 +33,7 @@ char		*get_filename_from(char *str)
 	return (result);
 }
 
-int		write_redirect(char *pipe, t_datas *datas, int i, t_fd *fd)
+int		write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 {
 	char	**str;
 	int create;
@@ -81,7 +81,7 @@ int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			return write_redirect(pipe, datas, i);
+			return write_redirect(pipe, datas, &datas->fd, i);
 		else if (pipe[i] == '<')
 		{
 			pipe[i] = ' ';

@@ -73,7 +73,10 @@ void		add_lst_export_env(t_deck *env, t_deck *export,
 {
 	t_list *inlist;
 
+	inlist = NULL;
 	inlist = find_lst_by_key(env, data[0]);
+	if(inlist)
+	printf("####\n%s\n", inlist->content);
 	if (inlist == NULL)
 	{
 		ft_lstadd(env, ft_new_list(target));
@@ -95,14 +98,13 @@ void		ft_export_env(t_deck *env, t_deck *export, char *target)
 		ft_print_all_export(*export);
 	else if (!is_valid_key(target))
 		printf("not a valid identifier\n");
-	else if (ft_strchr(target, '=') < 0)
-		ft_add_export(export, target);
 	else
 	{
 		while (data[++count])
 			;
 		if (count > 1)
 			add_lst_export_env(env, export, data, target);
+		ft_add_export(export, target);
 	}
 	free_str_array(data);
 }

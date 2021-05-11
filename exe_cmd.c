@@ -26,7 +26,10 @@ int					in_dir(char *path, char *cmd)
 	while ((file = readdir(dir_ptr)))
 	{
 		if (!ft_strcmp(file->d_name, cmd))
-			return (1);
+			{
+
+				return (1);
+			}
 	}
 	closedir(dir_ptr);
 	return (0);
@@ -87,6 +90,8 @@ int					exe_process(char **new_argv, t_datas *datas)
 		sig_dfl();
 		temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
 				new_argv[0]);
+		if(temp[0]!='/')
+			exit(print_err(datas->ori_fd.write, new_argv, 127));
 		dup2(datas->fd.read, 0);
 		dup2(datas->fd.write, 1);
 		if (!ft_strcmp(new_argv[0], "echo"))
