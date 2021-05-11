@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 14:56:10 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 18:16:00 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
 			exit(1);
 		dup2(datas->fd.read, 0);
 		if (is_final)
-			dup2(datas->ori_fd.write, 1);
+				dup2(datas->ori_fd.write, 1);
 		else
 			dup2(fd_pipe[1], 1);
 		mini_single_process(argv, datas);
-		close(fd_pipe[1]);
+		close(1);
 		close(datas->fd.read);
 		exit(datas->status / 256);
 	}
@@ -63,7 +63,7 @@ void		start_pipe(char **pipes, t_datas *datas)
 	if (pid == 0)
 	{
 		i = -1;
-		datas->fd.read = 0;
+		datas->fd.read = dup(0);
 		while (pipes[++i])
 			datas->fd.read = refeat_pipe(pipes[i], datas, child_pid + i,
 					pipes[i + 1] == NULL);
@@ -88,20 +88,17 @@ int			pipe_process(char *block, t_datas *datas)
 	datas->ori_fd.read = dup(0);
 	if (pipes[1] == NULL)
 	{
-		datas->fd.read = 0;
 		datas->fd.write = 1;
-		if(!check_redirect(pipes[0], datas, &datas->fd))
-    {
-      free_str_array(pipes);
-
+		datas->fd.read = 0;
+		if (!check_redirect(pipes[0], datas, &datas->fd))
+		{
+			free_str_array(pipes);
 			return (1);
 		}
 		mini_single_process(pipes[0], datas);
 	}
 	else
-	{
 		start_pipe(pipes, datas);
-	}
 	free_str_array(pipes);
 	return (1);
 }

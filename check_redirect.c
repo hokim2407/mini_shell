@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:56:56 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 14:53:58 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 17:56:22 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,14 @@ int		write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 	{
 		i++;
 		pipe[i] = ' ';
-		str = ft_split(pipe, ' ');
-		fd->write = open(get_filename_from(pipe + i + 1),
-					O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		create = O_WRONLY | O_APPEND | O_CREAT;
   }
 	else
-  {
-    str = ft_split(pipe, ' ');
 		create = O_WRONLY | O_TRUNC | O_CREAT;
-  }
+    str = ft_split(pipe, ' ');
 	filename = get_filename_from(pipe + i + 1);
 	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
+	printf("!!!!!%d!!!!!\n", fd->write);
 	free(filename);
 	if (fd->write == -1)
 	{
@@ -86,20 +83,19 @@ int		check_redirect(char *pipe, t_datas *datas, t_fd *fd)
 		else if (pipe[i] == '<')
 		{
 			pipe[i] = ' ';
-			 str = ft_split(pipe, ' ');
-      filename = get_filename_from(pipe + i + 1);
+			str = ft_split(pipe, ' ');
+			filename = get_filename_from(pipe + i + 1);
 			fd->read = open(filename, O_RDONLY);
 			free(filename);
 			if (fd->read == -1)
 			{
-				
-				 datas->status = print_err(datas->ori_fd.write, str, 22);
-				 free_str_array(str);
+
+				datas->status = print_err(datas->ori_fd.write, str, 22);
+				free_str_array(str);
 				return 0;
 			}
 			if(str != NULL)
 				free_str_array(str);
-
 		}
 	}
 	return 1;
