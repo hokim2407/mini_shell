@@ -21,15 +21,13 @@ int				print_err(int fd, char **argv, int status)
 	len = -1;
 	while (argv[++len])
 		;
+	write(fd, "minishell: ", 11);
+	write(fd, argv[0], ft_strlen(argv[0]));
+	write(fd, ": ", 2);
 	if (status == 127)
-	{
-		write(fd, "bash: ", 6);
-		write(fd, argv[0], ft_strlen(argv[0]));
 		write(fd, ": command not found\n", 20);
-	}
 	else
 	{
-		write(fd, "bash: ", 6);
 		write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
 		write(fd, ": ", 2);
 		write(fd, strerror(errno), ft_strlen(strerror(errno)));
