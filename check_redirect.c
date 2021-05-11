@@ -35,31 +35,36 @@ char		*get_filename_from(char *str)
 
 int		write_redirect(char *pipe, t_fd ori_fd, t_fd *fd, int i)
 {
-	if (pipe[i] == '>' && pipe[i + 1] && pipe[i + 1] == '>')
+
+	int create;
+	char * filename;
+
+	pipe[i] = ' ';
+	create = 0;
+	if (pipe[i + 1] && pipe[i + 1] == '>')
 	{
-		pipe[i] = ' ';
 		i++;
 		pipe[i] = ' ';
-		fd->write = open(get_filename_from(pipe + i + 1),
-					O_WRONLY | O_APPEND | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
+		create = O_WRONLY | O_APPEND | O_CREAT;
 	}
-	else if (pipe[i] == '>')
-	{
-		pipe[i] = ' ';
-		fd->write = open(get_filename_from(pipe + i + 1),
-					O_WRONLY | O_TRUNC | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO);
-	}
+	else
+		create = O_WRONLY | O_TRUNC | O_CREAT;
+	filename = get_filename_from(pipe + i + 1);
+	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
+	free(filename);
 	if (fd->write == -1)
 	{
 		print_err(ori_fd.write);
 		return 0;
 	}
+
 	return 1;
 }
 
 int		check_redirect(char *pipe, t_fd ori_fd, t_fd *fd)
 {
 	int		i;
+	char	*filename;
 
 	i = -1;
 	while (pipe[++i])
@@ -69,12 +74,14 @@ int		check_redirect(char *pipe, t_fd ori_fd, t_fd *fd)
 		else if (pipe[i] == '<')
 		{
 			pipe[i] = ' ';
-			fd->read = open(get_filename_from(pipe + i + 1), O_RDONLY);
-			if (fd->read == -1)
-			{
+			filename = get_filename_from(pipe + i + 1);
+			fd->read = open(filename, O_RDONLY);
+			free(filename);
+			 if (fd->read == -1)
+			 {
 				print_err(ori_fd.write);
-				return 0;
-			}
+			 	return 0;
+			 }
 		}
 	}
 	return 1;

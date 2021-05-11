@@ -91,7 +91,10 @@ int			pipe_process(char *block, t_datas *datas)
 		datas->fd.read = 0;
 		datas->fd.write = 1;
 		if(!check_redirect(pipes[0], datas->ori_fd, &datas->fd))
+		{
+			free_str_array(pipes);
 			return (1);
+		}
 		mini_single_process(pipes[0], datas);
 	}
 	else
