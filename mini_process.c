@@ -22,9 +22,19 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 			print_err(1, new_argv, 1);
 	}
 	else if (!ft_strcmp(new_argv[0], "env"))
-		ft_print_all_deck(*datas->env_list);
+		{
+			if(new_argv[1]==NULL)
+			ft_print_all_deck(*datas->env_list);
+			else
+			{
+				print_env_err(datas->ori_fd.write, new_argv);
+				datas->status = 1;
+			}
+			
+		
+		}
 	else if (!ft_strcmp(new_argv[0], "export"))
-		ft_export_env(datas->env_list, datas->export_list, new_argv[1]);
+		ft_export_env(datas, new_argv, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "unset"))
 		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "$?"))

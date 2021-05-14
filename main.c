@@ -41,6 +41,7 @@ int				print_err(int fd, char **argv, int status)
 	return (status);
 }
 
+
 int				print_status(int fd, int status)
 {
 	char *str ;

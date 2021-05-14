@@ -76,8 +76,6 @@ void		add_lst_export_env(t_deck *env, t_deck *export,
 
 	inlist = NULL;
 	inlist = find_lst_by_key(env, data[0]);
-	if(inlist)
-	printf("####\n%s\n", inlist->content);
 	if (inlist == NULL)
 	{
 		ft_lstadd(env, ft_new_list(target));
@@ -87,25 +85,64 @@ void		add_lst_export_env(t_deck *env, t_deck *export,
 		inlist->content = ft_strdup(target);
 }
 
-void		ft_export_env(t_deck *env, t_deck *export, char *target)
+
+int				print_env_err(int fd, char **argv)
 {
-	char	**data;
+	int len;
+
+	len = -1;
+	while (argv[++len])
+		;
+	write(fd, argv[0], ft_strlen(argv[0]));
+	write(fd, ": ", 2);
+	write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
+	write(fd, ": ", 2);
+	write(fd, "No such file or directory", ft_strlen("No such file or directory"));
+	write(fd, "\n", 1);
+	return (1);
+}
+
+
+int				print_export_err(int fd, char **argv)
+{
+	int len;
+
+	len = -1;
+	while (argv[++len])
+		;
+	write(fd, "minishell: ", 11);
+	write(fd, argv[0], ft_strlen(argv[0]));
+	write(fd, ": `", 3);
+	write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
+	write(fd, "\': ", 3);
+	write(fd, "not a valid identifier", ft_strlen("not a valid identifier"));
+	write(fd, "\n", 1);
+
+	return (1);
+}
+
+void		ft_export_env(t_datas * datas,char **argv, char *target)
+{
+	char	**split;
 	int		count;
 	t_list	*inlist;
 
-	data = ft_split_two(target, '=');
+	split = ft_split_two(target, '=');
 	count = -1;
 	if (target == NULL)
-		ft_print_all_export(*export);
+		ft_print_all_export(*(datas->export_list));
 	else if (!is_valid_key(target))
-		printf("not a valid identifier\n");
+		{
+			print_export_err(datas->ori_fd.write, argv);
+			datas->status = 1;
+		}
 	else
 	{
-		while (data[++count])
+		while (split[++count])
 			;
 		if (count > 1)
-			add_lst_export_env(env, export, data, target);
-		ft_add_export(export, target);
+			add_lst_export_env(datas->env_list, datas->export_list, split, target);
+		ft_add_export(datas->export_list, target);
 	}
-	free_str_array(data);
+	free_str_array(split);
 }

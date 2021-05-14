@@ -130,8 +130,7 @@ void				rm_quato(char **buf);
 int					get_quato(char *str, int util);
 
 void				ft_rm_env(t_deck *env, t_deck *export, char *target);
-void				ft_export_env(t_deck *env, t_deck *export,
-									char *target);
+void					ft_export_env(t_datas * datas,char **argv, char *target);
 void				ft_print_all_deck(t_deck deck);
 
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
@@ -167,4 +166,6 @@ void				sig_dfl();
 void				sig_special(int signum);
 
 int					check_file_state(t_fd fd, int is_check_write);
+int				print_env_err(int fd, char **argv);
+int				print_env_err(int fd, char **argv);
 #endif
