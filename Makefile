@@ -2,9 +2,18 @@ CC = gcc
 CFLAGS = #-g3 -fsanitize=address#-Wall -Wextra -Werror
 NAME = minishell
 RM = rm -f
-SRCS = env_cmd.c ft_lst_add.c ft_pipe.c ft_strutils_basic.c get_abs_path.c check_redirect.c env_to_value.c \
-		ft_lst_find.c ft_quato.c ft_strutils_etc.c main.c sh_cmd.c cursor.c exe_cmd.c ft_lst_new.c ft_split.c \
-		ft_strutils_make.c ft_strsplit_two.c term.c mini_process.c signal.c
+
+CMD_SRCS = check_redirect.c env_cmd.c exe_cmd.c ft_pipe.c mini_process.c sh_cmd.c 
+ETC_SRCS = error.c signal.c 
+LIST_SRCS = ft_lst_add.c ft_lst_find.c ft_lst_new.c 
+STRUTILS_SRCS = env_to_value.c ft_quato.c ft_split.c ft_strsplit_two.c ft_strutils_basic.c \
+				ft_strutils_etc.c ft_strutils_make.c get_abs_path.c 
+TERMINAL_SRCS = cursor.c term.c 
+
+SRCS = main.c $(addprefix ./cmd/, ${CMD_SRCS}) $(addprefix ./etc/, ${ETC_SRCS}) \
+		$(addprefix ./list/, ${LIST_SRCS}) $(addprefix ./strutils/, ${STRUTILS_SRCS}) \
+		$(addprefix ./terminal/, ${TERMINAL_SRCS}) 
+		
 OBJS = $(SRCS:.c=.o)
 .c.o :
 	$(CC) $(CFLAGS) -c -o $@ $<
