@@ -16,8 +16,8 @@ t_sig			g_sig;
 
 int				print_err(int fd, char **argv, int status)
 {
-	int len;
-	
+	int			len;
+
 	len = -1;
 	while (argv[++len])
 		;
@@ -41,12 +41,11 @@ int				print_err(int fd, char **argv, int status)
 	return (status);
 }
 
-
 int				print_status(int fd, int status)
 {
-	char *str ;
+	char		*str;
 
-	str = ft_itoa(status/256);
+	str = ft_itoa(status / 256);
 	write(fd, "minishell: ", 11);
 	write(fd, str, ft_strlen(str));
 	write(fd, ": command not found\n", 20);

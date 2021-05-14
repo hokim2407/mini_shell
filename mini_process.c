@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-extern t_sig	g_sig;
+extern		t_sig g_sig;
 
-void			mini_single_process2(char **new_argv, t_datas *datas)
+void		mini_single_process2(char **new_argv, t_datas *datas)
 {
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 	{
@@ -22,17 +22,15 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 			print_err(1, new_argv, 1);
 	}
 	else if (!ft_strcmp(new_argv[0], "env"))
-		{
-			if(new_argv[1]==NULL)
+	{
+		if (new_argv[1] == NULL)
 			ft_print_all_deck(*datas->env_list);
-			else
-			{
-				print_env_err(datas->ori_fd.write, new_argv);
-				datas->status = 1;
-			}
-			
-		
+		else
+		{
+			print_env_err(datas->ori_fd.write, new_argv);
+			datas->status = 1;
 		}
+	}
 	else if (!ft_strcmp(new_argv[0], "export"))
 		ft_export_env(datas, new_argv, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "unset"))
@@ -47,10 +45,12 @@ void			mini_single_process2(char **new_argv, t_datas *datas)
 		exe_process(new_argv, datas);
 }
 
-int mini_single_process(char *buf, t_datas *datas)
+int			mini_single_process(char *buf, t_datas *datas)
 {
-	char **new_argv;
-	int i;
+	char	**new_argv;
+	int		i;
+	int		num;
+
 	i = -1;
 	new_argv = ft_split(buf, ' ');
 	check_env_in_cmd(new_argv, datas->env_list);
@@ -60,8 +60,8 @@ int mini_single_process(char *buf, t_datas *datas)
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
 		i = 0;
-		int num = 0;
-		 write(datas->ori_fd.write, "exit\n", 5);
+		num = 0;
+		write(datas->ori_fd.write, "exit\n", 5);
 		if (new_argv[1] != NULL)
 		{
 			num = ft_atoi(new_argv[1]);
@@ -76,7 +76,7 @@ int mini_single_process(char *buf, t_datas *datas)
 	return (0);
 }
 
-void			ascii_char_process(char *buf, t_cursor *cursor, int *i)
+void		ascii_char_process(char *buf, t_cursor *cursor, int *i)
 {
 	if (cursor->max < ++(*i))
 	{
@@ -91,7 +91,7 @@ void			ascii_char_process(char *buf, t_cursor *cursor, int *i)
 	cursor->max++;
 }
 
-void			read_char_process(char *buf, t_cursor *cursor, int *i)
+void		read_char_process(char *buf, t_cursor *cursor, int *i)
 {
 	if (g_sig.sig == 'c')
 	{

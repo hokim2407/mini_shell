@@ -39,8 +39,8 @@ void			sig_dfl(void)
 
 void			sig_special(int signum)
 {
-	if(signum == SIGINT && g_sig.is_cat)
-		write(1,"\n",1);
-	if(signum == SIGQUIT && g_sig.is_cat)
-		write(1, "Quit: 3\n",10);
+	if (signum == SIGINT && g_sig.is_cat)
+		write(1, "\n", 1);
+	if (signum == SIGQUIT && g_sig.is_cat)
+		write(1, "Quit: 3\n", 10);
 }

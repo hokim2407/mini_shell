@@ -12,12 +12,12 @@
 
 #include "minishell.h"
 
-extern t_sig g_sig;
+extern				t_sig g_sig;
 
-int in_dir(char *path, char *cmd)
+int					in_dir(char *path, char *cmd)
 {
-	DIR *dir_ptr;
-	struct dirent *file;
+	DIR				*dir_ptr;
+	struct dirent	*file;
 
 	dir_ptr = NULL;
 	file = NULL;
@@ -26,20 +26,17 @@ int in_dir(char *path, char *cmd)
 	while ((file = readdir(dir_ptr)))
 	{
 		if (!ft_strcmp(file->d_name, cmd))
-		{
-
 			return (1);
-		}
 	}
 	closedir(dir_ptr);
 	return (0);
 }
 
-char *get_executable(char *path, char *cmd)
+char				*get_executable(char *path, char *cmd)
 {
-	char **paths;
-	int i;
-	char *temp;
+	char			**paths;
+	int				i;
+	char			*temp;
 
 	if (path == NULL)
 		return (NULL);
@@ -49,7 +46,7 @@ char *get_executable(char *path, char *cmd)
 	while (paths[++i])
 	{
 		if (in_dir(paths[i], cmd))
-			break;
+			break ;
 	}
 	if (paths[i])
 	{
@@ -64,22 +61,22 @@ char *get_executable(char *path, char *cmd)
 	return (temp);
 }
 
-int check_echo(char **new_argv)
+int					check_echo(char **new_argv)
 {
-	int i;
-	int j;
+	int				i;
+	int				j;
 
 	i = 0;
-	while (new_argv[++i] )
+	while (new_argv[++i])
 	{
 		j = 0;
-		if(new_argv[i][j]== '-')
+		if (new_argv[i][j] == '-')
 		{
-			while(new_argv[i][++j] == 'n')
-			;
+			while (new_argv[i][++j] == 'n')
+				;
 		}
-		if(new_argv[i][j] != '\0')
-			break;
+		if (new_argv[i][j] != '\0')
+			break ;
 	}
 	if (i == 1)
 		return (0);
@@ -87,29 +84,28 @@ int check_echo(char **new_argv)
 		return (i - 1);
 }
 
-int exe_process(char **new_argv, t_datas *datas)
+int					exe_process(char **new_argv, t_datas *datas)
 {
-	int pid;
-	char *temp;
-	int status;
-	int offset;
+	int				pid;
+	char			*temp;
+	int				status;
+	int				offset;
 
 	offset = 0;
 	pid = fork();
 	if (pid == 0)
 	{
 		sig_dfl();
-	
 		if (!(temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
-		 	new_argv[0]))|| temp[0] != '/')
-		 {
+			new_argv[0])) || temp[0] != '/')
+		{
 			if (!(ft_strcmp(new_argv[0], "echo")))
 			{
 				write(datas->ori_fd.write, "\n", 1);
 				exit(0);
-			}	
-		 	exit(print_err(datas->ori_fd.write, new_argv, 127));
-		 }
+			}
+			exit(print_err(datas->ori_fd.write, new_argv, 127));
+		}
 		dup2(datas->fd.read, 0);
 		dup2(datas->fd.write, 1);
 		if (!ft_strcmp(new_argv[0], "echo"))

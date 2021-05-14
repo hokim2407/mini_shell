@@ -70,9 +70,9 @@ void		ft_add_export(t_deck *deck, char *target)
 }
 
 void		add_lst_export_env(t_deck *env, t_deck *export,
-							char **data, char *target)
+				char **data, char *target)
 {
-	t_list *inlist;
+	t_list	*inlist;
 
 	inlist = NULL;
 	inlist = find_lst_by_key(env, data[0]);
@@ -85,10 +85,9 @@ void		add_lst_export_env(t_deck *env, t_deck *export,
 		inlist->content = ft_strdup(target);
 }
 
-
-int				print_env_err(int fd, char **argv)
+int			print_env_err(int fd, char **argv)
 {
-	int len;
+	int		len;
 
 	len = -1;
 	while (argv[++len])
@@ -97,15 +96,15 @@ int				print_env_err(int fd, char **argv)
 	write(fd, ": ", 2);
 	write(fd, argv[len - 1], ft_strlen(argv[len - 1]));
 	write(fd, ": ", 2);
-	write(fd, "No such file or directory", ft_strlen("No such file or directory"));
+	write(fd, "No such file or directory",
+			ft_strlen("No such file or directory"));
 	write(fd, "\n", 1);
 	return (1);
 }
 
-
-int				print_export_err(int fd, char **argv)
+int			print_export_err(int fd, char **argv)
 {
-	int len;
+	int		len;
 
 	len = -1;
 	while (argv[++len])
@@ -117,11 +116,10 @@ int				print_export_err(int fd, char **argv)
 	write(fd, "\': ", 3);
 	write(fd, "not a valid identifier", ft_strlen("not a valid identifier"));
 	write(fd, "\n", 1);
-
 	return (1);
 }
 
-void		ft_export_env(t_datas * datas,char **argv, char *target)
+void		ft_export_env(t_datas *datas, char **argv, char *target)
 {
 	char	**split;
 	int		count;
@@ -132,16 +130,17 @@ void		ft_export_env(t_datas * datas,char **argv, char *target)
 	if (target == NULL)
 		ft_print_all_export(*(datas->export_list));
 	else if (!is_valid_key(target))
-		{
-			print_export_err(datas->ori_fd.write, argv);
-			datas->status = 1;
-		}
+	{
+		print_export_err(datas->ori_fd.write, argv);
+		datas->status = 1;
+	}
 	else
 	{
 		while (split[++count])
 			;
 		if (count > 1)
-			add_lst_export_env(datas->env_list, datas->export_list, split, target);
+			add_lst_export_env(datas->env_list, datas->export_list,
+					split, target);
 		ft_add_export(datas->export_list, target);
 	}
 	free_str_array(split);
