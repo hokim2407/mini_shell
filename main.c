@@ -14,16 +14,6 @@
 
 t_sig			g_sig;
 
-int				print_status(int fd, int status)
-{
-	char		*str;
-
-	str = ft_itoa(status / 256);
-	write(fd, "minishell: ", 11);
-	write(fd, str, ft_strlen(str));
-	write(fd, ": command not found\n", 20);
-	return (status);
-}
 
 void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 {

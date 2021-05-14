@@ -130,8 +130,8 @@ void				rm_quato(char **buf);
 int					get_quato(char *str, int util);
 
 void				ft_rm_env(t_deck *env, t_deck *export, char *target);
-void					ft_export_env(t_datas * datas,char **argv, char *target);
-void				ft_print_all_deck(t_deck deck);
+void				ft_export_env(t_datas * datas,char **argv, char *target);
+void				ft_print_all_deck(t_datas datas);
 
 size_t				ft_strlcpy(char *dest, const char *src, size_t size);
 char				**ft_split_two(char *str, char c);
@@ -142,19 +142,12 @@ int					ft_strchr(const char *str, int value);
 void				free_str_array(char **str);
 char				*ft_itoa(int num);
 int					ft_atoi(const char *str);
-
+int					ft_write(int fd, char *str);
 char				*get_abs_path(char *original);
-
-int					ft_write(char *str);
-
 void				remove_char_in_str(char *buf, int nth);
+char				**ft_one_str_arr(const char *str);
 
 int					count_deck(t_deck *deck);
-
-int					print_err(int fd, char **argv, int status);
-int					print_status(int fd, int status);
-
-char				**ft_one_str_arr(const char *str);
 
 void				rm_chars_in_str(char *buf, int start, int len);
 int					mini_single_process(char *buf, t_datas *datas);
@@ -166,6 +159,10 @@ void				sig_dfl();
 void				sig_special(int signum);
 
 int					check_file_state(t_fd fd, int is_check_write);
-int				print_env_err(int fd, char **argv);
-int				print_env_err(int fd, char **argv);
+
+int					print_export_err(int fd, char **argv);
+int					print_env_err(int fd, char **argv);
+int					print_err(int fd, char **argv, int status);
+int					print_status(int fd, int status);
+
 #endif
