@@ -34,13 +34,11 @@ char		**ft_split_two(char *str, char c)
 	if (str == NULL)
 		return (NULL);
 	if (ft_strchr(str, c) < 0)
-		return ft_one_str_arr(str);
+		return (ft_one_str_arr(str));
 	count = 2;
-	if ((point = ft_strchr(str, c)) == -1)
-		count = 1;
 	if (!(result = malloc(sizeof(char *) * (count + 1))))
 		return (NULL);
-	if (count == 1)
+	if ((point = ft_strchr(str, c)) == -1)
 	{
 		result[0] = ft_strdup(str);
 		result[1] = NULL;

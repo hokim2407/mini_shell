@@ -165,5 +165,5 @@ void				ft_print_all_export(t_datas datas);
 int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
 int					print_status(int fd, int status);
-
+int					remove_back_null(char **new_argv);
 #endif

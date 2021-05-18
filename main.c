@@ -40,13 +40,24 @@ void			new_input_init(t_cursor *cursor, char *buf, int *i)
 	signal(SIGQUIT, sig_ft);
 }
 
+void			make_blocks(char *buf, t_datas datas)
+{
+	int			i;
+	char		**blocks;
+
+	blocks = ft_split(buf, ';');
+	i = -1;
+	while (blocks[++i])
+		pipe_process(blocks[i], &datas);
+	free_str_array(blocks);
+}
+
 int				main(int argc, char **argv, char **envv)
 {
 	char		buf[4096];
 	t_datas		datas;
 	t_cursor	cursor;
 	int			i;
-	char		**blocks;
 
 	shell_init(&datas, &cursor, envv);
 	new_input_init(&cursor, buf, &i);
@@ -64,11 +75,7 @@ int				main(int argc, char **argv, char **envv)
 			write(1, "\n", 1);
 		if (buf[0] == '\0' || buf[0] == '\n')
 			continue;
-		blocks = ft_split(buf, ';');
-		i = -1;
-		while (blocks[++i])
-			pipe_process(blocks[i], &datas);
-		free_str_array(blocks);
+		make_blocks(buf, datas);
 		new_input_init(&cursor, buf, &i);
 	}
 }

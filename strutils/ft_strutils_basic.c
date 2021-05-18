@@ -56,3 +56,18 @@ int			ft_strchr(const char *str, int value)
 		return (i);
 	return (-1);
 }
+
+int			remove_back_null(char **new_argv)
+{
+	int		i;
+
+	i = -1;
+	while (new_argv[++i])
+		;
+	while (new_argv[--i][0] == '\0' && i > 0)
+	{
+		free(new_argv[i]);
+		new_argv[i] = NULL;
+	}
+	return (1);
+}

@@ -15,7 +15,7 @@
 int			is_valid_key(char *target)
 {
 	int		i;
-	
+
 	i = -1;
 	if (target[0] >= '0' && target[0] <= '9')
 		return (0);
@@ -23,11 +23,11 @@ int			is_valid_key(char *target)
 		if (!((target[i] >= '0' && target[i] <= '9') ||
 			(target[i] >= 'a' && target[i] <= 'z') ||
 			(target[i] >= 'A' && target[i] <= 'Z') || target[i] >= '_'))
-			{
-				if(target[i + 1] == '='  && target[i] == '+')
-					return 2;
-				return (0);
-			}
+		{
+			if (target[i + 1] == '=' && target[i] == '+')
+				return (2);
+			return (0);
+		}
 	return (1);
 }
 

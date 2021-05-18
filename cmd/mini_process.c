@@ -75,8 +75,7 @@ int			mini_single_process(char *buf, t_datas *datas)
 		return (1);
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
-		num = 0;
-		//write(2, "exit\n", 5);
+		write(2, "exit\n", 5);
 		if (new_argv[1] != NULL)
 		{
 			num = ft_atoi(new_argv[1]);
