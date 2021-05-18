@@ -58,7 +58,7 @@ void		ft_add_export(t_deck *deck, char *target)
 		data = ft_split_two(target, '=');
 	inlist = find_lst_by_key(deck, data[0]);
 	if (!is_valid_key(target))
-		return;
+		return ;
 	if (inlist == NULL)
 	{
 		inlist = ft_new_list(target);
@@ -85,22 +85,20 @@ void		add_lst_export_env(t_deck *env, t_deck *export,
 		ft_add_export(export, target);
 	}
 	else
-		{
-			free(inlist->content);
-			inlist->content = ft_strdup(target);
-		}
+	{
+		free(inlist->content);
+		inlist->content = ft_strdup(target);
+	}
 }
 
 void		ft_export_env(t_datas *datas, char **argv, char *target)
 {
 	char	**split;
 	int		count;
-	t_list	*inlist;
 
-	
 	split = ft_split_two(target, '=');
 	count = -1;
-	 if (!is_valid_key(target) || target[0] == '=')
+	if (!is_valid_key(target) || target[0] == '=')
 	{
 		print_export_err(datas->ori_fd.write, argv[0], target);
 		datas->status = 1;

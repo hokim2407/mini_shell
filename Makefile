@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = #-g3 -fsanitize=address#-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror#-g3 -fsanitize=address#
 NAME = minishell
 RM = rm -f
 
@@ -25,4 +25,12 @@ clean:
 fclean:	clean
 	$(RM) $(NAME)
 re : clean all
+
+
+norm : 
+	norminette *.c *.h cmd/*.c etc/*.c list/*.c strutils/*.c terminal/*.c
+
+add :
+	git add *.c *.h cmd etc list strutils terminal Makefile
+
 .PHONY:	all clean fclean re

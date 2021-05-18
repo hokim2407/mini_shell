@@ -84,35 +84,36 @@ int					check_echo(char **new_argv)
 		return (i - 1);
 }
 
-int					exe_process(char **new_argv, t_datas *datas)
+void				exe_cmd(char **new_argv, t_datas *datas)
 {
-	int				pid;
 	char			*temp;
-	int				status;
 	int				offset;
 
 	offset = 0;
+	sig_dfl();
+	if (!(temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
+								new_argv[0])) ||
+		temp[0] != '/')
+	{
+		if (!(ft_strcmp(new_argv[0], "echo")))
+			exit(write(datas->ori_fd.write, "\n", 1) & 0);
+		exit(print_err(datas->ori_fd.write, new_argv, 127));
+	}
+	dup2(datas->fd.read, 0);
+	dup2(datas->fd.write, 1);
+	if (!ft_strcmp(new_argv[0], "echo"))
+		offset = check_echo(new_argv);
+	if (execve(temp, new_argv + offset, datas->envv) == -1)
+		exit(print_err(datas->ori_fd.write, new_argv, 127));
+}
+
+int					exe_process(char **new_argv, t_datas *datas)
+{
+	int				pid;
+
 	pid = fork();
 	if (pid == 0)
-	{
-		sig_dfl();
-		if (!(temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
-			new_argv[0])) || temp[0] != '/')
-		{
-			if (!(ft_strcmp(new_argv[0], "echo")))
-			{
-				write(datas->ori_fd.write, "\n", 1);
-				exit(0);
-			}
-			exit(print_err(datas->ori_fd.write, new_argv, 127));
-		}
-		dup2(datas->fd.read, 0);
-		dup2(datas->fd.write, 1);
-		if (!ft_strcmp(new_argv[0], "echo"))
-			offset = check_echo(new_argv);
-		if (execve(temp, new_argv + offset, datas->envv) == -1)
-			exit(print_err(datas->ori_fd.write, new_argv, 127));
-	}
+		exe_cmd(new_argv, datas);
 	else
 	{
 		g_sig.is_cat = !ft_strcmp(new_argv[0], "cat");

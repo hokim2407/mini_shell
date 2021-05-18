@@ -42,9 +42,9 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	i = 0;
 	*start = chr;
 	chr += 1;
-	while (str[chr] >= '0' && str[chr] <= '9' ||
-			str[chr] >= 'a' && str[chr] <= 'z' ||
-			str[chr] >= 'A' && str[chr] <= 'Z' ||
+	while ((str[chr] >= '0' && str[chr] <= '9') ||
+			(str[chr] >= 'a' && str[chr] <= 'z') ||
+			(str[chr] >= 'A' && str[chr] <= 'Z') ||
 			str[chr] == '_')
 	{
 		result[i++] = str[chr++];
@@ -100,9 +100,6 @@ void		change_env_to_value(char **str, t_deck *env)
 
 void		check_env_in_cmd(char **cmds, t_deck *env)
 {
-	int		len;
-	int		chr;
-
 	if (cmds == NULL || !ft_strcmp(cmds[0], "$?"))
 		return ;
 	change_env_to_value(cmds, env);

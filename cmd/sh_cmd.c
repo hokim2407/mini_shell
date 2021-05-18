@@ -17,7 +17,6 @@ extern t_sig	g_sig;
 int			sh_process(char **new_argv, t_datas *datas)
 {
 	int		pid;
-	char	*temp;
 
 	if ((new_argv[0][0] != '.' && new_argv[0][0] != '/') ||
 			new_argv[0][ft_strlen(new_argv[0]) - 1] == '/')
@@ -32,7 +31,6 @@ int			sh_process(char **new_argv, t_datas *datas)
 		dup2(datas->fd.write, 1);
 		if (execve(new_argv[0], new_argv, datas->envv) == -1)
 			exit(print_err(datas->ori_fd.write, new_argv, 127));
-		free(temp);
 	}
 	else
 	{

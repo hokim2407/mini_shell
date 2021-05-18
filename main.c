@@ -49,7 +49,7 @@ int				main(int argc, char **argv, char **envv)
 	char		**blocks;
 
 	shell_init(&datas, &cursor, envv);
-	while (1)
+	while (argc && argv[0])
 	{
 		new_input_init(&cursor, buf, &i);
 		while (read(0, &cursor.c, sizeof(int)) > 0 && cursor.c != '\n')

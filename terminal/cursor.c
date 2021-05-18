@@ -33,11 +33,11 @@ void		move_cursor_horizontal(t_cursor *cursor, int *i, int is_left)
 
 void		move_cursor_vertital(t_cursor *cursor, char *buf, int *i, int is_up)
 {
-	if (is_up && cursor->cur_history == cursor->history->head ||
-		is_up && cursor->cur_history->pre == cursor->history->head)
+	if ((is_up && cursor->cur_history == cursor->history->head) ||
+		(is_up && cursor->cur_history->pre == cursor->history->head))
 		return ;
-	if (!is_up && cursor->cur_history->next == cursor->history->tail ||
-		!is_up && cursor->cur_history == cursor->history->tail)
+	if ((!is_up && cursor->cur_history->next == cursor->history->tail) ||
+		(!is_up && cursor->cur_history == cursor->history->tail))
 	{
 		if (cursor->cur_history->next == cursor->history->tail)
 			cursor->cur_history = cursor->history->tail;

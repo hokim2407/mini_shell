@@ -17,7 +17,6 @@ void				get_cursor_position(int *h, int *v)
 	int				i;
 	char			buf[255];
 	int				ret;
-	int				temp;
 
 	i = 0;
 	write(0, "\033[6n", 4);

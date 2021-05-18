@@ -14,35 +14,43 @@
 
 extern		t_sig g_sig;
 
+int			mini_env_process(char **new_argv, t_datas *datas)
+{
+	int		i;
+
+	i = 0;
+	if (!ft_strcmp(new_argv[0], "env"))
+	{
+		if (new_argv[1] == NULL)
+			ft_print_all_deck(*datas);
+		else
+			datas->status = print_env_err(datas->ori_fd.write, new_argv);
+	}
+	else if (!ft_strcmp(new_argv[0], "export"))
+	{
+		if (new_argv[1] == NULL)
+			ft_print_all_export(*datas);
+		while (new_argv[++i])
+			ft_export_env(datas, new_argv, new_argv[i]);
+	}
+	else if (!ft_strcmp(new_argv[0], "unset"))
+		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
+	else if (!ft_strcmp(new_argv[0], "$?"))
+		print_status(datas->ori_fd.write, datas->status);
+	else
+		return (0);
+	return (1);
+}
+
 void		mini_single_process2(char **new_argv, t_datas *datas)
 {
+	if (mini_env_process(new_argv, datas))
+		return ;
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 	{
 		if (chdir(new_argv[1]) < 0)
 			print_err(1, new_argv, 1);
 	}
-	else if (!ft_strcmp(new_argv[0], "env"))
-	{
-		if (new_argv[1] == NULL)
-			ft_print_all_deck(*datas);
-		else
-		{
-			print_env_err(datas->ori_fd.write, new_argv);
-			datas->status = 1;
-		}
-	}
-	else if (!ft_strcmp(new_argv[0], "export"))
-		{
-			if(new_argv[1] == NULL)
-				ft_print_all_export(*datas);;
-			int i = 0;
-			while(new_argv[++i])
-				ft_export_env(datas, new_argv, new_argv[i]);
-		}
-	else if (!ft_strcmp(new_argv[0], "unset"))
-		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
-	else if (!ft_strcmp(new_argv[0], "$?"))
-		print_status(datas->ori_fd.write, datas->status);
 	else if (new_argv[0][0] == '/' ||
 			!ft_strlcmp(new_argv[0], "./", 2) ||
 			!ft_strlcmp(new_argv[0], "../", 3))
@@ -54,10 +62,8 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 int			mini_single_process(char *buf, t_datas *datas)
 {
 	char	**new_argv;
-	int		i;
 	int		num;
 
-	i = -1;
 	new_argv = ft_split(buf, ' ');
 	check_env_in_cmd(new_argv, datas->env_list);
 	rm_quato(new_argv);
@@ -65,7 +71,6 @@ int			mini_single_process(char *buf, t_datas *datas)
 		return (1);
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
-		i = 0;
 		num = 0;
 		write(datas->ori_fd.write, "exit\n", 5);
 		if (new_argv[1] != NULL)

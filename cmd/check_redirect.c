@@ -15,7 +15,6 @@
 char		*get_filename_from(char *str)
 {
 	char	*result;
-	int		chr;
 	int		i;
 	int		j;
 
@@ -50,48 +49,51 @@ int			write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 	}
 	else
 		create = O_WRONLY | O_TRUNC | O_CREAT;
-	
-		filename = get_filename_from(pipe + i + 1);
-		fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
-		free(filename);
-		if (datas->fd.write != -1)
-			return (1);
-		datas->fd.write = 1;
-		str = ft_split(pipe, ' ');
-		datas->status = print_err(datas->ori_fd.write, str, 22);
-		free_str_array(str);
-		return (0);
+	filename = get_filename_from(pipe + i + 1);
+	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
+	free(filename);
+	if (datas->fd.write != -1)
+		return (1);
+	datas->fd.write = 1;
+	str = ft_split(pipe, ' ');
+	datas->status = print_err(datas->ori_fd.write, str, 22);
+	free_str_array(str);
+	return (0);
 }
 
-int			check_redirect(char *pipe, t_datas *datas, t_fd *fd)
+int			read_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 {
-	int		i;
 	char	**str;
 	char	*filename;
 
-	str = NULL;
+	pipe[i] = ' ';
+	str = ft_split(pipe, ' ');
+	filename = get_filename_from(pipe + i + 1);
+	fd->read = open(filename, O_RDONLY);
+	free(filename);
+	if (datas->fd.read == -1)
+	{
+		print_err(datas->ori_fd.write, str, 22);
+		free_str_array(str);
+		datas->fd.read = 0;
+		return (0);
+	}
+	if (str != NULL)
+		free_str_array(str);
+	return (1);
+}
+
+int			check_redirect(char *pipe, t_datas *datas)
+{
+	int		i;
+
 	i = -1;
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
 			return (write_redirect(pipe, datas, &datas->fd, i));
 		else if (pipe[i] == '<')
-		{
-			pipe[i] = ' ';
-			str = ft_split(pipe, ' ');
-			filename = get_filename_from(pipe + i + 1);
-			fd->read = open(filename, O_RDONLY);
-			free(filename);
-			if (datas->fd.read == -1)
-			{
-				print_err(datas->ori_fd.write, str, 22);
-				free_str_array(str);
-				datas->fd.read = 0;
-				return (0);
-			}
-			if (str != NULL)
-				free_str_array(str);
-		}
+			return (read_redirect(pipe, datas, &datas->fd, i));
 	}
 	return (1);
 }

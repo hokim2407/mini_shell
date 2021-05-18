@@ -20,9 +20,9 @@ int			is_valid_key(char *target)
 	if (target[0] >= '0' && target[0] <= '9')
 		return (0);
 	while (target[++i] && target[i] != '=')
-		if (!(target[i] >= '0' && target[i] <= '9' || target[i] >= 'a'
-					&& target[i] <= 'z' || target[i] >= 'A' &&
-					target[i] <= 'Z' || target[i] >= '_'))
+		if (!((target[i] >= '0' && target[i] <= '9') ||
+			(target[i] >= 'a' && target[i] <= 'z') ||
+			(target[i] >= 'A' && target[i] <= 'Z') || target[i] >= '_'))
 			return (0);
 	return (1);
 }

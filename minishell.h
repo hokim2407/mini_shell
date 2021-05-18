@@ -114,7 +114,7 @@ void				ft_lstadd(t_deck *deck, t_list *new_lst);
 void				ft_lstdelone(t_list *one);
 void				ft_lstadd_inorder(t_deck *deck, t_list *lst);
 
-int					check_redirect(char *pipe, t_datas *datas, t_fd *fd);
+int					check_redirect(char *pipe, t_datas *datas);
 
 char				**ft_split(char const *str, char c);
 int					ft_strcmp(char *str1, char *str2);
