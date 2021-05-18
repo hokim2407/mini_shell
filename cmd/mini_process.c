@@ -69,12 +69,14 @@ int			mini_single_process(char *buf, t_datas *datas)
 	new_argv = ft_split(buf, ' ');
 	check_env_in_cmd(new_argv, datas->env_list);
 	rm_quato(new_argv);
+	if (new_argv[0] && new_argv[0][0] == '\0')
+		new_argv++;
 	if (new_argv[0] == NULL)
 		return (1);
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
 		num = 0;
-		write(datas->ori_fd.write, "exit\n", 5);
+		//write(2, "exit\n", 5);
 		if (new_argv[1] != NULL)
 		{
 			num = ft_atoi(new_argv[1]);
@@ -82,7 +84,7 @@ int			mini_single_process(char *buf, t_datas *datas)
 				exit(num);
 			exit(print_err(datas->ori_fd.write, new_argv, 255));
 		}
-		exit(0);
+		exit(datas->status);
 	}
 	mini_single_process2(new_argv, datas);
 	free_str_array(new_argv);

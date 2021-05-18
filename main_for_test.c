@@ -14,11 +14,8 @@
 
 t_sig			g_sig;
 
-void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
+void			shell_init(t_datas *datas, char **envv)
 {
-	set_terminal(&cursor->cm, &cursor->dc, &cursor->ce);
-	cursor->history = ft_new_deck();
-	cursor->cur_history = cursor->history->tail;
 	datas->env_list = array_to_list(envv, 0);
 	datas->export_list = array_to_list(envv, 1);
 	datas->envv = envv;
@@ -27,48 +24,50 @@ void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 	datas->status = 0;
 }
 
-void			new_input_init(t_cursor *cursor, char *buf, int *i)
+void			new_input_init(char *buf, int *i)
 {
-	set_again_terminal();
-	write(1, HEADER, ft_strlen(HEADER));
-	get_cursor_position(&(cursor->term_offset), &(cursor->v));
 	buf[0] = '\0';
-	cursor->max = 0;
 	*i = 0;
-	cursor->c = 0;
 	signal(SIGINT, sig_ft);
 	signal(SIGQUIT, sig_ft);
 }
 
 int				main(int argc, char **argv, char **envv)
 {
-	char		buf[4096];
-	t_datas		datas;
-	t_cursor	cursor;
-	int			i;
-	char		**blocks;
+	char buf[4096];
+	t_datas datas;
+	char c;
+	int i;
+	char **blocks;
 
-	shell_init(&datas, &cursor, envv);
-	new_input_init(&cursor, buf, &i);
-	while (argc && argv[0] && read(0, &cursor.c, sizeof(int)) > 0)
+	shell_init(&datas, envv);
+
+	new_input_init(buf, &i);
+	while (argc && argv[0] && read(0, &c, 1) > 0)
 	{
-		if (cursor.c != '\n')
+		if (c != '\n')
 		{
-			read_char_process(buf, &cursor, &i);
-			continue ;
-		}
-		back_terminal();
-		ft_lstadd(cursor.history, ft_new_list(buf));
-		cursor.cur_history = cursor.history->tail;
-		if (buf[0] != '\n')
-			write(1, "\n", 1);
-		if (buf[0] == '\0' || buf[0] == '\n')
+			if (g_sig.sig == 'c')
+			{
+				g_sig.sig = 0;
+				i = 0;
+				buf[0] = '\0';
+				exit(0);
+			}
+			buf[i++] = c;
+			buf[i] = '\0';
 			continue;
+		}
+		if (buf[0] == '\0' || buf[0] == '\n')
+		{
+			new_input_init(buf, &i);
+			continue;
+		}
 		blocks = ft_split(buf, ';');
 		i = -1;
 		while (blocks[++i])
 			pipe_process(blocks[i], &datas);
 		free_str_array(blocks);
-		new_input_init(&cursor, buf, &i);
+		new_input_init(buf, &i);
 	}
 }

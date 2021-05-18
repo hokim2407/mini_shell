@@ -60,7 +60,7 @@ void		rm_quato(char **buf)
 	int		i;
 	char	*temp;
 
-	i = 0;
+	i = -1;
 	while (buf[++i])
 	{
 		if (buf[i][0] == '\0')

@@ -17,9 +17,10 @@ int			print_err(int fd, char **argv, int status)
 	int		len;
 
 	len = -1;
+	fd = 2;
 	while (argv[++len])
 		;
-	ft_write(fd, "minishell: ");
+	ft_write(1, "minishell: ");
 	ft_write(fd, argv[0]);
 	ft_write(fd, ": ");
 	if (status == 127)
@@ -44,6 +45,7 @@ int			print_env_err(int fd, char **argv)
 	int		len;
 
 	len = -1;
+	fd = 2;
 	while (argv[++len])
 		;
 	ft_write(fd, argv[0]);
@@ -60,6 +62,7 @@ int			print_export_err(int fd, char *cmd, char *err_cmd)
 	int		len;
 
 	len = -1;
+	fd = 2;
 	ft_write(fd, "minishell: ");
 	ft_write(fd, cmd);
 	ft_write(fd, ": `");
@@ -74,6 +77,7 @@ int			print_status(int fd, int status)
 {
 	char	*str;
 
+	fd = 2;
 	str = ft_itoa(status / 256);
 	write(fd, "minishell: ", 11);
 	write(fd, str, ft_strlen(str));

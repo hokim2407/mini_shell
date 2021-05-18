@@ -91,9 +91,9 @@ int			check_redirect(char *pipe, t_datas *datas)
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			return (write_redirect(pipe, datas, &datas->fd, i));
+			write_redirect(pipe, datas, &datas->fd, i);
 		else if (pipe[i] == '<')
-			return (read_redirect(pipe, datas, &datas->fd, i));
+			read_redirect(pipe, datas, &datas->fd, i);
 	}
 	return (1);
 }

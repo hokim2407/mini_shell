@@ -53,49 +53,63 @@ void		ft_print_all_export(t_datas datas)
 	}
 }
 
-void		ft_add_export(t_deck *deck, char *target)
+void		ft_push_export(t_deck *deck, char **data, char *target)
 {
-	char	**data;
 	t_list	*inlist;
 
-	if (ft_strchr(target, '=') < 0)
-		data = ft_one_str_arr(target);
-	else
-		data = ft_split_two(target, '=');
+	inlist = NULL;
 	inlist = find_lst_by_key(deck, data[0]);
-	if (!is_valid_key(target))
-		return ;
 	if (inlist == NULL)
-	{
-		inlist = ft_new_list(target);
-		ft_lstadd_inorder(deck, inlist);
-	}
+		ft_lstadd_inorder(deck, ft_new_list(target));
 	else if (data[1] != NULL)
 	{
 		free(inlist->content);
 		inlist->content = ft_strdup(target);
 	}
-	free_str_array(data);
 }
 
-void		add_lst_export_env(t_deck *env, t_deck *export,
-				char **data, char *target)
+void		ft_push_env(t_deck *env,
+				char *key, char *target)
 {
 	t_list	*inlist;
+	int		is_add;
 
 	inlist = NULL;
-	inlist = find_lst_by_key(env, data[0]);
+	inlist = find_lst_by_key(env, key);
+	is_add = (key[ft_strlen(key)-1] == '+');
+	if(is_add)
+		key[ft_strlen(key)-1] = '\0';
 	if (inlist == NULL)
-	{
 		ft_lstadd(env, ft_new_list(target));
-		ft_add_export(export, target);
-	}
 	else
 	{
 		free(inlist->content);
 		inlist->content = ft_strdup(target);
 	}
+	if (is_add)
+		key[ft_strlen(key) - 1] = '+';
 }
+
+// void		ft_add_env(t_datas *datas, char *key)
+// {
+// 	t_list	*inlist;
+// 	int		is_add;
+
+// 	inlist = NULL;
+// 	inlist = find_lst_by_key(datas->env_list, key);
+// 	is_add = (key[ft_strlen(key)-1] == '+');
+// 	if(is_add)
+// 		key[ft_strlen(key)-1] = '\0';
+// 	if (inlist == NULL)
+// 		ft_lstadd(env, ft_new_list(target));
+// 	else
+// 	{
+// 		free(inlist->content);
+// 		inlist->content = ft_strdup(target);
+// 	}
+// 	if (is_add)
+// 		key[ft_strlen(key) - 1] = '+';
+// }
 
 void		ft_export_env(t_datas *datas, char **argv, char *target)
 {
@@ -114,9 +128,8 @@ void		ft_export_env(t_datas *datas, char **argv, char *target)
 		while (split[++count])
 			;
 		if (count > 1)
-			add_lst_export_env(datas->env_list, datas->export_list,
-					split, target);
-		ft_add_export(datas->export_list, target);
+			ft_push_env(datas->env_list, split[0], target);
+		ft_push_export(datas->export_list, split, target);
 	}
 	free_str_array(split);
 }

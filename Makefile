@@ -13,18 +13,26 @@ TERMINAL_SRCS = cursor.c term.c
 SRCS = main.c $(addprefix ./cmd/, ${CMD_SRCS}) $(addprefix ./etc/, ${ETC_SRCS}) \
 		$(addprefix ./list/, ${LIST_SRCS}) $(addprefix ./strutils/, ${STRUTILS_SRCS}) \
 		$(addprefix ./terminal/, ${TERMINAL_SRCS}) 
+
+TEST_SRCS = main_for_test.c $(addprefix ./cmd/, ${CMD_SRCS}) $(addprefix ./etc/, ${ETC_SRCS}) \
+		$(addprefix ./list/, ${LIST_SRCS}) $(addprefix ./strutils/, ${STRUTILS_SRCS}) \
+		$(addprefix ./terminal/, ${TERMINAL_SRCS}) 
 		
 OBJS = $(SRCS:.c=.o)
+TEST_OBJS = $(TEST_SRCS:.c=.o)
 .c.o :
 	$(CC) $(CFLAGS) -c -o $@ $<
 $(NAME) : $(OBJS)
 	$(CC) $(CFLAGS) -lncurses -o $@ $^
 all : $(NAME)
 clean:
-	$(RM) $(OBJS) $(BOBJS)
+	$(RM) $(OBJS) $(TEST_OBJS)
 fclean:	clean
-	$(RM) $(NAME)
+	$(RM) $(NAME) test
 re : clean all
+
+test :$(TEST_SRCS)
+	$(CC) $(CFLAGS) -lncurses -o $(NAME) $^
 
 
 norm : 

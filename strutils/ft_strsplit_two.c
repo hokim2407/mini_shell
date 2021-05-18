@@ -33,6 +33,8 @@ char		**ft_split_two(char *str, char c)
 	i = 0;
 	if (str == NULL)
 		return (NULL);
+	if (ft_strchr(str, c) < 0)
+		return ft_one_str_arr(str);
 	count = 2;
 	if ((point = ft_strchr(str, c)) == -1)
 		count = 1;

@@ -85,10 +85,7 @@ void		change_env_to_value(char **str, t_deck *env)
 		if (get_quato(str[index], start) != 1)
 		{
 			if (env_data.value == NULL)
-			{
-				str[index][start] = ' ';
 				rm_chars_in_str(str[index], start, env_data.key_len);
-			}
 			else
 				env_to_value(str, env_data, index, start);
 			index--;

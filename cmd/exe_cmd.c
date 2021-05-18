@@ -67,6 +67,8 @@ int					check_echo(char **new_argv)
 	int				j;
 
 	i = 0;
+	if (!new_argv[2] && new_argv[1][0] == '\0')
+		return (0);
 	while (new_argv[++i])
 	{
 		j = 0;
@@ -77,11 +79,27 @@ int					check_echo(char **new_argv)
 		}
 		if (new_argv[i][j] != '\0')
 			break ;
+		else if (j > 1)
+			new_argv[i][2] = '\0';
 	}
-	if (i == 1)
-		return (0);
-	else
-		return (i - 1);
+	if(i == 1)
+		return 0;
+	return (i - 2);
+}
+
+int					remove_back_null(char **new_argv)
+{
+	int				i;
+
+	i = -1;
+	while (new_argv[++i])
+	;
+	while(new_argv[--i][0]=='\0' && i > 0)
+		{
+			free(new_argv[i]);
+			new_argv[i] = NULL;
+		}
+	return 1;
 }
 
 void				exe_cmd(char **new_argv, t_datas *datas)
@@ -91,6 +109,7 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 
 	offset = 0;
 	sig_dfl();
+
 	if (!(temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
 								new_argv[0])) ||
 		temp[0] != '/')
@@ -101,8 +120,10 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 	}
 	dup2(datas->fd.read, 0);
 	dup2(datas->fd.write, 1);
+
 	if (!ft_strcmp(new_argv[0], "echo"))
-		offset = check_echo(new_argv);
+		offset = check_echo(new_argv) * remove_back_null(new_argv);
+
 	if (execve(temp, new_argv + offset, datas->envv) == -1)
 		exit(print_err(datas->ori_fd.write, new_argv, 127));
 }
