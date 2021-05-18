@@ -56,4 +56,3 @@ int			ft_strchr(const char *str, int value)
 		return (i);
 	return (-1);
 }
-

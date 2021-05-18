@@ -99,5 +99,4 @@ void		ft_print_all_deck(t_datas datas)
 		write(datas.fd.write, "\n", 1);
 		temp = temp->next;
 	}
-	
 }

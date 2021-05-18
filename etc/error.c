@@ -1,9 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
+/*   Updated: 2021/05/18 13:30:37 by hyerkim          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../minishell.h"
 
-int				print_err(int fd, char **argv, int status)
+int			print_err(int fd, char **argv, int status)
 {
-	int			len;
+	int		len;
 
 	len = -1;
 	while (argv[++len])
@@ -44,7 +55,7 @@ int			print_env_err(int fd, char **argv)
 	return (1);
 }
 
-int			print_export_err(int fd, char *cmd, char * err_cmd)
+int			print_export_err(int fd, char *cmd, char *err_cmd)
 {
 	int		len;
 
@@ -59,9 +70,9 @@ int			print_export_err(int fd, char *cmd, char * err_cmd)
 	return (1);
 }
 
-int				print_status(int fd, int status)
+int			print_status(int fd, int status)
 {
-	char		*str;
+	char	*str;
 
 	str = ft_itoa(status / 256);
 	write(fd, "minishell: ", 11);

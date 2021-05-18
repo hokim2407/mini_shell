@@ -64,12 +64,11 @@ char				*ft_strdup(const char *str)
 	return (result);
 }
 
-
-int			ft_atoi(const char *str)
+int					ft_atoi(const char *str)
 {
-	int		value;
-	int		flag;
-	int		i;
+	int				value;
+	int				flag;
+	int				i;
 
 	i = 0;
 	value = 0;
@@ -91,12 +90,12 @@ int			ft_atoi(const char *str)
 	return (int)value * flag;
 }
 
-char		*ft_itoa(int num)
+char				*ft_itoa(int num)
 {
-	int		divider;
-	char	*result;
-	int		flag;
-	int		count;
+	int				divider;
+	char			*result;
+	int				flag;
+	int				count;
 
 	divider = 1;
 	flag = (num < 0) ? -1 : 1;

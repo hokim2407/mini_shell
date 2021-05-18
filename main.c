@@ -14,7 +14,6 @@
 
 t_sig			g_sig;
 
-
 void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 {
 	set_terminal(&cursor->cm, &cursor->dc, &cursor->ce);
