@@ -12,10 +12,16 @@
 
 #include "../minishell.h"
 
-void		ft_rm_env(t_deck *env, t_deck *export, char *target)
+void		ft_rm_env(t_datas *datas, char *target)
 {
-	ft_lstdelone(find_lst_by_key(env, target));
-	ft_lstdelone(find_lst_by_key(export, target));
+	if (!is_valid_key(target) || target[0] == '=')
+	{
+		print_export_err(datas->ori_fd.write, "unset", target);
+		datas->status = 1;
+		return ;
+	}
+	ft_lstdelone(find_lst_by_key(datas->env_list, target));
+	ft_lstdelone(find_lst_by_key(datas->export_list, target));
 }
 
 void		ft_print_all_export(t_datas datas)

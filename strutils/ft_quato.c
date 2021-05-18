@@ -63,6 +63,8 @@ void		rm_quato(char **buf)
 	i = 0;
 	while (buf[++i])
 	{
+		if (buf[i][0] == '\0')
+			continue;
 		temp = malloc(ft_strlen(buf[i]) + 1);
 		check_quato_and_cp(temp, buf[i]);
 		free(buf[i]);

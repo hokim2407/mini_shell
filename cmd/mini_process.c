@@ -34,7 +34,7 @@ int			mini_env_process(char **new_argv, t_datas *datas)
 			ft_export_env(datas, new_argv, new_argv[i]);
 	}
 	else if (!ft_strcmp(new_argv[0], "unset"))
-		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
+		ft_rm_env(datas, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "$?"))
 		print_status(datas->ori_fd.write, datas->status);
 	else
@@ -48,6 +48,8 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		return ;
 	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
 	{
+		if (new_argv[1][0] == '\0')
+			return ;
 		if (chdir(new_argv[1]) < 0)
 			print_err(1, new_argv, 1);
 	}
