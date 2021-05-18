@@ -32,7 +32,13 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		}
 	}
 	else if (!ft_strcmp(new_argv[0], "export"))
-		ft_export_env(datas, new_argv, new_argv[1]);
+		{
+			if(new_argv[1] == NULL)
+				ft_print_all_export(*datas);;
+			int i = 0;
+			while(new_argv[++i])
+				ft_export_env(datas, new_argv, new_argv[i]);
+		}
 	else if (!ft_strcmp(new_argv[0], "unset"))
 		ft_rm_env(datas->env_list, datas->export_list, new_argv[1]);
 	else if (!ft_strcmp(new_argv[0], "$?"))

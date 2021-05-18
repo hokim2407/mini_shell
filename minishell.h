@@ -160,7 +160,8 @@ void				sig_special(int signum);
 
 int					check_file_state(t_fd fd, int is_check_write);
 
-int					print_export_err(int fd, char **argv);
+int					print_export_err(int fd, char *cmd, char * err_cmd);
+void				ft_print_all_export(t_datas datas);
 int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
 int					print_status(int fd, int status);
