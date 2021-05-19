@@ -122,6 +122,7 @@ int					exe_process(char **new_argv, t_datas *datas)
 		signal(SIGINT, sig_special);
 		signal(SIGQUIT, sig_special);
 		waitpid(pid, &datas->status, 0);
+
 	}
 	return (1);
 }

@@ -125,7 +125,7 @@ int					is_valid_key(char *target);
 t_list				*find_lst_by_key(t_deck *deck, char *data);
 char				*find_value_by_key(t_deck *deck, char *key);
 
-void				check_env_in_cmd(char **str, t_deck *env);
+void				check_env_in_cmd(char **str, t_deck *env, int status);
 void				rm_quato(char **buf);
 int					get_quato(char *str, int util);
 
@@ -166,4 +166,5 @@ int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
 int					print_status(int fd, int status);
 int					remove_back_null(char **new_argv);
+int			syntax_error_check(int fd, char *buf);
 #endif

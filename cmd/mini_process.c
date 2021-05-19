@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 16:53:01 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/11 19:45:34 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int			mini_env_process(char **new_argv, t_datas *datas)
 	}
 	else if (!ft_strcmp(new_argv[0], "unset"))
 		ft_rm_env(datas, new_argv[1]);
-	else if (!ft_strcmp(new_argv[0], "$?"))
-		print_status(datas->ori_fd.write, datas->status);
 	else
 		return (0);
 	return (1);
@@ -67,7 +65,7 @@ int			mini_single_process(char *buf, t_datas *datas)
 	int		num;
 
 	new_argv = ft_split(buf, ' ');
-	check_env_in_cmd(new_argv, datas->env_list);
+	check_env_in_cmd(new_argv, datas->env_list, datas->status);
 	rm_quato(new_argv);
 	if (new_argv[0] && new_argv[0][0] == '\0')
 		new_argv++;
@@ -75,11 +73,11 @@ int			mini_single_process(char *buf, t_datas *datas)
 		return (1);
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
-		write(2, "exit\n", 5);
+			write(2, "exit\n", 5);
 		int i;
 
 		i = 0;
-		while (((new_argv[1][i] < '0') || (new_argv[1][i] > '9')) && new_argv[1][i])
+		while (new_argv[1] && new_argv[1][i] && ((new_argv[1][i] < '0') || (new_argv[1][i] > '9')))
 			i++;
 		if (new_argv[1] != NULL && new_argv[2])
 		{
@@ -116,6 +114,7 @@ void		ascii_char_process(char *buf, t_cursor *cursor, int *i)
 		push_new(cursor, buf);
 	}
 	cursor->max++;
+	buf[cursor->max] = '\0';
 }
 
 void		read_char_process(char *buf, t_cursor *cursor, int *i)

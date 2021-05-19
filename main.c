@@ -40,7 +40,7 @@ void			new_input_init(t_cursor *cursor, char *buf, int *i)
 	signal(SIGQUIT, sig_ft);
 }
 
-void			make_blocks(char *buf, t_datas datas)
+void			make_blocks(char *buf, t_datas *datas)
 {
 	int			i;
 	char		**blocks;
@@ -48,7 +48,7 @@ void			make_blocks(char *buf, t_datas datas)
 	blocks = ft_split(buf, ';');
 	i = -1;
 	while (blocks[++i])
-		pipe_process(blocks[i], &datas);
+		pipe_process(blocks[i], datas);
 	free_str_array(blocks);
 }
 
@@ -73,9 +73,14 @@ int				main(int argc, char **argv, char **envv)
 		cursor.cur_history = cursor.history->tail;
 		if (buf[0] != '\n')
 			write(1, "\n", 1);
-		if (buf[0] == '\0' || buf[0] == '\n')
-			continue;
-		make_blocks(buf, datas);
+		if (buf[0] != '\0' &&  buf[0] != '\n')
+		{
+			if (syntax_error_check(datas.ori_fd.write, buf))
+					make_blocks(buf, &datas);
+			else
+				datas.status = 258;
+		}
+			
 		new_input_init(&cursor, buf, &i);
 	}
 }

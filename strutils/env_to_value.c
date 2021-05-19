@@ -60,8 +60,10 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 
 	env_data.val_len = ft_strlen(env_data.value);
 	result = malloc(ft_strlen(str[index]) + env_data.val_len + 1);
+
 	ft_strlcpy(result, str[index], start + 1);
 	ft_strlcpy(result + start, env_data.value, env_data.val_len + 1);
+
 	ft_strlcpy(result + start + env_data.val_len,
 				str[index] + start + env_data.key_len + 1,
 				ft_strlen(str[index]));
@@ -69,7 +71,7 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 	str[index] = result;
 }
 
-void		change_env_to_value(char **str, t_deck *env)
+void		change_env_to_value(char **str, t_deck *env, int status)
 {
 	int		start;
 	t_env	env_data;
@@ -79,6 +81,14 @@ void		change_env_to_value(char **str, t_deck *env)
 	while (str[++index])
 	{
 		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
+		if(str[index][start + 1]== '?')
+		{
+			env_data.key_len = 1;
+			env_data.value = ft_itoa(status);
+			env_data.val_len = ft_strlen(env_data.value);
+			env_to_value(str, env_data, index, start);
+			continue;
+		}
 		if (env_data.key == NULL || start < 0)
 			continue;
 		env_data.value = find_value_by_key(env, env_data.key);
@@ -95,9 +105,9 @@ void		change_env_to_value(char **str, t_deck *env)
 	}
 }
 
-void		check_env_in_cmd(char **cmds, t_deck *env)
+void		check_env_in_cmd(char **cmds, t_deck *env, int status)
 {
-	if (cmds == NULL || !ft_strcmp(cmds[0], "$?"))
+	if (cmds == NULL)
 		return ;
-	change_env_to_value(cmds, env);
+	change_env_to_value(cmds, env, status);
 }
