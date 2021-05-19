@@ -81,7 +81,7 @@ void		change_env_to_value(char **str, t_deck *env, int status)
 	while (str[++index])
 	{
 		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
-		if(str[index][start + 1]== '?')
+		if(str[index][start]== '$' && str[index][start + 1]== '?')
 		{
 			env_data.key_len = 1;
 			env_data.value = ft_itoa(status);

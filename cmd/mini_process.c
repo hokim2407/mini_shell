@@ -51,6 +51,11 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		if (chdir(new_argv[1]) < 0)
 			print_err(1, new_argv, 1);
 	}
+	else if(!ft_strcmp(new_argv[0], "."))
+	{
+		ft_write(2,"minishell: .: filename argument required\n.: usage: . filename [arguments]\n");
+		return ;
+	}
 	else if (new_argv[0][0] == '/' ||
 			!ft_strlcmp(new_argv[0], "./", 2) ||
 			!ft_strlcmp(new_argv[0], "../", 3))

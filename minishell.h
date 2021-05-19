@@ -31,7 +31,7 @@
 # define UP 4283163
 # define DOWN 4348699
 
-# define HEADER "mini_shell> "
+# define HEADER "minishell> "
 
 typedef struct		s_deck
 {

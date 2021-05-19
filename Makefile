@@ -39,6 +39,6 @@ norm :
 	norminette *.c *.h cmd/*.c etc/*.c list/*.c strutils/*.c terminal/*.c
 
 add :
-	git add *.c *.h cmd etc list strutils terminal Makefile
+	git add *.c *.h cmd/*.c etc/*.c list/*.c strutils/*.c terminal/*.c Makefile
 
 .PHONY:	all clean fclean re
