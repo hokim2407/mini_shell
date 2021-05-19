@@ -81,7 +81,7 @@ int			print_syntax_error(int fd, char *token, int token_num)
 	ft_write(fd, "minishell: syntax error near unexpected token `");
 	if(token_num %10 > 2 && token_num/ 10 < 2)
 		ft_write(fd,"newline");
-	else if((token_num %10 > 2 && (token_num/10) > 2)|| (token_num %10 < 3 &&  token_num > 10))
+	else if((token_num %10 > 1 && (token_num/10) > 2)|| (token_num %10 < 3 &&  token_num > 10))
 		write(fd,token,2);
 	else
 		write(fd,token,1);
@@ -93,29 +93,23 @@ int			print_syntax_error(int fd, char *token, int token_num)
 int			is_err_token(char *str)
 {
 	int i;
-	
+	int value = 0;;
 	i = 0;
-	if(*str == ';' && *(str + 1) == ';')
-		return 11;
-	if(*str == '|' && *(str + 1) == '|')
-		return 12;
+
 	if (*str == ';')
-		return 1;
+		value = 1;
 	if (*str == '|')
-		return 2;
+		value = 2;
 	if (*str == '<')
-	{
-		while (str[i] == '<')
-			i++;
-		return 3 + 10 * (i - 1);
-	}
+		value = 3 ;
 	if (*str == '>')
-	{
-		while (str[i] == '>')
+		value = 4;
+	if(value == 0)
+		return value;
+	while (str[i] == *str)
 			i++;
-		return 4 + 10 * (i - 1);
-	}
-	return 0;
+	value += 10 * (i - 1);
+	return value;
 }
 int			syntax_error_check(int fd, char *buf)
 {
@@ -133,9 +127,7 @@ int			syntax_error_check(int fd, char *buf)
 		{
 			err_token = is_err_token(strs[i]+j);
 			if (err_token && (
-				(err_token % 10 < 3 && j == 0) 
-				|| (i == 0 && j == 0) || err_token / 10 > 20 
-				|| (err_token > 10 && err_token != 13 && err_token != 14) 
+				(i == 0 && j == 0) || err_token / 10 > 20 || (err_token == 11) 
 				|| (err_token % 10 > 1&& strs[i][j + err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)
 				))
 			{
