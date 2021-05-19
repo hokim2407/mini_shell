@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/18 13:30:37 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 18:46:29 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int			print_err(int fd, char **argv, int status)
 		ft_write(fd, "command not found\n");
 	else if (status == 1)
 		ft_write(fd, "too many arguments\n");
+	else if (status == 2)
+		ft_write(fd, "is a directory\n");
 	else if (status == 255)
 	{
 		ft_write(fd, argv[1]);

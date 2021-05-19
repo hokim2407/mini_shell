@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/11 14:54:59 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 18:45:51 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <dirent.h>
 # include <termios.h>
 # include <termcap.h>
+# include <sys/types.h>
+# include <sys/stat.h>
 
 # define BACKSPACE 127
 # define LEFT 4479771
