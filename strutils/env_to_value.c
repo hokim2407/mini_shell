@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/10 13:01:32 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/19 20:35:26 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,8 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 
 	env_data.val_len = ft_strlen(env_data.value);
 	result = malloc(ft_strlen(str[index]) + env_data.val_len + 1);
-
 	ft_strlcpy(result, str[index], start + 1);
 	ft_strlcpy(result + start, env_data.value, env_data.val_len + 1);
-
 	ft_strlcpy(result + start + env_data.val_len,
 				str[index] + start + env_data.key_len + 1,
 				ft_strlen(str[index]));
@@ -81,7 +79,7 @@ void		change_env_to_value(char **str, t_deck *env, int status)
 	while (str[++index])
 	{
 		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
-		if(str[index][start]== '$' && str[index][start + 1]== '?')
+		if (str[index][start] == '$' && str[index][start + 1] == '?')
 		{
 			env_data.key_len = 1;
 			env_data.value = ft_itoa(status);

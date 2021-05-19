@@ -103,8 +103,9 @@ void		ft_push_env(t_deck *env,
 	inlist = NULL;
 	is_add = (data[0][len - 1] == '+');
 	if (is_add)
-	{	data[0][len - 1] = '\0';
-		rm_chars_in_str(target, ft_strchr(target,'+'),0);
+	{
+		data[0][len - 1] = '\0';
+		rm_chars_in_str(target, ft_strchr(target, '+'), 0);
 	}
 	inlist = find_lst_by_key(env, data[0]);
 	if (inlist == NULL)

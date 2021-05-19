@@ -99,6 +99,6 @@ int			pipe_process(char *block, t_datas *datas)
 	else
 		start_pipe(pipes, datas);
 	free_str_array(pipes);
-	datas->status/=256;
+	datas->status /= 256;
 	return (1);
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_for_test.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/11 14:55:01 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 20:40:46 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,13 @@ void			new_input_init(char *buf, int *i)
 
 int				main(int argc, char **argv, char **envv)
 {
-	char buf[4096];
-	t_datas datas;
-	char c;
-	int i;
-	char **blocks;
+	char		buf[4096];
+	t_datas		datas;
+	char		c;
+	int			i;
+	char		**blocks;
 
 	shell_init(&datas, envv);
-
 	new_input_init(buf, &i);
 	while (argc && argv[0] && read(0, &c, 1) > 0)
 	{

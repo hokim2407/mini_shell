@@ -14,10 +14,10 @@
 
 extern t_sig	g_sig;
 
-int			sh_process(char **new_argv, t_datas *datas)
+int				sh_process(char **new_argv, t_datas *datas)
 {
-	int		pid;
-	struct stat buf;
+	int			pid;
+	struct stat	buf;
 
 	stat(new_argv[0], &buf);
 	if (S_ISDIR(buf.st_mode))

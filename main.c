@@ -73,14 +73,13 @@ int				main(int argc, char **argv, char **envv)
 		cursor.cur_history = cursor.history->tail;
 		if (buf[0] != '\n')
 			write(1, "\n", 1);
-		if (buf[0] != '\0' &&  buf[0] != '\n')
+		if (buf[0] != '\0' && buf[0] != '\n')
 		{
 			if (syntax_error_check(datas.ori_fd.write, buf))
-					make_blocks(buf, &datas);
+				make_blocks(buf, &datas);
 			else
 				datas.status = 258;
 		}
-			
 		new_input_init(&cursor, buf, &i);
 	}
 }

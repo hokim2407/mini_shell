@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/11 19:45:34 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 20:40:08 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,15 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		if (chdir(new_argv[1]) < 0)
 			print_err(1, new_argv, 1);
 	}
-	else if(!ft_strcmp(new_argv[0], "."))
+	else if (!ft_strcmp(new_argv[0], "."))
 	{
-		ft_write(2,"minishell: .: filename argument required\n.: usage: . filename [arguments]\n");
+		ft_write(2, "minishell: .: filename argument required\n");
+		ft_write(2, ".:usage: . filename [arguments]\n");
 		return ;
 	}
 	else if (new_argv[0][0] == '/' ||
-			!ft_strlcmp(new_argv[0], "./", 2) ||
-			!ft_strlcmp(new_argv[0], "../", 3))
+		!ft_strlcmp(new_argv[0], "./", 2) ||
+		!ft_strlcmp(new_argv[0], "../", 3))
 		sh_process(new_argv, datas);
 	else
 		exe_process(new_argv, datas);
@@ -68,6 +69,7 @@ int			mini_single_process(char *buf, t_datas *datas)
 {
 	char	**new_argv;
 	int		num;
+	int		i;
 
 	new_argv = ft_split(buf, ' ');
 	check_env_in_cmd(new_argv, datas->env_list, datas->status);
@@ -78,11 +80,10 @@ int			mini_single_process(char *buf, t_datas *datas)
 		return (1);
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
-			write(2, "exit\n", 5);
-		int i;
-
+		write(2, "exit\n", 5);
 		i = 0;
-		while (new_argv[1] && new_argv[1][i] && ((new_argv[1][i] < '0') || (new_argv[1][i] > '9')))
+		while (new_argv[1] && new_argv[1][i] && ((new_argv[1][i] < '0')
+		|| (new_argv[1][i] > '9')))
 			i++;
 		if (new_argv[1] != NULL && new_argv[2])
 		{
@@ -95,7 +96,8 @@ int			mini_single_process(char *buf, t_datas *datas)
 			num = ft_atoi(new_argv[1]);
 			if (num != 0 && i <= 1)
 				exit(num);
-			else if (num == 0 && i <= 1 && ((new_argv[1][0] >= '0') && (new_argv[1][0] <= '9')))
+			else if (num == 0 && i <= 1 && ((new_argv[1][0] >= '0')
+			&& (new_argv[1][0] <= '9')))
 				exit(0);
 			exit(print_err(datas->ori_fd.write, new_argv, 255));
 		}
