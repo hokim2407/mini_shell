@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main_for_test.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 20:40:46 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 22:14:47 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,37 @@ void			new_input_init(char *buf, int *i)
 	signal(SIGQUIT, sig_ft);
 }
 
+void			make_blocks(char *buf, t_datas *datas)
+{
+	int			i;
+	char		**blocks;
+
+	blocks = ft_split(buf, ';');
+	i = -1;
+	while (blocks[++i])
+		pipe_process(blocks[i], datas);
+	free_str_array(blocks);
+}
+
+void			read_char(char *buf, char c, int *i)
+{
+	if (g_sig.sig == 'c')
+	{
+		g_sig.sig = 0;
+		*i = 0;
+		buf[0] = '\0';
+		exit(0);
+	}
+	buf[(*i)++] = c;
+	buf[*i] = '\0';
+}
+
 int				main(int argc, char **argv, char **envv)
 {
 	char		buf[4096];
 	t_datas		datas;
 	char		c;
 	int			i;
-	char		**blocks;
 
 	shell_init(&datas, envv);
 	new_input_init(buf, &i);
@@ -46,15 +70,7 @@ int				main(int argc, char **argv, char **envv)
 	{
 		if (c != '\n')
 		{
-			if (g_sig.sig == 'c')
-			{
-				g_sig.sig = 0;
-				i = 0;
-				buf[0] = '\0';
-				exit(0);
-			}
-			buf[i++] = c;
-			buf[i] = '\0';
+			read_char(buf, c, &i);
 			continue;
 		}
 		if (buf[0] == '\0' || buf[0] == '\n')
@@ -62,11 +78,9 @@ int				main(int argc, char **argv, char **envv)
 			new_input_init(buf, &i);
 			continue;
 		}
-		blocks = ft_split(buf, ';');
-		i = -1;
-		while (blocks[++i])
-			pipe_process(blocks[i], &datas);
-		free_str_array(blocks);
+		if (buf[0] != '\0' && buf[0] != '\n')
+			if (syntax_error_check(datas.ori_fd.write, buf, &(datas.status)))
+				make_blocks(buf, &datas);
 		new_input_init(buf, &i);
 	}
 }
