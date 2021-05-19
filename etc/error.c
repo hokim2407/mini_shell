@@ -6,11 +6,38 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/18 13:30:37 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 16:30:27 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+/*int exit_error(char **new_argv, t_datas *datas)
+{
+	int i;
+	int num;
+
+	i = 0;
+	while (new_argv[1][i] == '+' || new_argv[1][i] == '-')
+		i++;
+	if (new_argv[1] != NULL && new_argv[2])
+	{
+		datas->status = print_err(datas->ori_fd.write, new_argv, 1);
+		return (datas->status);
+	}
+	if (new_argv[1] != NULL)
+	{
+		num = 0;
+		num = ft_atoi(new_argv[1]);
+		printf("num = %d\n", num);
+		if (num != 0 && i <= 1)
+			exit(num);
+		else if (num == 0 && i <= 1)
+			exit(0);
+		exit(print_err(datas->ori_fd.write, new_argv, 255));
+	}
+	exit(datas->status);
+}*/
 
 int			print_err(int fd, char **argv, int status)
 {
@@ -30,6 +57,8 @@ int			print_err(int fd, char **argv, int status)
 		ft_write(fd, argv[1]);
 		ft_write(fd, ": numeric argument required\n");
 	}
+	else if (status == 1)
+		ft_write(fd, "too many arguments\n");
 	else
 	{
 		ft_write(fd, argv[len - 1]);

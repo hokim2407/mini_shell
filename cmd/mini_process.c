@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/11 19:45:34 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 16:53:01 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,24 @@ int			mini_single_process(char *buf, t_datas *datas)
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
 		write(2, "exit\n", 5);
+		int i;
+
+		i = 0;
+		while (((new_argv[1][i] < '0') || (new_argv[1][i] > '9')) && new_argv[1][i])
+			i++;
+		if (new_argv[1] != NULL && new_argv[2])
+		{
+			datas->status = print_err(datas->ori_fd.write, new_argv, 1);
+			return (datas->status);
+		}
 		if (new_argv[1] != NULL)
 		{
+			num = 0;
 			num = ft_atoi(new_argv[1]);
-			if (num != 0)
+			if (num != 0 && i <= 1)
 				exit(num);
+			else if (num == 0 && i <= 1 && ((new_argv[1][0] >= '0') && (new_argv[1][0] <= '9')))
+				exit(0);
 			exit(print_err(datas->ori_fd.write, new_argv, 255));
 		}
 		exit(datas->status);
