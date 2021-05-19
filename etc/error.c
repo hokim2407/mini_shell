@@ -97,7 +97,6 @@ int			is_err_token(char *str)
 	int i;
 	int value = 0;;
 	i = 0;
-
 	if (*str == ';')
 		value = 1;
 	if (*str == '|')
@@ -128,6 +127,8 @@ int			syntax_error_check(int fd, char *buf)
 		while (strs[i][++j])
 		{
 			err_token = is_err_token(strs[i]+j);
+			if(get_quato(strs[i], j) != 0)
+				continue;
 			if (err_token && (
 				(i == 0 && j == 0) || err_token > 20 || (err_token == 11) 
 				|| (err_token % 10 > 1&& strs[i][j + err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)
