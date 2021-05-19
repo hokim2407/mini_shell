@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/11 14:55:01 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 22:02:39 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void			make_blocks(char *buf, t_datas *datas)
 	i = -1;
 	while (blocks[++i])
 		pipe_process(blocks[i], datas);
-
 	free_str_array(blocks);
 }
 
@@ -75,12 +74,8 @@ int				main(int argc, char **argv, char **envv)
 		if (buf[0] != '\n')
 			write(1, "\n", 1);
 		if (buf[0] != '\0' && buf[0] != '\n')
-		{
-			if (syntax_error_check(datas.ori_fd.write, buf))
+			if (syntax_error_check(datas.ori_fd.write, buf, &(datas.status)))
 				make_blocks(buf, &datas);
-			else
-				datas.status = 258;
-		}
 		new_input_init(&cursor, buf, &i);
 	}
 }

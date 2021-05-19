@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/19 20:35:26 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/19 22:03:12 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	int		i;
 
 	chr = find_out_sign(str);
+	*start = chr;
 	if (chr == -1)
 		return (NULL);
 	result = malloc(ft_strlen(str) - chr + 1);
 	i = 0;
-	*start = chr;
 	chr += 1;
-	while ((str[chr] >= '0' && str[chr] <= '9') ||
+	while (str[chr] &&
+			(str[chr] >= '0' && str[chr] <= '9') ||
 			(str[chr] >= 'a' && str[chr] <= 'z') ||
 			(str[chr] >= 'A' && str[chr] <= 'Z') ||
 			str[chr] == '_')
@@ -69,43 +70,42 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 	str[index] = result;
 }
 
-void		change_env_to_value(char **str, t_deck *env, int status)
+void		change_env_to_value(char **str, t_deck *env, int status, int *i)
 {
 	int		start;
 	t_env	env_data;
-	int		index;
 
-	index = -1;
-	while (str[++index])
+	env_data.key = get_env_in_cmd(str[*i], &start, &env_data.key_len);
+	if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] == '?')
 	{
-		env_data.key = get_env_in_cmd(str[index], &start, &env_data.key_len);
-		if (str[index][start] == '$' && str[index][start + 1] == '?')
-		{
-			env_data.key_len = 1;
-			env_data.value = ft_itoa(status);
-			env_data.val_len = ft_strlen(env_data.value);
-			env_to_value(str, env_data, index, start);
-			continue;
-		}
-		if (env_data.key == NULL || start < 0)
-			continue;
-		env_data.value = find_value_by_key(env, env_data.key);
-		if (get_quato(str[index], start) != 1)
-		{
-			if (env_data.value == NULL)
-				rm_chars_in_str(str[index], start, env_data.key_len);
-			else
-				env_to_value(str, env_data, index, start);
-			index--;
-		}
-		free(env_data.value);
-		free(env_data.key);
+		env_data.key_len = 1;
+		env_data.value = ft_itoa(status);
+		env_data.val_len = ft_strlen(env_data.value);
+		env_to_value(str, env_data, *i, start);
+		return ;
 	}
+	if (env_data.key == NULL || start < 0)
+		return ;
+	env_data.value = find_value_by_key(env, env_data.key);
+	if (get_quato(str[*i], start) != 1)
+	{
+		if (env_data.value == NULL)
+			rm_chars_in_str(str[*i], start, env_data.key_len);
+		else
+			env_to_value(str, env_data, *i, start);
+		(*i)--;
+	}
+	free(env_data.value);
+	free(env_data.key);
 }
 
 void		check_env_in_cmd(char **cmds, t_deck *env, int status)
 {
+	int		index;
+
 	if (cmds == NULL)
 		return ;
-	change_env_to_value(cmds, env, status);
+	index = -1;
+	while (cmds[++index])
+		change_env_to_value(cmds, env, status, &index);
 }

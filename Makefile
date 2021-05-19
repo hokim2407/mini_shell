@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror#-g3 -fsanitize=address#
+CFLAGS = -g3 -fsanitize=address##-Wall -Wextra -Werror#
 NAME = minishell
 RM = rm -f
 
