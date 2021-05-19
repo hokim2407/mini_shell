@@ -49,6 +49,7 @@ void			make_blocks(char *buf, t_datas *datas)
 	i = -1;
 	while (blocks[++i])
 		pipe_process(blocks[i], datas);
+
 	free_str_array(blocks);
 }
 

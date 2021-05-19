@@ -162,10 +162,11 @@ void				sig_special(int signum);
 
 int					check_file_state(t_fd fd, int is_check_write);
 
-int					print_export_err(int fd, char *cmd, char *err_cmd);
+int					print_export_err(int *status, char *cmd, char *err_cmd);
 void				ft_print_all_export(t_datas datas);
 int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
+void				print_exit_err(t_datas * datas, char **new_argv);
 int					print_status(int fd, int status);
 int					remove_back_null(char **new_argv);
 int					syntax_error_check(int fd, char *buf);

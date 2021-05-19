@@ -16,8 +16,7 @@ void		ft_rm_env(t_datas *datas, char *target)
 {
 	if (!is_valid_key(target) || target[0] == '=')
 	{
-		print_export_err(datas->ori_fd.write, "unset", target);
-		datas->status = 1;
+		print_export_err(&(datas->status), "unset", target);
 		return ;
 	}
 	ft_lstdelone(find_lst_by_key(datas->env_list, target));
@@ -53,20 +52,13 @@ void		ft_print_all_export(t_datas datas)
 	}
 }
 
-void		ft_push_export(t_deck *deck, char **data, char *target)
+void		ft_push_export(t_deck *deck, char **data, char *target, int is_add)
 {
 	t_list	*inlist;
-	int		is_add;
 	char	*temp;
 	int		len;
 
 	len = ft_strlen(data[0]);
-	is_add = (data[0][len - 1] == '+');
-	if (is_add)
-	{
-		data[0][len - 1] = '\0';
-	}
-	inlist = NULL;
 	inlist = find_lst_by_key(deck, data[0]);
 	if (inlist == NULL)
 		ft_lstadd_inorder(deck, ft_new_list(target));
@@ -87,26 +79,16 @@ void		ft_push_export(t_deck *deck, char **data, char *target)
 			inlist->content = ft_strdup(target);
 		free(temp);
 	}
-	if (is_add)
-		data[0][len - 1] = '+';
 }
 
 void		ft_push_env(t_deck *env,
-				char **data, char *target)
+				char **data, char *target, int is_add)
 {
 	t_list	*inlist;
-	int		is_add;
 	char	*temp;
 	int		len;
 
 	len = ft_strlen(data[0]);
-	inlist = NULL;
-	is_add = (data[0][len - 1] == '+');
-	if (is_add)
-	{
-		data[0][len - 1] = '\0';
-		rm_chars_in_str(target, ft_strchr(target, '+'), 0);
-	}
 	inlist = find_lst_by_key(env, data[0]);
 	if (inlist == NULL)
 		ft_lstadd(env, ft_new_list(target));
@@ -119,29 +101,31 @@ void		ft_push_env(t_deck *env,
 			inlist->content = ft_strdup(target);
 		free(temp);
 	}
-	if (is_add)
-		data[0][len - 1] = '+';
 }
 
 void		ft_export_env(t_datas *datas, char **argv, char *target)
 {
 	char	**split;
 	int		count;
+	int		is_add;
 
 	split = ft_split_two(target, '=');
 	count = -1;
 	if (!is_valid_key(target) || target[0] == '=')
-	{
-		print_export_err(datas->ori_fd.write, argv[0], target);
-		datas->status = 1;
-	}
+		print_export_err(&(datas->status), argv[0], target);
 	else
 	{
+		is_add = (split[0][ft_strlen(split[0]) - 1] == '+');
+		if (is_add)
+		{
+			split[0][ft_strlen(split[0]) - 1] = '\0';
+			rm_chars_in_str(target, ft_strchr(target, '+'), 0);
+		}
 		while (split[++count])
 			;
 		if (count > 1)
-			ft_push_env(datas->env_list, split, target);
-		ft_push_export(datas->export_list, split, target);
+			ft_push_env(datas->env_list, split, target, is_add);
+		ft_push_export(datas->export_list, split, target, is_add);
 	}
 	free_str_array(split);
 }

@@ -12,17 +12,8 @@
 
 #include "../minishell.h"
 
-int			print_err(int fd, char **argv, int status)
+int			err_msg(int fd, char **argv, int status)
 {
-	int		len;
-
-	len = -1;
-	fd = 2;
-	while (argv[++len])
-		;
-	ft_write(1, "minishell: ");
-	ft_write(fd, argv[0]);
-	ft_write(fd, ": ");
 	if (status == 127)
 		ft_write(fd, "command not found\n");
 	else if (status == 1)
@@ -35,6 +26,22 @@ int			print_err(int fd, char **argv, int status)
 		ft_write(fd, ": numeric argument required\n");
 	}
 	else
+		return (1);
+	return (0);
+}
+
+int			print_err(int fd, char **argv, int status)
+{
+	int		len;
+
+	len = -1;
+	fd = 2;
+	while (argv[++len])
+		;
+	ft_write(1, "minishell: ");
+	ft_write(fd, argv[0]);
+	ft_write(fd, ": ");
+	if (err_msg(fd, argv, status))
 	{
 		ft_write(fd, argv[len - 1]);
 		ft_write(fd, ": ");
@@ -61,9 +68,10 @@ int			print_env_err(int fd, char **argv)
 	return (1);
 }
 
-int			print_export_err(int fd, char *cmd, char *err_cmd)
+int			print_export_err(int *status, char *cmd, char *err_cmd)
 {
 	int		len;
+	int		fd;
 
 	len = -1;
 	fd = 2;
@@ -74,73 +82,33 @@ int			print_export_err(int fd, char *cmd, char *err_cmd)
 	ft_write(fd, "\': ");
 	ft_write(fd, "not a valid identifier");
 	ft_write(fd, "\n");
+	*status = 256;
 	return (1);
 }
 
-int			print_syntax_error(int fd, char *token, int token_num)
-{
-	fd = 2;
-	ft_write(fd, "minishell: syntax error near unexpected token `");
-	if (token_num % 10 > 2 && token_num / 10 < 2)
-		ft_write(fd, "newline");
-	else if ((token_num % 10 > 1 && (token_num / 10) > 2) ||
-			(token_num % 10 < 3 && token_num > 10))
-		write(fd, token, 2);
-	else
-		write(fd, token, 1);
-	ft_write(fd, "\'\n");
-	return (258);
-}
-
-int			is_err_token(char *str)
+void		print_exit_err(t_datas *datas, char **new_argv)
 {
 	int		i;
-	int		value;
+	int		num;
 
 	i = 0;
-	value = 0;
-	if (*str == ';')
-		value = 1;
-	if (*str == '|')
-		value = 2;
-	if (*str == '<')
-		value = 3;
-	if (*str == '>')
-		value = 4;
-	if (value == 0)
-		return (value);
-	while (str[i] == *str)
+	while (new_argv[1] && new_argv[1][i] &&
+		((new_argv[1][i] < '0') || (new_argv[1][i] > '9')))
 		i++;
-	value += 10 * (i - 1);
-	return (value);
-}
-
-int			syntax_error_check(int fd, char *buf)
-{
-	char	**strs;
-	int		i;
-	int		j;
-	int		err_token;
-
-	i = -1;
-	strs = ft_split(buf, ' ');
-	while (strs[++i])
+	if (new_argv[1] != NULL && new_argv[2])
 	{
-		j = -1;
-		while (strs[i][++j])
-		{
-			err_token = is_err_token(strs[i] + j);
-			if (get_quato(strs[i], j) != 0)
-				continue ;
-			if (err_token && ((i == 0 && j == 0)
-				|| err_token > 20 || (err_token == 11)
-				|| (err_token % 10 > 1 && strs[i][j + err_token / 10 + 1]
-				== '\0' && strs[i + 1] == NULL)))
-			{
-				print_syntax_error(fd, strs[i] + j, err_token);
-				return (0);
-			}
-		}
+		datas->status = print_err(datas->ori_fd.write, new_argv, 1);
+		return ;
 	}
-	return (1);
+	if (new_argv[1] != NULL)
+	{
+		num = 0;
+		num = ft_atoi(new_argv[1]);
+		if (num != 0 && i <= 1)
+			exit(num);
+		else if (num == 0 && i <= 1 && ((new_argv[1][0] >= '0')
+				&& (new_argv[1][0] <= '9')))
+			exit(0);
+		exit(print_err(datas->ori_fd.write, new_argv, 255));
+	}
 }

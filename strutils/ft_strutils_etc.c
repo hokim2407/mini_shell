@@ -49,7 +49,10 @@ int			ft_strlcmp(char *str1, char *str2, int len)
 			return (str1[i] - str2[i]);
 		i++;
 	}
-	return (str1[i] - str2[i]);
+	if (i == len - 1)
+		return (str1[i] - str2[i]);
+	else
+		return (0);
 }
 
 void		remove_char_in_str(char *buf, int nth)

@@ -14,17 +14,27 @@
 
 extern t_sig	g_sig;
 
-int				sh_process(char **new_argv, t_datas *datas)
+int				sh_err_check(char **new_argv, t_datas *datas)
 {
-	int			pid;
 	struct stat	buf;
 
 	stat(new_argv[0], &buf);
 	if (S_ISDIR(buf.st_mode))
-		return (print_err(datas->ori_fd.write, new_argv, 2));
-	if ((new_argv[0][0] != '.' && new_argv[0][0] != '/') ||
+		print_err(datas->ori_fd.write, new_argv, 2);
+	else if ((new_argv[0][0] != '.' && new_argv[0][0] != '/') ||
 			new_argv[0][ft_strlen(new_argv[0]) - 1] == '/')
-		return (print_err(datas->ori_fd.write, new_argv, 127));
+		print_err(datas->ori_fd.write, new_argv, 127);
+	else
+		return (1);
+	return (0);
+}
+
+int				sh_process(char **new_argv, t_datas *datas)
+{
+	int			pid;
+
+	if (!sh_err_check(new_argv, datas))
+		return (0);
 	if (new_argv[0][0] != '/')
 		new_argv[0] = get_abs_path(new_argv[0]);
 	pid = fork();
