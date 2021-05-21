@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 16:28:33 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 19:59:10 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,12 @@ int		print_exit_err(t_datas *datas, char **new_argv)
 	int		num;
 
 	i = 0;
-	while (new_argv[1] && new_argv[1][i] &&
-		((new_argv[1][i] < '0') || (new_argv[1][i] > '9')))
-		i++;
+	num = -1;
+	while (new_argv[1] && new_argv[1][++num])
+	{
+		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
+			i++;
+	}
 	if (new_argv[1] != NULL && new_argv[2])
 		return (datas->status = print_err(datas->ori_fd.err, new_argv, 1));
 	if (new_argv[1] != NULL)
@@ -100,8 +103,9 @@ int		print_exit_err(t_datas *datas, char **new_argv)
 		num = ft_atoi(new_argv[1]);
 		if (num != 0 && i <= 1)
 			exit(num);
-		else if (num == 0 && i <= 1 && ((new_argv[1][0] >= '0')
-				&& (new_argv[1][0] <= '9')))
+		else if (num == 0 && i <= 1 && (((new_argv[1][0] >= '0')
+				&& (new_argv[1][0] <= '9'))|| ((new_argv[1][0] == '+')
+				|| (new_argv[1][0] == '-'))))
 			exit(0);
 		exit(print_err(datas->ori_fd.err, new_argv, 255));
 	}
