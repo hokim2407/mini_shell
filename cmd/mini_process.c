@@ -123,9 +123,7 @@ void		read_char_process(char *buf, t_cursor *cursor, int *i)
 	if (g_sig.sig == 'c')
 	{
 		g_sig.sig = 0;
-		cursor->max = 0;
-		*i = 0;
-		buf[0] = '\0';
+		new_input_init(cursor, buf, i);
 	}
 	if ((cursor->c == 4 && cursor->max != 0) || cursor->c == '\t')
 		return ;
