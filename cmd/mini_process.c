@@ -65,7 +65,9 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 	}
 	else if (!ft_strcmp(new_argv[0], "."))
 	{
-		ft_write(2, "minishell: .: filename argument required\n");
+		
+		ft_write(2, ERR_HEADER);
+		ft_write(2, ".: filename argument required\n");
 		ft_write(2, ".:usage: . filename [arguments]\n");
 		return ;
 	}

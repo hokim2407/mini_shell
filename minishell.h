@@ -34,7 +34,7 @@
 # define DOWN 4348699
 
 # define HEADER "minishell> "
-# define ERR_HEADER "minishell: "
+# define ERR_HEADER "bash: "
 
 typedef struct		s_deck
 {
