@@ -43,10 +43,10 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	i = 0;
 	chr += 1;
 	while (str[chr] &&
-			(str[chr] >= '0' && str[chr] <= '9') ||
+			((str[chr] >= '0' && str[chr] <= '9') ||
 			(str[chr] >= 'a' && str[chr] <= 'z') ||
 			(str[chr] >= 'A' && str[chr] <= 'Z') ||
-			str[chr] == '_')
+			str[chr] == '_'))
 	{
 		result[i++] = str[chr++];
 	}

@@ -86,14 +86,15 @@ int			read_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 int			check_redirect(char *pipe, t_datas *datas)
 {
 	int		i;
+	int		result;
 
 	i = -1;
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			write_redirect(pipe, datas, &datas->fd, i);
+			result = write_redirect(pipe, datas, &datas->fd, i);
 		else if (pipe[i] == '<')
-			read_redirect(pipe, datas, &datas->fd, i);
+			result = read_redirect(pipe, datas, &datas->fd, i);
 	}
-	return (1);
+	return (result);
 }
