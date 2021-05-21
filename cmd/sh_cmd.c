@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:51:24 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 16:26:20 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 18:01:21 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int				sh_err_check(char **new_argv, t_datas *datas)
 	if ((result == -1 && new_argv[0][0] == '/'))
 	{
 		errno = 2;
-		print_err(datas->ori_fd.err, new_argv, 2);
+		redirect_err(datas->ori_fd.err, new_argv[0], 1);
 		datas->status = 127 * 256;
 	}
 	else if (S_ISDIR(buf.st_mode))
