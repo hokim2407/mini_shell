@@ -55,11 +55,21 @@ void		check_quato_and_cp(char *target, char *str)
 	}
 }
 
+
 void		rm_quato(char **buf)
 {
 	int		i;
+	int		j;
 	char	*temp;
 
+	i = -1;
+	while (buf[++i])
+	{
+		j = -1;
+		while (buf[i][++j])
+			if (buf[i][j] == 92)
+				rm_chars_in_str(buf[i], j, 0);
+	}
 	i = -1;
 	while (buf[++i])
 	{

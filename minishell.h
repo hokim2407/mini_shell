@@ -175,4 +175,5 @@ int					print_status(int fd, int status);
 int					is_n_option(char *argv);
 int					syntax_error_check(int fd, char *buf, int *status);
 void				new_input_init(t_cursor *cursor, char *buf, int *i);
+void				pull_back_strs(char **strs, int i);
 #endif

@@ -76,7 +76,7 @@ char				**check_echo(char **new_argv)
 	index = 1;
 	while (new_argv[++i])
 	{
-		if (new_argv[i][0] == '\0' || (is_n_option(new_argv[i]) && i != 1))
+		if ((is_n_option(new_argv[i]) && i != 1))
 			continue ;
 		smaller_argv[index++] = ft_strdup(new_argv[i]);
 		;

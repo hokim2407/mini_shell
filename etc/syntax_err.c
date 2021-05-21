@@ -62,9 +62,9 @@ int			is_syntax_err(char **strs, int err_token, int i, int j)
 int			syntax_error_check(int fd, char *buf, int *status)
 {
 	char	**strs;
-	int		i;
 	int		j;
 	int		err_token;
+	int		i;
 
 	i = -1;
 	strs = ft_split(buf, ' ');
@@ -74,6 +74,7 @@ int			syntax_error_check(int fd, char *buf, int *status)
 		while (strs[i][++j])
 		{
 			err_token = is_err_token(strs[i] + j);
+
 			if (get_quato(strs[i], j) != 0)
 				continue;
 			if (is_syntax_err(strs, err_token, i, j))
