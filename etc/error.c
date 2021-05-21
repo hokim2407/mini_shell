@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 19:59:10 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 20:54:58 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,27 @@ int			err_msg(int fd, char **argv, int status)
 	else
 		return (1);
 	return (0);
+}
+
+int			print_cd_err(int fd, char **argv, int status, int i)
+{
+	int		len;
+
+	len = -1;
+	while (argv[++len])
+		;
+	ft_write(fd, ERR_HEADER);
+	ft_write(fd, argv[0]);
+	ft_write(fd, ": ");
+	if (err_msg(fd, argv, status))
+	{
+		ft_write(fd, argv[i]);
+		ft_write(fd, ": ");
+		ft_write(fd, strerror(errno));
+		ft_write(fd, "\n");
+		status = 256;
+	}
+	return (status);
 }
 
 int			print_err(int fd, char **argv, int status)

@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:50:53 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 20:19:24 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 21:20:15 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,14 @@ void				change_pwd_env(t_datas *datas, char *old_path)
 	char		*temp;
 	char		now_path[256];
 
+
+	if(old_path == NULL)
+	{
+		temp = ft_strjoin("OLDPWD=", "");
+		ft_export_env(datas, NULL, temp);
+		free(temp);
+		return;
+	}
 	getcwd(now_path, 255);
 	temp = ft_strjoin("OLDPWD=", old_path);
 	ft_export_env(datas, NULL, temp);
