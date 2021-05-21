@@ -23,7 +23,7 @@ int			print_syntax_error(int fd, char *token, int token_num)
 	else
 		write(fd, token, 1);
 	ft_write(fd, "\'\n");
-	return (1);
+	return (258);
 }
 
 int			is_err_token(char *str)

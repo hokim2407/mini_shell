@@ -79,4 +79,5 @@ int				main(int argc, char **argv, char **envv)
 				make_blocks(buf, &datas);
 		new_input_init(&cursor, buf, &i);
 	}
+	return (datas.status);
 }

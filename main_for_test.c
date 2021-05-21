@@ -83,4 +83,5 @@ int				main(int argc, char **argv, char **envv)
 				make_blocks(buf, &datas);
 		new_init(buf, &i);
 	}
+	return (datas.status);
 }
