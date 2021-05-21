@@ -38,7 +38,7 @@ int			print_err(int fd, char **argv, int status)
 	fd = 2;
 	while (argv[++len])
 		;
-	ft_write(1, "minishell: ");
+	ft_write(1, ERR_HEADER);
 	ft_write(fd, argv[0]);
 	ft_write(fd, ": ");
 	if (err_msg(fd, argv, status))
@@ -75,7 +75,7 @@ int			print_export_err(int *status, char *cmd, char *err_cmd)
 
 	len = -1;
 	fd = 2;
-	ft_write(fd, "minishell: ");
+	ft_write(fd, ERR_HEADER);
 	ft_write(fd, cmd);
 	ft_write(fd, ": `");
 	ft_write(fd, err_cmd);
