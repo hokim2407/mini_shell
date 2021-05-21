@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 20:54:58 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 22:03:58 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,12 @@ int			print_export_err(int fd, int *status, char *cmd, char *err_cmd)
 
 int		print_exit_err(t_datas *datas, char **new_argv)
 {
-	int		i;
-	int		num;
+	int	i;
+	long long	num;
 
 	i = 0;
 	num = -1;
+	
 	while (new_argv[1] && new_argv[1][++num])
 	{
 		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
@@ -121,7 +122,7 @@ int		print_exit_err(t_datas *datas, char **new_argv)
 	if (new_argv[1] != NULL)
 	{
 		num = 0;
-		num = ft_atoi(new_argv[1]);
+		num = ft_atoi(new_argv[1], new_argv);
 		if (num != 0 && i <= 1)
 			exit(num);
 		else if (num == 0 && i <= 1 && (((new_argv[1][0] >= '0')

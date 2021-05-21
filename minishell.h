@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 20:55:06 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 22:03:57 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ char				*ft_strdup(const char *str);
 int					ft_strchr(const char *str, int value);
 void				free_str_array(char **str);
 char				*ft_itoa(int num);
-int					ft_atoi(const char *str);
+int					ft_atoi(const char *str, char **new_argv);
 int					ft_write(int fd, char *str);
 char				*get_abs_path(char *original);
 void				remove_char_in_str(char *buf, int nth);

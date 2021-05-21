@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strutils_make.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:51:07 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:51:09 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 22:03:34 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,9 +64,9 @@ char				*ft_strdup(const char *str)
 	return (result);
 }
 
-int					ft_atoi(const char *str)
+int				ft_atoi(const char *str, char **new_argv)
 {
-	int				value;
+	long long		value;
 	int				flag;
 	int				i;
 
@@ -86,6 +86,8 @@ int					ft_atoi(const char *str)
 	{
 		value = value * 10 + *(str + i) - '0';
 		i++;
+		if (value == 922337203685477580 && *(str + i) != '\0' && *(str + i) >= '8')
+			exit(print_err(2, new_argv, 255));
 	}
 	return (int)value * flag;
 }
