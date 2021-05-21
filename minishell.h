@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 19:39:40 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 20:18:23 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,4 +182,5 @@ void				check_env_data_null_case(char **str,
 					t_env env_data, int start, int *i);
 char				**check_upper_case(char **new_argv);
 char				**check_echo(char **new_argv);
+void				change_pwd_env(t_datas *datas, char *old_path);
 #endif

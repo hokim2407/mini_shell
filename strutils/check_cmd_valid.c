@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:50:53 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 19:39:19 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 20:19:24 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,19 @@ void				check_env_data_null_case(char **str,
 		pull_back_strs(str, *i);
 		(*i)--;
 	}
+}
+
+void				change_pwd_env(t_datas *datas, char *old_path)
+{
+	char		*temp;
+	char		now_path[256];
+
+	getcwd(now_path, 255);
+	temp = ft_strjoin("OLDPWD=", old_path);
+	ft_export_env(datas, NULL, temp);
+	free(temp);
+	temp = ft_strjoin("PWD=", now_path);
+	ft_export_env(datas, NULL, temp);
+	free(temp);
+	free(old_path);
 }
