@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 19:33:13 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 19:33:14 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 20:06:08 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ void		read_char_process(char *buf, t_cursor *cursor, int *i)
 	if (g_sig.sig == 'c')
 	{
 		g_sig.sig = 0;
-		new_input_init(cursor, buf, i);
+		buf[0] = '\0';
+		*i = 0;
+		cursor->max = 0;
 	}
 	if ((cursor->c == 4 && cursor->max != 0) || cursor->c == '\t')
 		return ;
