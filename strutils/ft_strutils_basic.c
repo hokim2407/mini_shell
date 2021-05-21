@@ -67,7 +67,10 @@ int			is_n_option(char *argv)
 		while (argv[++i] == 'n')
 			;
 		if (i > 1 && argv[i] == '\0')
-			return (1);
+			{ 
+				argv[2] = '\0';
+				return (1);
+			}
 	}
 	return (0);
 }
