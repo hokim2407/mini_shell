@@ -23,14 +23,14 @@ int				sh_err_check(char **new_argv, t_datas *datas)
 	if ((result == -1 && new_argv[0][0] == '/'))
 	{
 		errno = 2;
-		print_err(datas->ori_fd.write, new_argv, 2);
+		print_err(datas->ori_fd.err, new_argv, 2);
 		datas->status = 127 * 256;
 	}
 	else if (S_ISDIR(buf.st_mode))
-		datas->status =print_err(datas->ori_fd.write, new_argv, 126) * 256;
+		datas->status =print_err(datas->ori_fd.err, new_argv, 126) * 256;
 	else if ((new_argv[0][0] != '.' && new_argv[0][0] != '/') ||
 			new_argv[0][ft_strlen(new_argv[0]) - 1] == '/')
-		print_err(datas->ori_fd.write, new_argv, 127);
+		print_err(datas->ori_fd.err, new_argv, 127);
 	else
 		return (1);
 	return (0);
@@ -51,7 +51,7 @@ int				sh_process(char **new_argv, t_datas *datas)
 		dup2(datas->fd.read, 0);
 		dup2(datas->fd.write, 1);
 		if (execve(new_argv[0], new_argv, datas->envv) == -1)
-			exit(print_err(datas->ori_fd.write, new_argv, 127));
+			exit(print_err(datas->ori_fd.err, new_argv, 127));
 	}
 	else
 	{

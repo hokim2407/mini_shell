@@ -98,14 +98,14 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 	{
 		if (!(ft_strcmp(new_argv[0], "echo")))
 			exit(write(datas->ori_fd.write, "\n", 1) & 0);
-		exit(print_err(datas->ori_fd.write, new_argv, 127));
+		exit(print_err(datas->ori_fd.err, new_argv, 127));
 	}
 	dup2(datas->fd.read, 0);
 	dup2(datas->fd.write, 1);
 	if (!ft_strcmp(new_argv[0], "echo"))
 		new_argv = check_echo(new_argv);
 	if (execve(temp, new_argv, datas->envv) == -1)
-		exit(print_err(datas->ori_fd.write, new_argv, 127));
+		exit(print_err(datas->ori_fd.err, new_argv, 127));
 }
 
 int					exe_process(char **new_argv, t_datas *datas)

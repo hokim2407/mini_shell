@@ -62,6 +62,7 @@ typedef struct		s_fd
 {
 	int				read;
 	int				write;
+	int				err;
 }					t_fd;
 
 typedef struct		s_datas
@@ -164,7 +165,7 @@ void				sig_special(int signum);
 
 int					check_file_state(t_fd fd, int is_check_write);
 
-int					print_export_err(int *status, char *cmd, char *err_cmd);
+int					print_export_err(int fd, int *status, char *cmd, char *err_cmd);
 void				ft_print_all_export(t_datas datas);
 int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);

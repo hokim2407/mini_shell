@@ -35,7 +35,6 @@ int			print_err(int fd, char **argv, int status)
 	int		len;
 
 	len = -1;
-	fd = 2;
 	while (argv[++len])
 		;
 	ft_write(1, ERR_HEADER);
@@ -57,7 +56,6 @@ int			print_env_err(int fd, char **argv)
 	int		len;
 
 	len = -1;
-	fd = 2;
 	while (argv[++len])
 		;
 	ft_write(fd, argv[0]);
@@ -69,13 +67,11 @@ int			print_env_err(int fd, char **argv)
 	return (1);
 }
 
-int			print_export_err(int *status, char *cmd, char *err_cmd)
+int			print_export_err(int fd, int *status, char *cmd, char *err_cmd)
 {
 	int		len;
-	int		fd;
 
 	len = -1;
-	fd = 2;
 	ft_write(fd, ERR_HEADER);
 	ft_write(fd, cmd);
 	ft_write(fd, ": `");
@@ -97,7 +93,7 @@ int		print_exit_err(t_datas *datas, char **new_argv)
 		((new_argv[1][i] < '0') || (new_argv[1][i] > '9')))
 		i++;
 	if (new_argv[1] != NULL && new_argv[2])
-		return (datas->status = print_err(datas->ori_fd.write, new_argv, 1));
+		return (datas->status = print_err(datas->ori_fd.err, new_argv, 1));
 	if (new_argv[1] != NULL)
 	{
 		num = 0;
@@ -107,7 +103,7 @@ int		print_exit_err(t_datas *datas, char **new_argv)
 		else if (num == 0 && i <= 1 && ((new_argv[1][0] >= '0')
 				&& (new_argv[1][0] <= '9')))
 			exit(0);
-		exit(print_err(datas->ori_fd.write, new_argv, 255));
+		exit(print_err(datas->ori_fd.err, new_argv, 255));
 	}
 	return (0);
 }

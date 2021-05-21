@@ -24,7 +24,7 @@ void			shell_init(t_datas *datas, char **envv)
 	datas->status = 0;
 }
 
-void			new_input_init(char *buf, int *i)
+void			new_init(char *buf, int *i)
 {
 	buf[0] = '\0';
 	*i = 0;
@@ -65,7 +65,7 @@ int				main(int argc, char **argv, char **envv)
 	int			i;
 
 	shell_init(&datas, envv);
-	new_input_init(buf, &i);
+	new_init(buf, &i);
 	while (argc && argv[0] && read(0, &c, 1) > 0)
 	{
 		if (c != '\n')
@@ -75,12 +75,12 @@ int				main(int argc, char **argv, char **envv)
 		}
 		if (buf[0] == '\0' || buf[0] == '\n')
 		{
-			new_input_init(buf, &i);
+			new_init(buf, &i);
 			continue;
 		}
 		if (buf[0] != '\0' && buf[0] != '\n')
 			if (syntax_error_check(datas.ori_fd.write, buf, &(datas.status)))
 				make_blocks(buf, &datas);
-		new_input_init(buf, &i);
+		new_init(buf, &i);
 	}
 }

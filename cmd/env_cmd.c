@@ -16,7 +16,7 @@ void		ft_rm_env(t_datas *datas, char *target)
 {
 	if (!is_valid_key(target) || target[0] == '=')
 	{
-		print_export_err(&(datas->status), "unset", target);
+		print_export_err(datas->ori_fd.err, &(datas->status), "unset", target);
 		return ;
 	}
 	ft_lstdelone(find_lst_by_key(datas->env_list, target));
@@ -112,7 +112,7 @@ void		ft_export_env(t_datas *datas, char **argv, char *target)
 	split = ft_split_two(target, '=');
 	count = -1;
 	if (!is_valid_key(target) || target[0] == '=')
-		print_export_err(&(datas->status), argv[0], target);
+		print_export_err(datas->ori_fd.err, &(datas->status), argv[0], target);
 	else
 	{
 		is_add = (split[0][ft_strlen(split[0]) - 1] == '+');

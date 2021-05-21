@@ -12,8 +12,6 @@
 
 #include "../minishell.h"
 
-extern		t_sig g_sig;
-
 int			mini_env_process(char **new_argv, t_datas *datas)
 {
 	int		i;
@@ -24,7 +22,7 @@ int			mini_env_process(char **new_argv, t_datas *datas)
 		if (new_argv[1] == NULL)
 			ft_print_all_deck(*datas);
 		else
-			datas->status = print_env_err(datas->ori_fd.write, new_argv);
+			datas->status = print_env_err(datas->ori_fd.err, new_argv);
 	}
 	else if (!ft_strcmp(new_argv[0], "export"))
 	{
@@ -62,7 +60,7 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		else if (new_argv[1] != NULL)
 		{
 			if (chdir(new_argv[1]) < 0)
-				datas->status = print_err(1, new_argv, 0);
+				datas->status = print_err(datas->ori_fd.err, new_argv, 0);
 		}
 	}
 	else if (!ft_strcmp(new_argv[0], "."))
@@ -100,41 +98,4 @@ int			mini_single_process(char *buf, t_datas *datas)
 	mini_single_process2(new_argv, datas);
 	free_str_array(new_argv);
 	return (0);
-}
-
-void		ascii_char_process(char *buf, t_cursor *cursor, int *i)
-{
-	if (cursor->max < ++(*i))
-	{
-		buf[*i - 1] = cursor->c;
-		write(1, buf + *i - 1, 1);
-	}
-	else
-	{
-		put_char_in_str(buf, cursor->c, *i - 1);
-		push_new(cursor, buf);
-	}
-	cursor->max++;
-	buf[cursor->max] = '\0';
-}
-
-void		read_char_process(char *buf, t_cursor *cursor, int *i)
-{
-	if (g_sig.sig == 'c')
-	{
-		g_sig.sig = 0;
-		new_input_init(cursor, buf, i);
-	}
-	if ((cursor->c == 4 && cursor->max != 0) || cursor->c == '\t')
-		return ;
-	if (cursor->c == 4)
-	{
-		write(1, "exit\n", 5);
-		exit(0);
-	}
-	check_cursor(cursor, buf, i);
-	if (cursor->c < 127)
-		ascii_char_process(buf, cursor, i);
-	cursor->c = 0;
-	buf[cursor->max + 1] = '\0';
 }

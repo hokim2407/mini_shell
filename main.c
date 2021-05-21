@@ -24,6 +24,7 @@ void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 	datas->envv = envv;
 	datas->fd.read = 0;
 	datas->fd.write = 1;
+	datas->ori_fd.err = dup(2);
 	datas->status = 0;
 }
 
