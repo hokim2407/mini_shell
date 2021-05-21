@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:45:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:52:08 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 21:34:29 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int			is_valid_key(char *target)
 		return (0);
 	while (target[++i] && target[i] != '=')
 		if (!((target[i] >= '0' && target[i] <= '9') ||
-			(target[i] >= 'a' && target[i] <= 'z') ||
-			(target[i] >= 'A' && target[i] <= 'Z') || target[i] >= '_'))
+			  (target[i] >= 'a' && target[i] <= 'z') ||
+			  (target[i] >= 'A' && target[i] <= 'Z') || target[i] == '_'))
 		{
 			if (target[i + 1] == '=' && target[i] == '+')
 				return (2);

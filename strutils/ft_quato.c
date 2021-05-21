@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:50:30 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:50:44 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 21:57:12 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,12 @@ int			find_outquate_sign(char *str)
 {
 	int temp;
 	int chr;
+	int len;
 
+	len = ft_strlen(str);
 	temp = ft_strchr(str, '$');
 	chr = temp;
-	if (temp != -1 && get_quato(str, chr) == 1)
+	while (chr < len && temp != -1 && get_quato(str, chr) == 1)
 	{
 		temp = ft_strchr(str + chr + 1, '$');
 		chr += temp + 1;
