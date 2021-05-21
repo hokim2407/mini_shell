@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 16:30:29 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 19:59:52 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,35 @@ int			mini_env_process(char **new_argv, t_datas *datas)
 	return (1);
 }
 
-void		home_cd(t_datas *datas)
-{
-	char	*home;
 
-	home = ft_strdup(find_value_by_key(datas->env_list, "HOME"));
-	chdir(home);
+
+void		cd_process(char **new_argv, t_datas *datas)
+{
+	int		result;
+	char	now_path[256];
+	char	*old_path;
+	char	*temp;
+
+		old_path = find_value_by_key(datas->env_list,"PWD");
+		temp = ft_strjoin("OLDPWD=",old_path);
+		ft_export_env(datas,NULL, temp);
+		free(old_path);
+		free(temp);
+		if (new_argv[1] == NULL || !ft_strcmp(new_argv[1],"~"))
+		{
+			temp = find_value_by_key(datas->env_list, "HOME");
+			result = chdir (temp);
+			free(temp);
+		}
+		else
+			result = chdir(new_argv[1]);
+		if (result < 0)
+			datas->status = print_err(datas->ori_fd.err, new_argv, 0);
+		getcwd(now_path, 255);
+		temp = ft_strjoin("PWD=",now_path);
+		ft_export_env(datas,NULL,temp );
+		free(temp);
+
 }
 
 void		mini_single_process2(char **new_argv, t_datas *datas)
@@ -51,15 +74,7 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 	if (mini_env_process(new_argv, datas))
 		return ;
 	if (!ft_strcmp(new_argv[0], "cd"))
-	{
-		if (new_argv[1] == NULL)
-		{
-			home_cd(datas);
-			return ;
-		}
-		else if (new_argv[1] != NULL && chdir(new_argv[1]) < 0)
-			datas->status = print_err(datas->ori_fd.err, new_argv, 0);
-	}
+		cd_process(new_argv, datas);
 	else if (!ft_strcmp(new_argv[0], "."))
 	{
 		ft_write(2, ERR_HEADER);

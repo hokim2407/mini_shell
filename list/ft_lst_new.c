@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_new.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:10:52 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/09 17:10:58 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 20:02:25 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void		ft_lstdelone(t_list *one)
 {
 	if (one == NULL || one->pre == NULL || one->next == NULL)
 		return ;
+	free((char*)one->content);
 	one->pre->next = one->next;
 	one->next->pre = one->pre;
 	free(one);
