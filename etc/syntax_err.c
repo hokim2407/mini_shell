@@ -14,7 +14,6 @@
 
 int			print_syntax_error(int fd, char *token, int token_num)
 {
-	fd = 2;
 	ft_write(fd, "minishell: syntax error near unexpected token `");
 	if (token_num % 10 > 2 && token_num / 10 < 2)
 		ft_write(fd, "newline");

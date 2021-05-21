@@ -90,7 +90,7 @@ int			mini_single_process(char *buf, t_datas *datas)
 		return (1);
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
-		write(2, "exit\n", 5);
+		write(datas->ori_fd.err, "exit\n", 5);
 		if (print_exit_err(datas, new_argv))
 			return (datas->status = 256);
 		exit(datas->status);

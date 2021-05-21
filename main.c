@@ -75,7 +75,7 @@ int				main(int argc, char **argv, char **envv)
 		if (buf[0] != '\n')
 			write(1, "\n", 1);
 		if (buf[0] != '\0' && buf[0] != '\n')
-			if (syntax_error_check(datas.ori_fd.write, buf, &(datas.status)))
+			if (syntax_error_check(datas.ori_fd.err, buf, &(datas.status)))
 				make_blocks(buf, &datas);
 		new_input_init(&cursor, buf, &i);
 	}

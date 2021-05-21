@@ -79,7 +79,7 @@ int				main(int argc, char **argv, char **envv)
 			continue;
 		}
 		if (buf[0] != '\0' && buf[0] != '\n')
-			if (syntax_error_check(datas.ori_fd.write, buf, &(datas.status)))
+			if (syntax_error_check(datas.ori_fd.err, buf, &(datas.status)))
 				make_blocks(buf, &datas);
 		new_init(buf, &i);
 	}

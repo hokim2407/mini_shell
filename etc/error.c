@@ -37,7 +37,7 @@ int			print_err(int fd, char **argv, int status)
 	len = -1;
 	while (argv[++len])
 		;
-	ft_write(1, ERR_HEADER);
+	ft_write(fd, ERR_HEADER);
 	ft_write(fd, argv[0]);
 	ft_write(fd, ": ");
 	if (err_msg(fd, argv, status))

@@ -102,6 +102,7 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 	}
 	dup2(datas->fd.read, 0);
 	dup2(datas->fd.write, 1);
+	dup2(datas->ori_fd.err, 2);
 	if (!ft_strcmp(new_argv[0], "echo"))
 		new_argv = check_echo(new_argv);
 	if (execve(temp, new_argv, datas->envv) == -1)

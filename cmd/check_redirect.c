@@ -34,7 +34,7 @@ char		*get_filename_from(char *str)
 
 int			redirect_err(int fd, char *filename, int status)
 {
-	ft_write(1, ERR_HEADER);
+	ft_write(fd, ERR_HEADER);
 	ft_write(fd, filename);
 	ft_write(fd, ": ");
 	ft_write(fd, strerror(errno));
@@ -67,7 +67,7 @@ int			write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 		return (1);
 	datas->fd.write = 1;
 	str = ft_split(pipe, ' ');
-	datas->status = redirect_err(datas->ori_fd.write, filename, 22);
+	datas->status = redirect_err(datas->ori_fd.err, filename, 22);
 	free_str_array(str);
 	return (0);
 }
@@ -84,7 +84,7 @@ int			read_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 	free(filename);
 	if (datas->fd.read == -1)
 	{
-		redirect_err(datas->ori_fd.write, filename, 22);
+		redirect_err(datas->ori_fd.err, filename, 22);
 		free_str_array(str);
 		datas->fd.read = 0;
 		return (0);
