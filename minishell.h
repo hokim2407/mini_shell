@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 21:41:19 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 16:27:21 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,7 +168,7 @@ int					print_export_err(int *status, char *cmd, char *err_cmd);
 void				ft_print_all_export(t_datas datas);
 int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
-void				print_exit_err(t_datas *datas, char **new_argv);
+int					print_exit_err(t_datas *datas, char **new_argv);
 int					print_status(int fd, int status);
 int					is_n_option(char *argv);
 int					syntax_error_check(int fd, char *buf, int *status);

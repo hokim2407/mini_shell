@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/19 20:35:12 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 16:28:33 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int			err_msg(int fd, char **argv, int status)
 		ft_write(fd, "command not found\n");
 	else if (status == 1)
 		ft_write(fd, "too many arguments\n");
-	else if (status == 2)
+	else if (status == 126 )
 		ft_write(fd, "is a directory\n");
 	else if (status == 255)
 	{
@@ -47,6 +47,7 @@ int			print_err(int fd, char **argv, int status)
 		ft_write(fd, ": ");
 		ft_write(fd, strerror(errno));
 		ft_write(fd, "\n");
+		status = 256;
 	}
 	return (status);
 }
@@ -86,7 +87,7 @@ int			print_export_err(int *status, char *cmd, char *err_cmd)
 	return (1);
 }
 
-void		print_exit_err(t_datas *datas, char **new_argv)
+int		print_exit_err(t_datas *datas, char **new_argv)
 {
 	int		i;
 	int		num;
@@ -96,10 +97,7 @@ void		print_exit_err(t_datas *datas, char **new_argv)
 		((new_argv[1][i] < '0') || (new_argv[1][i] > '9')))
 		i++;
 	if (new_argv[1] != NULL && new_argv[2])
-	{
-		datas->status = print_err(datas->ori_fd.write, new_argv, 1);
-		return ;
-	}
+		return (datas->status = print_err(datas->ori_fd.write, new_argv, 1));
 	if (new_argv[1] != NULL)
 	{
 		num = 0;
@@ -111,4 +109,5 @@ void		print_exit_err(t_datas *datas, char **new_argv)
 			exit(0);
 		exit(print_err(datas->ori_fd.write, new_argv, 255));
 	}
+	return (0);
 }

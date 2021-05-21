@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:51:24 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 18:46:15 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 16:26:20 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,17 @@ extern t_sig	g_sig;
 int				sh_err_check(char **new_argv, t_datas *datas)
 {
 	struct stat	buf;
+	int			result;
 
-	stat(new_argv[0], &buf);
-	if (S_ISDIR(buf.st_mode))
+	result = stat(new_argv[0], &buf);
+	if ((result == -1 && new_argv[0][0] == '/'))
+	{
+		errno = 2;
 		print_err(datas->ori_fd.write, new_argv, 2);
+		datas->status = 127 * 256;
+	}
+	else if (S_ISDIR(buf.st_mode))
+		datas->status =print_err(datas->ori_fd.write, new_argv, 126) * 256;
 	else if ((new_argv[0][0] != '.' && new_argv[0][0] != '/') ||
 			new_argv[0][ft_strlen(new_argv[0]) - 1] == '/')
 		print_err(datas->ori_fd.write, new_argv, 127);

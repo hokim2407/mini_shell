@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 22:02:08 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 16:30:29 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,30 @@ int			mini_env_process(char **new_argv, t_datas *datas)
 	return (1);
 }
 
+void		home_cd(t_datas *datas)
+{
+	char	*home;
+
+	home = ft_strdup(find_value_by_key(datas->env_list, "HOME"));
+	chdir(home);
+}
+
 void		mini_single_process2(char **new_argv, t_datas *datas)
 {
 	if (mini_env_process(new_argv, datas))
 		return ;
-	if (!ft_strcmp(new_argv[0], "cd") && new_argv[1] != NULL)
+	if (!ft_strcmp(new_argv[0], "cd"))
 	{
-		if (new_argv[1][0] == '\0')
+		if (new_argv[1] == NULL)
+		{
+			home_cd(datas);
 			return ;
-		if (chdir(new_argv[1]) < 0)
-			print_err(1, new_argv, 1);
+		}
+		else if (new_argv[1] != NULL)
+		{
+			if (chdir(new_argv[1]) < 0)
+				datas->status = print_err(1, new_argv, 0);
+		}
 	}
 	else if (!ft_strcmp(new_argv[0], "."))
 	{
@@ -79,7 +93,8 @@ int			mini_single_process(char *buf, t_datas *datas)
 	if (!ft_strcmp(new_argv[0], "exit"))
 	{
 		write(2, "exit\n", 5);
-		print_exit_err(datas, new_argv);
+		if (print_exit_err(datas, new_argv))
+			return (datas->status = 256);
 		exit(datas->status);
 	}
 	mini_single_process2(new_argv, datas);
