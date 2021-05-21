@@ -6,7 +6,7 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:56:56 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 19:44:49 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 17:34:36 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,17 @@ char		*get_filename_from(char *str)
 	}
 	result[++j] = '\0';
 	return (result);
+}
+
+int			redirect_err(int fd, char *filename, int status)
+{
+	ft_write(1, ERR_HEADER);
+	ft_write(fd, filename);
+	ft_write(fd, ": ");
+	ft_write(fd, strerror(errno));
+	ft_write(fd, "\n");
+	status = 256;
+	return (status);
 }
 
 int			write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
@@ -56,7 +67,7 @@ int			write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 		return (1);
 	datas->fd.write = 1;
 	str = ft_split(pipe, ' ');
-	datas->status = print_err(datas->ori_fd.write, str, 22);
+	datas->status = redirect_err(datas->ori_fd.write, filename, 22);
 	free_str_array(str);
 	return (0);
 }
@@ -73,7 +84,7 @@ int			read_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 	free(filename);
 	if (datas->fd.read == -1)
 	{
-		print_err(datas->ori_fd.write, str, 22);
+		redirect_err(datas->ori_fd.write, filename, 22);
 		free_str_array(str);
 		datas->fd.read = 0;
 		return (0);
@@ -92,9 +103,15 @@ int			check_redirect(char *pipe, t_datas *datas)
 	while (pipe[++i])
 	{
 		if (pipe[i] == '>')
-			result = write_redirect(pipe, datas, &datas->fd, i);
+		{
+			if (!(result = write_redirect(pipe, datas, &datas->fd, i)))
+				break ;
+		}
 		else if (pipe[i] == '<')
-			result = read_redirect(pipe, datas, &datas->fd, i);
+		{
+			if (!(result = read_redirect(pipe, datas, &datas->fd, i)))
+				break ;
+		}
 	}
 	return (result);
 }
