@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exe_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:43:51 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/19 22:02:19 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 19:08:56 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,20 @@ char				**check_echo(char **new_argv)
 	return (smaller_argv);
 }
 
+char				**check_upper_case(char **new_argv)
+{
+	int				i;
+
+	i = 0;
+	while (new_argv[0][i])
+	{
+		if (('A' <= new_argv[0][i]) && (new_argv[0][i] <= 'Z'))
+			new_argv[0][i] += 32;
+		i++; 
+	}
+	return (new_argv);
+}
+
 void				exe_cmd(char **new_argv, t_datas *datas)
 {
 	char			*temp;
@@ -93,6 +107,7 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 
 	offset = 0;
 	sig_dfl();
+	new_argv = check_upper_case(new_argv);
 	if (!(temp = get_executable(find_value_by_key(datas->env_list, "PATH"),
 		new_argv[0])) || temp[0] != '/')
 	{
