@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 18:01:39 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/21 19:39:40 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,8 @@ void				sig_special(int signum);
 int					check_file_state(t_fd fd, int is_check_write);
 
 int					redirect_err(int fd, char *filename, int status);
-int					print_export_err(int fd, int *status, char *cmd, char *err_cmd);
+int					print_export_err(int fd, int *status, char *cmd,
+					char *err_cmd);
 void				ft_print_all_export(t_datas datas);
 int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
@@ -176,4 +177,9 @@ int					is_n_option(char *argv);
 int					syntax_error_check(int fd, char *buf, int *status);
 void				new_input_init(t_cursor *cursor, char *buf, int *i);
 void				pull_back_strs(char **strs, int i);
+
+void				check_env_data_null_case(char **str,
+					t_env env_data, int start, int *i);
+char				**check_upper_case(char **new_argv);
+char				**check_echo(char **new_argv);
 #endif

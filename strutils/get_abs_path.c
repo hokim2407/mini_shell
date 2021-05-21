@@ -59,10 +59,12 @@ char		*get_abs_path(char *original)
 	return (abs_path);
 }
 
-void	pull_back_strs(char **strs, int i)
+void		pull_back_strs(char **strs, int i)
 {
-	char * temp = strs[i];
-	while(strs[i])
+	char	*temp;
+
+	temp = strs[i];
+	while (strs[i])
 	{
 		*(strs + i) = *(strs + i + 1);
 		i++;

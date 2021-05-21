@@ -22,7 +22,7 @@ void			shell_init(t_datas *datas, t_cursor *cursor, char **envv)
 	datas->env_list = array_to_list(envv, 0);
 	datas->export_list = array_to_list(envv, 1);
 	ft_rm_env(datas, "OLDPWD");
-	ft_export_env(datas, NULL,"OLDPWD");
+	ft_export_env(datas, NULL, "OLDPWD");
 	datas->envv = envv;
 	datas->fd.read = 0;
 	datas->fd.write = 1;

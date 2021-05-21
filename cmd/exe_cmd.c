@@ -61,48 +61,6 @@ char				*get_executable(char *path, char *cmd)
 	return (temp);
 }
 
-char				**check_echo(char **new_argv)
-{
-	int				i;
-	int				index;
-	int				is_continued;
-	char			**smaller_argv;
-
-	i = 0;
-	while (new_argv[++i])
-		;
-	is_continued = 0;
-	smaller_argv = malloc(sizeof(char *) * i + 1);
-	smaller_argv[0] = ft_strdup(new_argv[0]);
-	i = 0;
-	index = 1;
-	while (new_argv[++i])
-	{
-		if ((is_n_option(new_argv[i]) && i != 1) && !is_continued)
-			continue ;
-		smaller_argv[index++] = ft_strdup(new_argv[i]);
-		if (!is_n_option(new_argv[i]))
-			is_continued = 1;
-	}
-	smaller_argv[index] = NULL;
-	free_str_array(new_argv);
-	return (smaller_argv);
-}
-
-char				**check_upper_case(char **new_argv)
-{
-	int				i;
-
-	i = 0;
-	while (new_argv[0][i])
-	{
-		if (('A' <= new_argv[0][i]) && (new_argv[0][i] <= 'Z'))
-			new_argv[0][i] += 32;
-		i++; 
-	}
-	return (new_argv);
-}
-
 void				exe_cmd(char **new_argv, t_datas *datas)
 {
 	char			*temp;

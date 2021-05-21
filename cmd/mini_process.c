@@ -57,15 +57,11 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 			home_cd(datas);
 			return ;
 		}
-		else if (new_argv[1] != NULL)
-		{
-			if (chdir(new_argv[1]) < 0)
-				datas->status = print_err(datas->ori_fd.err, new_argv, 0);
-		}
+		else if (new_argv[1] != NULL && chdir(new_argv[1]) < 0)
+			datas->status = print_err(datas->ori_fd.err, new_argv, 0);
 	}
 	else if (!ft_strcmp(new_argv[0], "."))
 	{
-		
 		ft_write(2, ERR_HEADER);
 		ft_write(2, ".: filename argument required\n");
 		ft_write(2, ".:usage: . filename [arguments]\n");

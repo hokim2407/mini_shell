@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/19 22:03:12 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/21 19:37:53 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,26 +88,17 @@ void		change_env_to_value(char **str, t_deck *env, int status, int *i)
 	t_env	env_data;
 
 	env_data.key = get_env_in_cmd(str[*i], &start, &env_data.key_len);
-	if (change_env_extra_cases(str, start, status, i))
+	if (change_env_extra_cases(str, start, status, i) ||
+		env_data.key == NULL || start < 0)
 	{
 		free(env_data.key);
 		return ;
 	}
-	if (env_data.key == NULL || start < 0)
-		return ;
 	env_data.value = find_value_by_key(env, env_data.key);
 	if (get_quato(str[*i], start) != 1)
 	{
 		if (env_data.value == NULL)
-			{
-				rm_chars_in_str(str[*i], start, env_data.key_len);
-				if(ft_strlen(str[*i]) == 0)
-					{
-						pull_back_strs(str, *i);
-						(*i)--;
-					}
-			}
-
+			check_env_data_null_case(str, env_data, start, i);
 		else
 			env_to_value(str, env_data, *i, start);
 		(*i)--;

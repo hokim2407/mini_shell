@@ -27,7 +27,7 @@ int				sh_err_check(char **new_argv, t_datas *datas)
 		datas->status = 127 * 256;
 	}
 	else if (S_ISDIR(buf.st_mode))
-		datas->status =print_err(datas->ori_fd.err, new_argv, 126) * 256;
+		datas->status = print_err(datas->ori_fd.err, new_argv, 126) * 256;
 	else if ((new_argv[0][0] != '.' && new_argv[0][0] != '/') ||
 			new_argv[0][ft_strlen(new_argv[0]) - 1] == '/')
 		print_err(datas->ori_fd.err, new_argv, 127);

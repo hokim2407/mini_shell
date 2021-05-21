@@ -7,7 +7,7 @@ CMD_SRCS = check_redirect.c env_cmd.c exe_cmd.c ft_pipe.c mini_process.c sh_cmd.
 ETC_SRCS = error.c signal.c syntax_err.c
 LIST_SRCS = ft_lst_add.c ft_lst_find.c ft_lst_new.c 
 STRUTILS_SRCS = env_to_value.c ft_quato.c ft_split.c ft_strsplit_two.c ft_strutils_basic.c \
-				ft_strutils_etc.c ft_strutils_make.c get_abs_path.c 
+				ft_strutils_etc.c ft_strutils_make.c get_abs_path.c check_cmd_valid.c
 TERMINAL_SRCS = cursor.c term.c read_char.c
 
 SRCS = main.c $(addprefix ./cmd/, ${CMD_SRCS}) $(addprefix ./etc/, ${ETC_SRCS}) \
