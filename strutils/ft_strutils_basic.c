@@ -57,17 +57,17 @@ int			ft_strchr(const char *str, int value)
 	return (-1);
 }
 
-int			remove_back_null(char **new_argv)
+int			is_n_option(char *argv)
 {
 	int		i;
 
-	i = -1;
-	while (new_argv[++i])
-		;
-	while (new_argv[--i][0] == '\0' && i > 0)
+	i = 0;
+	if (argv[i] == '-')
 	{
-		free(new_argv[i]);
-		new_argv[i] = NULL;
+		while (argv[++i] == 'n')
+			;
+		if (i > 1 && argv[i] == '\0')
+			return (1);
 	}
-	return (1);
+	return (0);
 }

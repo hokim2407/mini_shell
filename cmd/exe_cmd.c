@@ -61,30 +61,29 @@ char				*get_executable(char *path, char *cmd)
 	return (temp);
 }
 
-int					check_echo(char **new_argv)
+char				**check_echo(char **new_argv)
 {
 	int				i;
-	int				j;
+	int				index;
+	char			**smaller_argv;
 
 	i = 0;
-	if (!new_argv[2] && new_argv[1][0] == '\0')
-		return (0);
+	while (new_argv[++i])
+		;
+	smaller_argv = malloc(sizeof(char *) * i + 1);
+	smaller_argv[0] = ft_strdup(new_argv[0]);
+	i = 0;
+	index = 1;
 	while (new_argv[++i])
 	{
-		j = 0;
-		if (new_argv[i][j] == '-')
-		{
-			while (new_argv[i][++j] == 'n')
-				;
-		}
-		if (new_argv[i][j] != '\0')
-			break ;
-		else if (j > 1)
-			new_argv[i][2] = '\0';
+		if (new_argv[i][0] == '\0' || (is_n_option(new_argv[i]) && i != 1))
+			continue ;
+		smaller_argv[index++] = ft_strdup(new_argv[i]);
+		;
 	}
-	if (i == 1)
-		return (0);
-	return (i - 2);
+	smaller_argv[index] = NULL;
+	free_str_array(new_argv);
+	return (smaller_argv);
 }
 
 void				exe_cmd(char **new_argv, t_datas *datas)
@@ -104,8 +103,8 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 	dup2(datas->fd.read, 0);
 	dup2(datas->fd.write, 1);
 	if (!ft_strcmp(new_argv[0], "echo"))
-		offset = check_echo(new_argv) * remove_back_null(new_argv);
-	if (execve(temp, new_argv + offset, datas->envv) == -1)
+		new_argv = check_echo(new_argv);
+	if (execve(temp, new_argv, datas->envv) == -1)
 		exit(print_err(datas->ori_fd.write, new_argv, 127));
 }
 

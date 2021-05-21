@@ -131,6 +131,7 @@ char				*find_value_by_key(t_deck *deck, char *key);
 void				check_env_in_cmd(char **str, t_deck *env, int status);
 void				rm_quato(char **buf);
 int					get_quato(char *str, int util);
+int					find_outquate_sign(char *str);
 
 void				ft_rm_env(t_datas *datas, char *target);
 void				ft_export_env(t_datas *datas, char **argv, char *target);
@@ -169,6 +170,6 @@ int					print_env_err(int fd, char **argv);
 int					print_err(int fd, char **argv, int status);
 void				print_exit_err(t_datas *datas, char **new_argv);
 int					print_status(int fd, int status);
-int					remove_back_null(char **new_argv);
+int					is_n_option(char *argv);
 int					syntax_error_check(int fd, char *buf, int *status);
 #endif

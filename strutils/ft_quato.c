@@ -71,3 +71,20 @@ void		rm_quato(char **buf)
 		buf[i] = temp;
 	}
 }
+
+int			find_outquate_sign(char *str)
+{
+	int temp;
+	int chr;
+
+	temp = ft_strchr(str, '$');
+	chr = temp;
+	if (temp != -1 && get_quato(str, chr) == 1)
+	{
+		temp = ft_strchr(str + chr + 1, '$');
+		chr += temp + 1;
+	}
+	if (temp == -1)
+		chr = -1;
+	return (chr);
+}

@@ -12,30 +12,13 @@
 
 #include "../minishell.h"
 
-int			find_out_sign(char *str)
-{
-	int temp;
-	int chr;
-
-	temp = ft_strchr(str, '$');
-	chr = temp;
-	if (temp != -1 && get_quato(str, chr) == 1)
-	{
-		temp = ft_strchr(str + chr + 1, '$');
-		chr += temp + 1;
-	}
-	if (temp == -1)
-		chr = -1;
-	return (chr);
-}
-
 char		*get_env_in_cmd(char *str, int *start, int *len)
 {
 	char	*result;
 	int		chr;
 	int		i;
 
-	chr = find_out_sign(str);
+	chr = find_outquate_sign(str);
 	*start = chr;
 	if (chr == -1)
 		return (NULL);
@@ -57,7 +40,7 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 
 void		env_to_value(char **str, t_env env_data, int index, int start)
 {
-	char *result;
+	char	*result;
 
 	env_data.val_len = ft_strlen(env_data.value);
 	result = malloc(ft_strlen(str[index]) + env_data.val_len + 1);
@@ -70,18 +53,44 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 	str[index] = result;
 }
 
+int			change_env_extra_cases(char **str, int start, int status, int *i)
+{
+	t_env	env_data;
+
+	env_data.key_len = 1;
+	if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] == '?')
+	{
+		env_data.value = ft_itoa(status);
+		env_data.val_len = ft_strlen(env_data.value);
+		env_to_value(str, env_data, *i, start);
+		free(env_data.value);
+	}
+	else if (start > -1 && str[*i][start] == '$' &&
+		str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9')
+	{
+		env_data.value = "";
+		env_data.val_len = 0;
+		env_to_value(str, env_data, *i, start);
+	}
+	else if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] != '_' &&
+			!((str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9') ||
+			(str[*i][start + 1] >= 'a' && str[*i][start + 1] <= 'z') ||
+			(str[*i][start + 1] >= 'A' && str[*i][start + 1] <= 'Z')))
+		;
+	else
+		return (0);
+	return (1);
+}
+
 void		change_env_to_value(char **str, t_deck *env, int status, int *i)
 {
 	int		start;
 	t_env	env_data;
 
 	env_data.key = get_env_in_cmd(str[*i], &start, &env_data.key_len);
-	if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] == '?')
+	if (change_env_extra_cases(str, start, status, i))
 	{
-		env_data.key_len = 1;
-		env_data.value = ft_itoa(status);
-		env_data.val_len = ft_strlen(env_data.value);
-		env_to_value(str, env_data, *i, start);
+		free(env_data.key);
 		return ;
 	}
 	if (env_data.key == NULL || start < 0)

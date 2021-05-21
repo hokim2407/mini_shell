@@ -52,7 +52,8 @@ int			is_err_token(char *str)
 
 int			is_syntax_err(char **strs, int err_token, int i, int j)
 {
-	if (err_token && ((i == 0 && j == 0) || err_token > 20 ||
+	if (err_token && ((err_token % 10 < 3 && i == 0 && j == 0) ||
+		err_token > 20 ||
 		(err_token == 11) || (err_token % 10 > 1 &&
 		strs[i][j + err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)))
 		return (1);
