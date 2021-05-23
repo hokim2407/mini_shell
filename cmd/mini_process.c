@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 17:47:43 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 18:01:48 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,12 +97,32 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		exe_process(new_argv, datas);
 }
 
+char		**change_wave_to_home(char **new_argv, t_datas *datas)
+{
+	int		i;
+	char	*path;
+
+	i = 0;
+	path = find_value_by_key(datas->env_list ,"HOME");
+	if (new_argv[0] && (new_argv[0][0] == '~') && (new_argv[0][1] == '\0'))
+		new_argv[0] = ft_strdup(path);
+	else if (new_argv[1] && new_argv[1][0] == '~')
+	{
+		if (new_argv[1][1] == '\0')
+			new_argv[1] = ft_strdup(path);
+		else if (new_argv[1][1] == '/')
+			new_argv[1] = ft_strjoin(path, new_argv[1] + 1);
+	}
+	return (new_argv);
+}
+
 int			mini_single_process(char *buf, t_datas *datas)
 {
 	char	**new_argv;
 
 	new_argv = ft_split(buf, ' ');
 	check_env_in_cmd(new_argv, datas->env_list, datas->status);
+	new_argv = change_wave_to_home(new_argv, datas);
 	rm_quato(new_argv);
 	if (new_argv[0] && new_argv[0][0] == '\0')
 		new_argv++;
