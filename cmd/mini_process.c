@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 20:21:10 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:32:09 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 extern t_sig			g_sig;
 
-int			mini_env_process(char **new_argv, t_datas *datas)
+int				mini_env_process(char **new_argv, t_datas *datas)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	if (!ft_strcmp(new_argv[0], "env"))
@@ -43,11 +43,11 @@ int			mini_env_process(char **new_argv, t_datas *datas)
 	return (1);
 }
 
-void		cd_process(char **new_argv, t_datas *datas, int i)
+void			cd_process(char **new_argv, t_datas *datas, int i)
 {
-	int		result;
-	char	*old_path;
-	char	*temp;
+	int			result;
+	char		*old_path;
+	char		*temp;
 
 	old_path = find_value_by_key(datas->env_list, "PWD");
 	if (new_argv[i] == NULL || !ft_strcmp(new_argv[i], "~"))
@@ -67,9 +67,9 @@ void		cd_process(char **new_argv, t_datas *datas, int i)
 	change_pwd_env(datas, old_path);
 }
 
-void		mini_single_process2(char **new_argv, t_datas *datas)
+void			mini_single_process2(char **new_argv, t_datas *datas)
 {
-	int i;
+	int			i;
 
 	i = 0;
 	if (mini_env_process(new_argv, datas))
@@ -96,35 +96,37 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		exe_process(new_argv, datas);
 }
 
-char		**change_wave_to_home(char **new_argv, t_datas *datas)
+int				print_exit_err(t_datas *datas, char **new_argv)
 {
-	int		i;
-	char	*path;
-	char	*temp;
+	int			i;
+	long long	num;
 
-	i = -1;
-	path = find_value_by_key(datas->env_list, "HOME");
-	while (new_argv[++i])
+	i = 0;
+	num = -1;
+	while (new_argv[1] && new_argv[1][++num])
+		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
+			i++;
+	if (new_argv[1] != NULL && new_argv[2] &&
+		(i == 0 || ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
+		return (datas->status = print_err(datas->ori_fd.err, new_argv, 1));
+	if (new_argv[1] != NULL)
 	{
-		if (new_argv[i] && new_argv[i][0] == '~')
-		{
-			temp = new_argv[i];
-			if (new_argv[i][1] == '\0')
-				new_argv[i] = ft_strdup(path);
-			else if (new_argv[i][1] == '/')
-				new_argv[i] = ft_strjoin(path, new_argv[i] + 1);
-			else
-				continue;
-			free(temp);
-		}
+		num = 0;
+		num = ft_atoi(new_argv[1], new_argv);
+		if (num != 0 && i <= 1)
+			exit(num);
+		else if (num == 0 && i <= 1 && (((new_argv[1][0] >= '0')
+			&& (new_argv[1][0] <= '9'))
+			|| ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
+			exit(0);
+		exit(print_err(datas->ori_fd.err, new_argv, 255));
 	}
-	free(path);
-	return (new_argv);
+	return (0);
 }
 
-int			mini_single_process(char *buf, t_datas *datas)
+int				mini_single_process(char *buf, t_datas *datas)
 {
-	char	**new_argv;
+	char		**new_argv;
 
 	new_argv = ft_split(buf, ' ');
 	new_argv = change_wave_to_home(new_argv, datas);

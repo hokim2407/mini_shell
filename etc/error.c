@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 20:27:29 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:31:20 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,32 +104,4 @@ int				print_export_err(int fd, int *status, char *cmd, char *err_cmd)
 	ft_write(fd, "\n");
 	*status = 256;
 	return (1);
-}
-
-int				print_exit_err(t_datas *datas, char **new_argv)
-{
-	int			i;
-	long long	num;
-
-	i = 0;
-	num = -1;
-	while (new_argv[1] && new_argv[1][++num])
-		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
-			i++;
-	if (new_argv[1] != NULL && new_argv[2] &&
-		(i == 0 || ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
-		return (datas->status = print_err(datas->ori_fd.err, new_argv, 1));
-	if (new_argv[1] != NULL)
-	{
-		num = 0;
-		num = ft_atoi(new_argv[1], new_argv);
-		if (num != 0 && i <= 1)
-			exit(num);
-		else if (num == 0 && i <= 1 && (((new_argv[1][0] >= '0')
-			&& (new_argv[1][0] <= '9'))
-			|| ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
-			exit(0);
-		exit(print_err(datas->ori_fd.err, new_argv, 255));
-	}
-	return (0);
 }

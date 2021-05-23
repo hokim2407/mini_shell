@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_abs_path.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:51:13 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:51:15 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:30:21 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,30 @@ void		pull_back_strs(char **strs, int i)
 		i++;
 	}
 	free(temp);
+}
+
+char		**change_wave_to_home(char **new_argv, t_datas *datas)
+{
+	int		i;
+	char	*path;
+	char	*temp;
+
+	i = -1;
+	path = find_value_by_key(datas->env_list, "HOME");
+	while (new_argv[++i])
+	{
+		if (new_argv[i] && new_argv[i][0] == '~')
+		{
+			temp = new_argv[i];
+			if (new_argv[i][1] == '\0')
+				new_argv[i] = ft_strdup(path);
+			else if (new_argv[i][1] == '/')
+				new_argv[i] = ft_strjoin(path, new_argv[i] + 1);
+			else
+				continue;
+			free(temp);
+		}
+	}
+	free(path);
+	return (new_argv);
 }

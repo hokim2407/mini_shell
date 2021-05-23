@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 20:01:06 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:30:57 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,4 +186,5 @@ char				**check_upper_case(char **new_argv);
 char				**check_echo(char **new_argv);
 void				change_pwd_env(t_datas *datas, char *old_path);
 int					print_cd_err(int fd, char **argv, int status, int i);
+char				**change_wave_to_home(char **new_argv, t_datas *datas);
 #endif
