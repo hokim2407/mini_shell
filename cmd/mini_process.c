@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:12:46 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:19:07 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,6 @@ int			mini_single_process(char *buf, t_datas *datas)
 	new_argv = ft_split(buf, ' ');
 	check_env_in_cmd(new_argv, datas->env_list, datas->status);
 	rm_quato(new_argv);
-	if(new_argv[1]) 
-	printf("%s\n", new_argv[1]);
 	if (new_argv[0] && new_argv[0][0] == '\0')
 		new_argv++;
 	if (new_argv[0] == NULL)
