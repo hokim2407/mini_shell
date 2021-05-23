@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 14:44:17 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 17:03:30 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,14 @@ void			make_blocks(char *buf, t_datas *datas)
 	blocks = ft_split(buf, ';');
 	i = -1;
 	while (blocks[++i])
+	{
+		if (g_sig.is_exit == 1)
+		{
+			printf("#\n");
+			break ;
+		}
 		pipe_process(blocks[i], datas);
+	}
 	free_str_array(blocks);
 }
 

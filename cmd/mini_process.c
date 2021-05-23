@@ -6,11 +6,13 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:24:48 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 17:07:35 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+extern t_sig			g_sig;
 
 int			mini_env_process(char **new_argv, t_datas *datas)
 {
@@ -109,7 +111,10 @@ int			mini_single_process(char *buf, t_datas *datas)
 	{
 		write(datas->ori_fd.err, "exit\n", 5);
 		if (print_exit_err(datas, new_argv))
+		{
+			g_sig.is_exit = 1;
 			return (datas->status = 256);
+		}
 		exit(datas->status);
 	}
 	mini_single_process2(new_argv, datas);

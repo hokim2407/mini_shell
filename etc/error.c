@@ -6,11 +6,13 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 15:35:37 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 17:03:48 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+extern t_sig			g_sig;
 
 int				err_msg(int fd, char **argv, int status)
 {
@@ -116,7 +118,8 @@ int				print_exit_err(t_datas *datas, char **new_argv)
 		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
 			i++;
 	}
-	if (new_argv[1] != NULL && new_argv[2])
+	if (new_argv[1] != NULL && new_argv[2] &&
+		(i == 0 || ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
 		return (datas->status = print_err(datas->ori_fd.err, new_argv, 1));
 	if (new_argv[1] != NULL)
 	{
