@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 18:18:39 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:06:29 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,18 +101,25 @@ char		**change_wave_to_home(char **new_argv, t_datas *datas)
 {
 	int		i;
 	char	*path;
+	char	*temp;
 
-	i = 0;
-	path = find_value_by_key(datas->env_list ,"HOME");
-	if (new_argv[0] && (new_argv[0][0] == '~') && (new_argv[0][1] == '\0'))
-		new_argv[0] = ft_strdup(path);
-	else if (new_argv[1] && new_argv[1][0] == '~')
+	i = -1;
+	path = find_value_by_key(datas->env_list, "HOME");
+	while (new_argv[++i])
 	{
-		if (new_argv[1][1] == '\0')
-			new_argv[1] = ft_strdup(path);
-		else if (new_argv[1][1] == '/')
-			new_argv[1] = ft_strjoin(path, new_argv[1] + 1);
+		if (new_argv[i] && new_argv[i][0] == '~')
+		{
+			temp = new_argv[i];
+			if (new_argv[i][1] == '\0')
+				new_argv[i] = ft_strdup(path);
+			else if (new_argv[i][1] == '/')
+				new_argv[i] = ft_strjoin(path, new_argv[i] + 1);
+			else
+				continue;
+			free(temp);
+		}
 	}
+	free(path);
 	return (new_argv);
 }
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 16:03:53 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:01:06 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ char				*find_value_by_key(t_deck *deck, char *key);
 void				check_env_in_cmd(char **str, t_deck *env, int status);
 void				rm_quato(char **buf);
 int					get_quato(char *str, int util);
-int					find_outquate_sign(char *str);
+int					find_outquate_sign(char *str, int from);
 
 void				ft_rm_env(t_datas *datas, char *target);
 void				ft_export_env(t_datas *datas, char **argv, char *target);

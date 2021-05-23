@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 18:51:57 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:02:41 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	int		chr;
 	int		i;
 
-	chr = find_outquate_sign(str);
+	chr = find_outquate_sign(str, *start);
 	*start = chr;
 	if (chr == -1)
 		return (NULL);
@@ -76,19 +76,21 @@ int			change_env_extra_cases(char **str, int start, int status, int i)
 		!((str[i][start + 1] >= '0' && str[i][start + 1] <= '9') ||
 		(str[i][start + 1] >= 'a' && str[i][start + 1] <= 'z') ||
 		(str[i][start + 1] >= 'A' && str[i][start + 1] <= 'Z')))
+		;
+	else
 		return (1);
 	return (0);
 	
 }
 
-int		change_env_to_value(char **str, t_deck *env, int status, int i, int pre_start)
+int		change_env_to_value(char **str, t_deck *env, int status, int i, int start)
 {
-	int		start;
 	t_env	env_data;
 
-	env_data.key = get_env_in_cmd(str[i] + pre_start, &start, &env_data.key_len);
-	start +=pre_start;
-	if (change_env_extra_cases(str, start, status, i))
+	env_data.key = get_env_in_cmd(str[i] , &start, &env_data.key_len);
+	if(start < 0)
+		return ft_strlen(str[i]);
+	if (!change_env_extra_cases(str, start, status, i))
 	{
 		free(env_data.key);
 		return (start);
@@ -125,6 +127,6 @@ void		check_env_in_cmd(char **cmds, t_deck *env, int status)
 	{
 		start = 0;
 		while (start < ft_strlen(cmds[index]))
-			start += change_env_to_value(cmds, env, status, index, start) + 1;
+			start = change_env_to_value(cmds, env, status, index, start) + 1;
 	}
 }
