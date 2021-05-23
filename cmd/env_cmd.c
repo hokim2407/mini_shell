@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:48:03 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 16:06:05 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:54:28 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,31 +44,26 @@ void		ft_print_all_export(t_datas datas)
 	t_list	*temp;
 	char	*str;
 	int		i;
-	int		len;
 
 	temp = datas.export_list->head->next;
 	while (temp != datas.export_list->tail)
 	{
-		if (temp->is_unseted)
+		if (!temp->is_unseted)
 		{
-			temp = temp->next;
-			continue;
+			str = temp->content;
+			i = ft_strchr(str, '=');
+			i = (i < 0) ? ft_strlen(str) : i;
+			write(datas.fd.write, "declare -x ", 11);
+			write(datas.fd.write, str, i);
+			if (str[i] == '=')
+			{
+				write(datas.fd.write, str + i++, 1);
+				write(datas.fd.write, "\"", 1);
+				write(datas.fd.write, str + i, ft_strlen(str) - i);
+				write(datas.fd.write, "\"", 1);
+			}
+			write(datas.fd.write, "\n", 1);
 		}
-		i = -1;
-		str = temp->content;
-		len = ft_strlen(str);
-		write(datas.fd.write, "declare -x ", 11);
-		while (str[++i] && str[i] != '=')
-			;
-		write(datas.fd.write, str, i);
-		if (str[i] == '=')
-		{
-			write(datas.fd.write, str + i++, 1);
-			write(datas.fd.write, "\"", 1);
-			write(datas.fd.write, str + i, len - i);
-			write(datas.fd.write, "\"", 1);
-		}
-		write(datas.fd.write, "\n", 1);
 		temp = temp->next;
 	}
 }
@@ -77,9 +72,7 @@ void		ft_push_export(t_deck *deck, char **data, char *target, int is_add)
 {
 	t_list	*inlist;
 	char	*temp;
-	int		len;
 
-	len = ft_strlen(data[0]);
 	inlist = find_lst_by_key(deck, data[0]);
 	if (inlist == NULL)
 		ft_lstadd_inorder(deck, ft_new_list(target));

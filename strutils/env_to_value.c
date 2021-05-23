@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 20:18:36 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:52:38 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,41 +82,38 @@ int			change_env_extra_cases(char **str, int start, int status, int i)
 	return (0);
 }
 
-int			change_env_to_value(char **str, t_deck *env, int status, int i, int start)
+int			change_env_to_value(t_datas *datas, char **str, int i, int start)
 {
 	t_env	env_data;
 
 	env_data.key = get_env_in_cmd(str[i], &start, &env_data.key_len);
 	if (start < 0)
 		return (ft_strlen(str[i]));
-	if (!change_env_extra_cases(str, start, status, i))
+	if (!change_env_extra_cases(str, start, datas->status, i))
 	{
 		free(env_data.key);
 		return (start);
 	}
 	if (env_data.key == NULL || start < 0)
 		return (0);
-	env_data.value = find_value_by_key(env, env_data.key);
-	if (get_quato(str[i], start) != 1)
+	env_data.value = find_value_by_key(datas->env_list, env_data.key);
+	if (env_data.value == NULL && get_quato(str[i], start) != 1)
 	{
-		if (env_data.value == NULL)
-		{
-			rm_chars_in_str(str[i], start, env_data.key_len);
-			if (str[i][0] == '\0')
-				pull_back_strs(str, i);
-		}
-		else
-			env_to_value(str, env_data, i, start);
+		rm_chars_in_str(str[i], start, env_data.key_len);
+		if (str[i][0] == '\0')
+			pull_back_strs(str, i);
 	}
+	else if (get_quato(str[i], start) != 1)
+		env_to_value(str, env_data, i, start);
 	free(env_data.value);
 	free(env_data.key);
 	return (start);
 }
 
-void		check_env_in_cmd(char **cmds, t_deck *env, int status)
+void		check_env_in_cmd(t_datas *datas, char **cmds)
 {
 	int		index;
-	int 	start;
+	int		start;
 
 	if (cmds == NULL)
 		return ;
@@ -125,6 +122,6 @@ void		check_env_in_cmd(char **cmds, t_deck *env, int status)
 	{
 		start = 0;
 		while (start < ft_strlen(cmds[index]))
-			start = change_env_to_value(cmds, env, status, index, start) + 1;
+			start = change_env_to_value(datas, cmds, index, start) + 1;
 	}
 }

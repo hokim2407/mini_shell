@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:36 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 20:30:57 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:42:00 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ int					is_valid_key(char *target);
 t_list				*find_lst_by_key(t_deck *deck, char *data);
 char				*find_value_by_key(t_deck *deck, char *key);
 
-void				check_env_in_cmd(char **str, t_deck *env, int status);
+void				check_env_in_cmd(t_datas *datas, char **str);
 void				rm_quato(char **buf);
 int					get_quato(char *str, int util);
 int					find_outquate_sign(char *str, int from);

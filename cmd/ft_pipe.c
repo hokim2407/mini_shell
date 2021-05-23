@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 20:25:20 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:43:00 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int			pipe_process(char *block, t_datas *datas)
 	pipes = ft_split(block, '|');
 	datas->ori_fd.write = dup(1);
 	datas->ori_fd.read = dup(0);
-	check_env_in_cmd(pipes, datas->env_list, datas->status);
+	check_env_in_cmd(datas, pipes);
 	if (pipes[1] == NULL)
 	{
 		datas->fd.write = 1;
