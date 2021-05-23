@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 17:07:35 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 17:47:43 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,10 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 	}
 	else if (!ft_strcmp(new_argv[0], "."))
 	{
-		ft_write(2, ERR_HEADER);
-		ft_write(2, ".: filename argument required\n");
-		ft_write(2, ".:usage: . filename [arguments]\n");
+		ft_write(datas->ori_fd.err, ERR_HEADER);
+		ft_write(datas->ori_fd.err, ".: filename argument required\n");
+		ft_write(datas->ori_fd.err, ".:usage: . filename [arguments]\n");
+		datas->status = 2 * 256;
 		return ;
 	}
 	else if (new_argv[0][0] == '/' ||
