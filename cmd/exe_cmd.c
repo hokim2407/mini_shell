@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:43:51 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 15:51:06 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:20:30 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ void				exe_cmd(char **new_argv, t_datas *datas)
 		new_argv[0])) || temp_list->is_unseted || temp[0] != '/')
 	{
 		if (!(ft_strcmp(new_argv[0], "echo")))
-			{
-				ft_write(datas->ori_fd.write,new_argv[1]);
-				exit(ft_write(datas->ori_fd.write, "\n") & 0);
-			}
+		{
+			ft_write(datas->ori_fd.write, new_argv[1]);
+			exit(ft_write(datas->ori_fd.write, "\n") & 0);
+		}
 		exit(print_err(datas->ori_fd.err, new_argv, 127));
 	}
 	dup2(datas->fd.read, 0);

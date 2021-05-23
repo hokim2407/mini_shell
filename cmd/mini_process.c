@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 20:06:29 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:21:10 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,7 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		datas->status = 2 * 256;
 		return ;
 	}
-	else if (new_argv[0][0] == '/' ||
-			!ft_strlcmp(new_argv[0], "./", 2) ||
+	else if (new_argv[0][0] == '/' || !ft_strlcmp(new_argv[0], "./", 2) ||
 			!ft_strlcmp(new_argv[0], "../", 3))
 		sh_process(new_argv, datas);
 	else

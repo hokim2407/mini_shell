@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 21:39:10 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 17:42:22 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:17:33 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,40 +52,38 @@ int			is_err_token(char *str)
 
 int			is_syntax_err(char **strs, int *err_token, int i, int j)
 {
-
 	if (*err_token && ((*err_token % 10 < 3 && i == 0 && j == 0) ||
-		*err_token > 20 ||
-		(*err_token == 11) || (*err_token % 10 > 1 &&
-		strs[i][j + *err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)))
+		*err_token > 20 || (*err_token == 11) || (*err_token % 10 > 1
+		&& strs[i][j + *err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)))
 		return (1);
-
 	return (0);
 }
+
 int			check_continuous_syntex_err(int fd, char *buf, int *status)
 {
-	int i;
-	int	err_token;
-	int	pre_token;
+	int		i;
+	int		err_token;
+	int		pre_token;
 
 	i = -1;
 	pre_token = 0;
-	while(buf[++i])
+	while (buf[++i])
 	{
-		if(buf[i] == ' ')
+		if (buf[i] == ' ')
 			continue;
-		err_token = is_err_token(buf+i);
-		if(err_token > 0 && pre_token > 0)
-			{
-				if(err_token % 10 > 2)
-				err_token +=20;
-				print_syntax_error(fd, buf + i, err_token);
-				*status = 258;
-				return 1;
-			}
+		err_token = is_err_token(buf + i);
+		if (err_token > 0 && pre_token > 0)
+		{
+			if (err_token % 10 > 2)
+				err_token += 20;
+			print_syntax_error(fd, buf + i, err_token);
+			*status = 258;
+			return (1);
+		}
 		pre_token = err_token;
-		i += err_token/10;
+		i += err_token / 10;
 	}
-	return 0;
+	return (0);
 }
 
 int			syntax_error_check(int fd, char *buf, int *status)
@@ -96,7 +94,7 @@ int			syntax_error_check(int fd, char *buf, int *status)
 	int		i;
 
 	i = -1;
-	if(check_continuous_syntex_err(fd, buf, status))
+	if (check_continuous_syntex_err(fd, buf, status))
 		return (0);
 	strs = ft_split(buf, ' ');
 	while (strs[++i])
@@ -105,9 +103,7 @@ int			syntax_error_check(int fd, char *buf, int *status)
 		while (strs[i][++j])
 		{
 			err_token = is_err_token(strs[i] + j);
-			if (get_quato(strs[i], j) != 0)
-				continue;
-			if (is_syntax_err(strs, &err_token, i, j))
+			if (is_syntax_err(strs, &err_token, i, j) && !get_quato(strs[i], j))
 			{
 				*status = print_syntax_error(fd, strs[i] + j, err_token);
 				free_str_array(strs);
