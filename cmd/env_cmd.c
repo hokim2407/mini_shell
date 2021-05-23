@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:48:03 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:02:59 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:26:54 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,28 @@
 
 void		ft_rm_env(t_datas *datas, char *target)
 {
-	t_list *env_data;
-	t_list *export_data;
+	t_list *data;
 	int chr;
+	int i;
 
+	i = -1;
 	if (!is_valid_key(target) || target[0] == '=' || ft_strchr(target, '=') > -1)
 	{
 		print_export_err(datas->ori_fd.err, &(datas->status), "unset", target);
 		return ;
 	}
-	env_data = find_lst_by_key(datas->env_list, target);
-	env_data->is_unseted = 1;
-	chr = ft_strchr((char *)env_data->content,'=');
-	if(chr> -1)
-	((char *)env_data->content)[chr] = '\0';
-	export_data = find_lst_by_key(datas->export_list, target);
-	export_data->is_unseted = 1;
-	chr = ft_strchr((char *)export_data->content,'=');
-	if(chr> -1)
-	((char *)export_data->content)[chr] = '\0';
+	data = find_lst_by_key(datas->env_list, target);
+	while (++i < 2)
+	{
+		if (data != NULL)
+		{
+			data->is_unseted = 1;
+			chr = ft_strchr((char *)data->content, '=');
+			if (chr > -1)
+				((char *)data->content)[chr] = '\0';
+		}
+		data = find_lst_by_key(datas->export_list, target);
+	}
 }
 
 void		ft_print_all_export(t_datas datas)
