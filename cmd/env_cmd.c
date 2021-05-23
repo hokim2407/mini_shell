@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:48:03 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/09 19:51:58 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:02:59 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,25 @@
 
 void		ft_rm_env(t_datas *datas, char *target)
 {
-	if (!is_valid_key(target) || target[0] == '=')
+	t_list *env_data;
+	t_list *export_data;
+	int chr;
+
+	if (!is_valid_key(target) || target[0] == '=' || ft_strchr(target, '=') > -1)
 	{
 		print_export_err(datas->ori_fd.err, &(datas->status), "unset", target);
 		return ;
 	}
-	ft_lstdelone(find_lst_by_key(datas->env_list, target));
-	ft_lstdelone(find_lst_by_key(datas->export_list, target));
+	env_data = find_lst_by_key(datas->env_list, target);
+	env_data->is_unseted = 1;
+	chr = ft_strchr((char *)env_data->content,'=');
+	if(chr> -1)
+	((char *)env_data->content)[chr] = '\0';
+	export_data = find_lst_by_key(datas->export_list, target);
+	export_data->is_unseted = 1;
+	chr = ft_strchr((char *)export_data->content,'=');
+	if(chr> -1)
+	((char *)export_data->content)[chr] = '\0';
 }
 
 void		ft_print_all_export(t_datas datas)
@@ -33,6 +45,11 @@ void		ft_print_all_export(t_datas datas)
 	temp = datas.export_list->head->next;
 	while (temp != datas.export_list->tail)
 	{
+		if (temp->is_unseted)
+		{
+			temp = temp->next;
+			continue;
+		}
 		i = -1;
 		str = temp->content;
 		len = ft_strlen(str);
@@ -77,6 +94,7 @@ void		ft_push_export(t_deck *deck, char **data, char *target, int is_add)
 		}
 		else
 			inlist->content = ft_strdup(target);
+		inlist->is_unseted =0;
 		free(temp);
 	}
 }
@@ -99,6 +117,7 @@ void		ft_push_env(t_deck *env,
 			inlist->content = ft_strjoin(temp, data[1]);
 		else
 			inlist->content = ft_strdup(target);
+		inlist->is_unseted =0;
 		free(temp);
 	}
 }

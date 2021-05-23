@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:10:52 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 20:02:25 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 14:46:10 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_list		*ft_new_list(void *value)
 	if (value != NULL)
 		result->content = ft_strdup((char *)value);
 	result->next = NULL;
+	result->is_unseted = 0;
 	return (result);
 }
 

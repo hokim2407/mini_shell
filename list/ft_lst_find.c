@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:45:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/21 21:34:29 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:10:51 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ char		*find_value_by_key(t_deck *deck, char *key)
 		list_data = ft_split_two(temp->content, '=');
 		if (!ft_strcmp(list_data[0], key))
 		{
-			result = ft_strdup(list_data[1]);
+			if(list_data[1])
+				result = ft_strdup(list_data[1]);
 			free_str_array(list_data);
 			break ;
 		}
@@ -99,6 +100,11 @@ void		ft_print_all_deck(t_datas datas)
 	temp = datas.env_list->head->next;
 	while (temp != datas.env_list->tail)
 	{
+		if (temp->is_unseted)
+		{
+			temp = temp->next;
+			continue;
+		}
 		write(datas.fd.write, temp->content, ft_strlen(temp->content));
 		write(datas.fd.write, "\n", 1);
 		temp = temp->next;

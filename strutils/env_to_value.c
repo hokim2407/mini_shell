@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 22:11:23 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:11:33 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int			change_env_extra_cases(char **str, int start, int status, int *i)
 			!((str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9') ||
 			(str[*i][start + 1] >= 'a' && str[*i][start + 1] <= 'z') ||
 			(str[*i][start + 1] >= 'A' && str[*i][start + 1] <= 'Z')))
-		;
+		(*i)++;
 	else
 		return (0);
 	return (1);
@@ -104,7 +104,8 @@ void		change_env_to_value(char **str, t_deck *env, int status, int *i)
 	if (get_quato(str[*i], start) != 1)
 	{
 		if (env_data.value == NULL)
-		{	rm_chars_in_str(str[*i], start, env_data.key_len);
+		{
+			rm_chars_in_str(str[*i], start, env_data.key_len);
 			if(str[*i][0] == '\0')
 			pull_back_strs(str, *i);
 		}
