@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 20:02:41 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:18:36 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,23 +80,22 @@ int			change_env_extra_cases(char **str, int start, int status, int i)
 	else
 		return (1);
 	return (0);
-	
 }
 
-int		change_env_to_value(char **str, t_deck *env, int status, int i, int start)
+int			change_env_to_value(char **str, t_deck *env, int status, int i, int start)
 {
 	t_env	env_data;
 
-	env_data.key = get_env_in_cmd(str[i] , &start, &env_data.key_len);
-	if(start < 0)
-		return ft_strlen(str[i]);
+	env_data.key = get_env_in_cmd(str[i], &start, &env_data.key_len);
+	if (start < 0)
+		return (ft_strlen(str[i]));
 	if (!change_env_extra_cases(str, start, status, i))
 	{
 		free(env_data.key);
 		return (start);
 	}
 	if (env_data.key == NULL || start < 0)
-		return 0;
+		return (0);
 	env_data.value = find_value_by_key(env, env_data.key);
 	if (get_quato(str[i], start) != 1)
 	{
@@ -108,7 +107,6 @@ int		change_env_to_value(char **str, t_deck *env, int status, int i, int start)
 		}
 		else
 			env_to_value(str, env_data, i, start);
-
 	}
 	free(env_data.value);
 	free(env_data.key);

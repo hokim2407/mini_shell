@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 20:20:12 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 20:25:20 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,15 @@ int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
 	{
 		close(fd_pipe[0]);
 		if (!check_redirect(argv, datas))
-			{
-				close(datas->fd.read);
-				close(fd_pipe[1]);
-				exit(1);
-			}
+		{
+			close(datas->fd.read);
+			close(fd_pipe[1]);
+			exit(1);
+		}
 		dup2(datas->fd.read, 0);
+		dup2(fd_pipe[1], 1);
 		if (is_final)
 			dup2(datas->ori_fd.write, 1);
-		else
-			dup2(fd_pipe[1], 1);
 		mini_single_process(argv, datas);
 		close(1);
 		close(datas->fd.read);
@@ -94,7 +93,6 @@ int			pipe_process(char *block, t_datas *datas)
 	{
 		datas->fd.write = 1;
 		datas->fd.read = 0;
-		
 		if (!check_redirect(pipes[0], datas))
 		{
 			free_str_array(pipes);
@@ -104,7 +102,7 @@ int			pipe_process(char *block, t_datas *datas)
 	}
 	else
 		start_pipe(pipes, datas);
-	 free_str_array(pipes);
+	free_str_array(pipes);
 	datas->status /= 256;
 	return (1);
 }
