@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 18:11:59 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 20:27:29 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,8 @@ int				print_exit_err(t_datas *datas, char **new_argv)
 	i = 0;
 	num = -1;
 	while (new_argv[1] && new_argv[1][++num])
-	{
 		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
 			i++;
-	}
 	if (new_argv[1] != NULL && new_argv[2] &&
 		(i == 0 || ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
 		return (datas->status = print_err(datas->ori_fd.err, new_argv, 1));
