@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 15:34:42 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 18:51:57 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,77 +53,78 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 	str[index] = result;
 }
 
-int			change_env_extra_cases(char **str, int start, int status, int *i)
+int			change_env_extra_cases(char **str, int start, int status, int i)
 {
 	t_env	env_data;
 
 	env_data.key_len = 1;
-	if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] == '?')
+	if (start > -1 && str[i][start] == '$' && str[i][start + 1] == '?')
 	{
 		env_data.value = ft_itoa(status);
 		env_data.val_len = ft_strlen(env_data.value);
-		env_to_value(str, env_data, *i, start);
+		env_to_value(str, env_data, i, start);
 		free(env_data.value);
 	}
-	else if (str[*i][start] == '$' && str[*i][start + 1] == ' ')
-	{
-		str[*i][start] = ' ';
-	}
-	else if (start > -1 && str[*i][start] == '$' &&
-		str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9')
+	else if (start > -1 && str[i][start] == '$' &&
+		str[i][start + 1] >= '0' && str[i][start + 1] <= '9')
 	{
 		env_data.value = "";
 		env_data.val_len = 0;
-		env_to_value(str, env_data, *i, start);
+		env_to_value(str, env_data, i, start);
 	}
-	else if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] != '_' &&
-		!((str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9') ||
-		(str[*i][start + 1] >= 'a' && str[*i][start + 1] <= 'z') ||
-		(str[*i][start + 1] >= 'A' && str[*i][start + 1] <= 'Z')))
-		(*i)++;
-	else
-		return (0);
-	return (1);
+	else if (start > -1 && str[i][start] == '$' && str[i][start + 1] != '_' &&
+		!((str[i][start + 1] >= '0' && str[i][start + 1] <= '9') ||
+		(str[i][start + 1] >= 'a' && str[i][start + 1] <= 'z') ||
+		(str[i][start + 1] >= 'A' && str[i][start + 1] <= 'Z')))
+		return (1);
+	return (0);
+	
 }
 
-void		change_env_to_value(char **str, t_deck *env, int status, int *i)
+int		change_env_to_value(char **str, t_deck *env, int status, int i, int pre_start)
 {
 	int		start;
 	t_env	env_data;
 
-	env_data.key = get_env_in_cmd(str[*i], &start, &env_data.key_len);
+	env_data.key = get_env_in_cmd(str[i] + pre_start, &start, &env_data.key_len);
+	start +=pre_start;
 	if (change_env_extra_cases(str, start, status, i))
 	{
-		(*i)--;
 		free(env_data.key);
-		return ;
+		return (start);
 	}
 	if (env_data.key == NULL || start < 0)
-		return ;
+		return 0;
 	env_data.value = find_value_by_key(env, env_data.key);
-	if (get_quato(str[*i], start) != 1)
+	if (get_quato(str[i], start) != 1)
 	{
 		if (env_data.value == NULL)
 		{
-			rm_chars_in_str(str[*i], start, env_data.key_len);
-			if (str[*i][0] == '\0')
-				pull_back_strs(str, *i);
+			rm_chars_in_str(str[i], start, env_data.key_len);
+			if (str[i][0] == '\0')
+				pull_back_strs(str, i);
 		}
 		else
-			env_to_value(str, env_data, *i, start);
-		(*i)--;
+			env_to_value(str, env_data, i, start);
+
 	}
 	free(env_data.value);
 	free(env_data.key);
+	return (start);
 }
 
 void		check_env_in_cmd(char **cmds, t_deck *env, int status)
 {
 	int		index;
+	int 	start;
 
 	if (cmds == NULL)
 		return ;
 	index = -1;
 	while (cmds[++index])
-		change_env_to_value(cmds, env, status, &index);
+	{
+		start = 0;
+		while (start < ft_strlen(cmds[index]))
+			start += change_env_to_value(cmds, env, status, index, start) + 1;
+	}
 }

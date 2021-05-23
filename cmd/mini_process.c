@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 18:01:48 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 18:18:39 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ int			mini_single_process(char *buf, t_datas *datas)
 	char	**new_argv;
 
 	new_argv = ft_split(buf, ' ');
-	check_env_in_cmd(new_argv, datas->env_list, datas->status);
 	new_argv = change_wave_to_home(new_argv, datas);
 	rm_quato(new_argv);
 	if (new_argv[0] && new_argv[0][0] == '\0')

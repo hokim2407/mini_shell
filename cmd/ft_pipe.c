@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 16:49:31 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 18:56:54 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,12 @@ int			pipe_process(char *block, t_datas *datas)
 	pipes = ft_split(block, '|');
 	datas->ori_fd.write = dup(1);
 	datas->ori_fd.read = dup(0);
+	check_env_in_cmd(pipes, datas->env_list, datas->status);
 	if (pipes[1] == NULL)
 	{
 		datas->fd.write = 1;
 		datas->fd.read = 0;
+		
 		if (!check_redirect(pipes[0], datas))
 		{
 			free_str_array(pipes);
@@ -102,7 +104,7 @@ int			pipe_process(char *block, t_datas *datas)
 	}
 	else
 		start_pipe(pipes, datas);
-	free_str_array(pipes);
+	 free_str_array(pipes);
 	datas->status /= 256;
 	return (1);
 }
