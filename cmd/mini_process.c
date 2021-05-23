@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_process.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:48:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:19:07 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:24:48 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,22 @@ void		cd_process(char **new_argv, t_datas *datas, int i)
 	char	*old_path;
 	char	*temp;
 
-		old_path = find_value_by_key(datas->env_list, "PWD");
-		if (new_argv[i] == NULL || !ft_strcmp(new_argv[i], "~"))
-		{
-			temp = find_value_by_key(datas->env_list, "HOME");
-			result = chdir(temp);
-			free(temp);
-		}
-		else if(new_argv[i][0] != '\0')
-			result = chdir(new_argv[i]);
-		if (result < 0)
-		{
-			datas->status = print_cd_err(datas->ori_fd.err, new_argv, 0, i);
-			free(old_path);
-			return;
-		}
-		change_pwd_env(datas, old_path);
+	old_path = find_value_by_key(datas->env_list, "PWD");
+	if (new_argv[i] == NULL || !ft_strcmp(new_argv[i], "~"))
+	{
+		temp = find_value_by_key(datas->env_list, "HOME");
+		result = chdir(temp);
+		free(temp);
+	}
+	else if (new_argv[i][0] != '\0')
+		result = chdir(new_argv[i]);
+	if (result < 0)
+	{
+		datas->status = print_cd_err(datas->ori_fd.err, new_argv, 0, i);
+		free(old_path);
+		return ;
+	}
+	change_pwd_env(datas, old_path);
 }
 
 void		mini_single_process2(char **new_argv, t_datas *datas)
@@ -74,8 +74,8 @@ void		mini_single_process2(char **new_argv, t_datas *datas)
 		return ;
 	if (!ft_strcmp(new_argv[0], "cd"))
 	{
-		if(new_argv[1] == NULL)
-			cd_process(new_argv, datas, 1);	
+		if (new_argv[1] == NULL)
+			cd_process(new_argv, datas, 1);
 		while (new_argv[++i])
 			cd_process(new_argv, datas, i);
 	}

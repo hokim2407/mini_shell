@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_to_value.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:00:06 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/23 15:11:33 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:34:42 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ char		*get_env_in_cmd(char *str, int *start, int *len)
 	i = 0;
 	chr += 1;
 	while (str[chr] &&
-			((str[chr] >= '0' && str[chr] <= '9') ||
-			(str[chr] >= 'a' && str[chr] <= 'z') ||
-			(str[chr] >= 'A' && str[chr] <= 'Z') ||
-			str[chr] == '_'))
+		((str[chr] >= '0' && str[chr] <= '9') ||
+		(str[chr] >= 'a' && str[chr] <= 'z') ||
+		(str[chr] >= 'A' && str[chr] <= 'Z') ||
+		str[chr] == '_'))
 	{
 		result[i++] = str[chr++];
 	}
@@ -47,8 +47,8 @@ void		env_to_value(char **str, t_env env_data, int index, int start)
 	ft_strlcpy(result, str[index], start + 1);
 	ft_strlcpy(result + start, env_data.value, env_data.val_len + 1);
 	ft_strlcpy(result + start + env_data.val_len,
-				str[index] + start + env_data.key_len + 1,
-				ft_strlen(str[index]));
+		str[index] + start + env_data.key_len + 1,
+		ft_strlen(str[index]));
 	free(str[index]);
 	str[index] = result;
 }
@@ -65,9 +65,9 @@ int			change_env_extra_cases(char **str, int start, int status, int *i)
 		env_to_value(str, env_data, *i, start);
 		free(env_data.value);
 	}
-	else if (str[*i][start] == '$' && str[*i][start + 1] ==' ')
+	else if (str[*i][start] == '$' && str[*i][start + 1] == ' ')
 	{
-		str[*i][start]= ' ';
+		str[*i][start] = ' ';
 	}
 	else if (start > -1 && str[*i][start] == '$' &&
 		str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9')
@@ -77,9 +77,9 @@ int			change_env_extra_cases(char **str, int start, int status, int *i)
 		env_to_value(str, env_data, *i, start);
 	}
 	else if (start > -1 && str[*i][start] == '$' && str[*i][start + 1] != '_' &&
-			!((str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9') ||
-			(str[*i][start + 1] >= 'a' && str[*i][start + 1] <= 'z') ||
-			(str[*i][start + 1] >= 'A' && str[*i][start + 1] <= 'Z')))
+		!((str[*i][start + 1] >= '0' && str[*i][start + 1] <= '9') ||
+		(str[*i][start + 1] >= 'a' && str[*i][start + 1] <= 'z') ||
+		(str[*i][start + 1] >= 'A' && str[*i][start + 1] <= 'Z')))
 		(*i)++;
 	else
 		return (0);
@@ -106,8 +106,8 @@ void		change_env_to_value(char **str, t_deck *env, int status, int *i)
 		if (env_data.value == NULL)
 		{
 			rm_chars_in_str(str[*i], start, env_data.key_len);
-			if(str[*i][0] == '\0')
-			pull_back_strs(str, *i);
+			if (str[*i][0] == '\0')
+				pull_back_strs(str, *i);
 		}
 		else
 			env_to_value(str, env_data, *i, start);

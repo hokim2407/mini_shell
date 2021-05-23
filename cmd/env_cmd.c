@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:48:03 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:26:54 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:37:26 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,13 @@
 
 void		ft_rm_env(t_datas *datas, char *target)
 {
-	t_list *data;
-	int chr;
-	int i;
+	t_list	*data;
+	int		chr;
+	int		i;
 
 	i = -1;
-	if (!is_valid_key(target) || target[0] == '=' || ft_strchr(target, '=') > -1)
+	if (!is_valid_key(target) || target[0] == '='
+		|| ft_strchr(target, '=') > -1)
 	{
 		print_export_err(datas->ori_fd.err, &(datas->status), "unset", target);
 		return ;
@@ -97,7 +98,7 @@ void		ft_push_export(t_deck *deck, char **data, char *target, int is_add)
 		}
 		else
 			inlist->content = ft_strdup(target);
-		inlist->is_unseted =0;
+		inlist->is_unseted = 0;
 		free(temp);
 	}
 }
@@ -120,7 +121,7 @@ void		ft_push_env(t_deck *env,
 			inlist->content = ft_strjoin(temp, data[1]);
 		else
 			inlist->content = ft_strdup(target);
-		inlist->is_unseted =0;
+		inlist->is_unseted = 0;
 		free(temp);
 	}
 }

@@ -6,19 +6,19 @@
 /*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 13:30:35 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 22:03:58 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 15:35:37 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int			err_msg(int fd, char **argv, int status)
+int				err_msg(int fd, char **argv, int status)
 {
 	if (status == 127)
 		ft_write(fd, "command not found\n");
 	else if (status == 1)
 		ft_write(fd, "too many arguments\n");
-	else if (status == 126 )
+	else if (status == 126)
 		ft_write(fd, "is a directory\n");
 	else if (status == 255)
 	{
@@ -30,9 +30,9 @@ int			err_msg(int fd, char **argv, int status)
 	return (0);
 }
 
-int			print_cd_err(int fd, char **argv, int status, int i)
+int				print_cd_err(int fd, char **argv, int status, int i)
 {
-	int		len;
+	int			len;
 
 	len = -1;
 	while (argv[++len])
@@ -51,9 +51,9 @@ int			print_cd_err(int fd, char **argv, int status, int i)
 	return (status);
 }
 
-int			print_err(int fd, char **argv, int status)
+int				print_err(int fd, char **argv, int status)
 {
-	int		len;
+	int			len;
 
 	len = -1;
 	while (argv[++len])
@@ -72,9 +72,9 @@ int			print_err(int fd, char **argv, int status)
 	return (status);
 }
 
-int			print_env_err(int fd, char **argv)
+int				print_env_err(int fd, char **argv)
 {
-	int		len;
+	int			len;
 
 	len = -1;
 	while (argv[++len])
@@ -88,9 +88,9 @@ int			print_env_err(int fd, char **argv)
 	return (1);
 }
 
-int			print_export_err(int fd, int *status, char *cmd, char *err_cmd)
+int				print_export_err(int fd, int *status, char *cmd, char *err_cmd)
 {
-	int		len;
+	int			len;
 
 	len = -1;
 	ft_write(fd, ERR_HEADER);
@@ -104,14 +104,13 @@ int			print_export_err(int fd, int *status, char *cmd, char *err_cmd)
 	return (1);
 }
 
-int		print_exit_err(t_datas *datas, char **new_argv)
+int				print_exit_err(t_datas *datas, char **new_argv)
 {
-	int	i;
+	int			i;
 	long long	num;
 
 	i = 0;
 	num = -1;
-	
 	while (new_argv[1] && new_argv[1][++num])
 	{
 		if ((new_argv[1][num] < '0') || (new_argv[1][num] > '9'))
@@ -126,8 +125,8 @@ int		print_exit_err(t_datas *datas, char **new_argv)
 		if (num != 0 && i <= 1)
 			exit(num);
 		else if (num == 0 && i <= 1 && (((new_argv[1][0] >= '0')
-				&& (new_argv[1][0] <= '9'))|| ((new_argv[1][0] == '+')
-				|| (new_argv[1][0] == '-'))))
+			&& (new_argv[1][0] <= '9'))
+			|| ((new_argv[1][0] == '+') || (new_argv[1][0] == '-'))))
 			exit(0);
 		exit(print_err(datas->ori_fd.err, new_argv, 255));
 	}

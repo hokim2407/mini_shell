@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst_find.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:45:52 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:10:51 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 15:26:14 by hyerkim          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ int			is_valid_key(char *target)
 		return (0);
 	while (target[++i] && target[i] != '=')
 		if (!((target[i] >= '0' && target[i] <= '9') ||
-			  (target[i] >= 'a' && target[i] <= 'z') ||
-			  (target[i] >= 'A' && target[i] <= 'Z') || target[i] == '_'))
+			(target[i] >= 'a' && target[i] <= 'z') ||
+			(target[i] >= 'A' && target[i] <= 'Z') || target[i] == '_'))
 		{
 			if (target[i + 1] == '=' && target[i] == '+')
 				return (2);
@@ -67,7 +67,7 @@ char		*find_value_by_key(t_deck *deck, char *key)
 		list_data = ft_split_two(temp->content, '=');
 		if (!ft_strcmp(list_data[0], key))
 		{
-			if(list_data[1])
+			if (list_data[1])
 				result = ft_strdup(list_data[1]);
 			free_str_array(list_data);
 			break ;
