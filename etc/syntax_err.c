@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/19 21:39:10 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 21:45:04 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 16:41:32 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,30 @@ int			is_err_token(char *str)
 	return (value);
 }
 
-int			is_syntax_err(char **strs, int err_token, int i, int j)
+int			is_syntax_err(char **strs, int *err_token, int i, int j)
 {
-	if (err_token && ((err_token % 10 < 3 && i == 0 && j == 0) ||
-		err_token > 20 ||
-		(err_token == 11) || (err_token % 10 > 1 &&
-		strs[i][j + err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)))
+	int next_token;
+
+
+	if (*err_token && ((*err_token % 10 < 3 && i == 0 && j == 0) ||
+		*err_token > 20 ||
+		(*err_token == 11) || (*err_token % 10 > 1 &&
+		strs[i][j + *err_token / 10 + 1] == '\0' && strs[i + 1] == NULL)))
 		return (1);
+	while(strs[i][++j] && strs[i][j] == ' ')
+		;
+	if(*err_token == 0 || ! strs[i][j + *err_token / 10] )
+		return 0;
+	next_token = is_err_token(strs[i] + *err_token / 10 + j);
+	if (next_token == 0 && i > 0)
+		next_token = is_err_token(strs[i - 1] + ft_strlen(strs[i - 1]) - 1);
+	if (next_token > 0)
+		{
+			if(next_token % 10 > 2)
+				next_token += 30;
+			*err_token = next_token;
+			return (1);
+		}
 	return (0);
 }
 
@@ -76,7 +93,7 @@ int			syntax_error_check(int fd, char *buf, int *status)
 			err_token = is_err_token(strs[i] + j);
 			if (get_quato(strs[i], j) != 0)
 				continue;
-			if (is_syntax_err(strs, err_token, i, j))
+			if (is_syntax_err(strs, &err_token, i, j))
 			{
 				*status = print_syntax_error(fd, strs[i] + j, err_token);
 				free_str_array(strs);

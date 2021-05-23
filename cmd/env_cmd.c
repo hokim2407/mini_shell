@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_cmd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/03/16 16:48:03 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/23 15:37:26 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 16:06:05 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,9 +98,10 @@ void		ft_push_export(t_deck *deck, char **data, char *target, int is_add)
 		}
 		else
 			inlist->content = ft_strdup(target);
-		inlist->is_unseted = 0;
 		free(temp);
 	}
+	else
+		inlist->is_unseted = 0;
 }
 
 void		ft_push_env(t_deck *env,

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pipe.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 17:12:25 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/11 19:45:48 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 16:49:31 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,11 @@ int			refeat_pipe(char *argv, t_datas *datas, pid_t *pid,
 	{
 		close(fd_pipe[0]);
 		if (!check_redirect(argv, datas))
-			exit(1);
+			{
+				close(datas->fd.read);
+				close(fd_pipe[1]);
+				exit(1);
+			}
 		dup2(datas->fd.read, 0);
 		if (is_final)
 			dup2(datas->ori_fd.write, 1);

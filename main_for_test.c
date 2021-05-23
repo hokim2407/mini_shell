@@ -6,7 +6,7 @@
 /*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 19:49:02 by hokim             #+#    #+#             */
-/*   Updated: 2021/05/19 22:14:47 by hokim            ###   ########.fr       */
+/*   Updated: 2021/05/23 16:09:43 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ void			shell_init(t_datas *datas, char **envv)
 {
 	datas->env_list = array_to_list(envv, 0);
 	datas->export_list = array_to_list(envv, 1);
+	ft_rm_env(datas, "OLDPWD");
+	ft_export_env(datas, NULL, "OLDPWD");
 	datas->envv = envv;
 	datas->fd.read = 0;
 	datas->fd.write = 1;

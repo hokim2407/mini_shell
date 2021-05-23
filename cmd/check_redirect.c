@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_redirect.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hyerkim <hyerkim@student.42.fr>            +#+  +:+       +#+        */
+/*   By: hokim <hokim@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/09 16:56:56 by hyerkim           #+#    #+#             */
-/*   Updated: 2021/05/21 18:07:24 by hyerkim          ###   ########.fr       */
+/*   Updated: 2021/05/23 15:38:53 by hokim            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,13 @@ int			write_redirect(char *pipe, t_datas *datas, t_fd *fd, int i)
 		create = O_WRONLY | O_TRUNC | O_CREAT;
 	filename = get_filename_from(pipe + i + 1);
 	fd->write = open(filename, create, S_IRWXU | S_IRWXG | S_IRWXO);
-	free(filename);
 	if (datas->fd.write != -1)
 		return (1);
 	datas->fd.write = 1;
 	str = ft_split(pipe, ' ');
 	datas->status = redirect_err(datas->ori_fd.err, filename, 1);
 	free_str_array(str);
+	free(filename);
 	return (0);
 }
 
